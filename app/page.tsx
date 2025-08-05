@@ -1,10 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TabNavigation from '../components/TabNavigation';
+import Link from 'next/link';
+
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('home');
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const tabs = [
     { id: 'home', name: '홈', icon: '🏠' },
@@ -26,16 +37,56 @@ export default function Home() {
     { name: 'ADA', price: '789', change: '-0.67%', volume: '12,345 ADA' },
   ];
 
+  useEffect(() => {
+    // Check if user is logged in (you can implement proper session management here)
+    const checkAuth = async () => {
+      try {
+        // For now, we'll just check if there's a user in localStorage
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    checkAuth();
+  }, []);
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'home':
         return (
           <div className="space-y-6">
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
-              <h3 className="text-xl font-bold mb-4">환영합니다! 👋</h3>
+              <h3 className="text-xl font-bold mb-4">
+                {user ? `안녕하세요, ${user.username}님! 👋` : '환영합니다! 👋'}
+              </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Next.js 프로젝트에 오신 것을 환영합니다. 위의 탭을 클릭하여 다양한 기능을 탐색해보세요.
+                {user 
+                  ? '로그인하신 것을 환영합니다! 위의 탭을 클릭하여 다양한 기능을 탐색해보세요.'
+                  : 'Next.js 프로젝트에 오신 것을 환영합니다. 로그인하여 더 많은 기능을 이용해보세요.'
+                }
               </p>
+              {!user && (
+                <div className="mt-4 flex space-x-4">
+                  <Link
+                    href="/login"
+                    className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
+                  >
+                    로그인
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+                  >
+                    회원가입
+                  </Link>
+                </div>
+              )}
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -206,3 +257,9 @@ export default function Home() {
     </div>
   );
 }
+
+
+
+
+
+
