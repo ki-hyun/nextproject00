@@ -69,13 +69,13 @@ export default function Navigation() {
             ) : (
               <>
                 <Link
-                  href="/login"
+                  href="/logincr"
                   className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   로그인
                 </Link>
                 <Link
-                  href="/register"
+                  href="/registercr"
                   className="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium"
                 >
                   회원가입
@@ -87,4 +87,4 @@ export default function Navigation() {
       </div>
     </nav>
   );
-} 
+}
