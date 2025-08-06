@@ -1,85 +1,85 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+이 파일은 이 저장소의 코드와 작업할 때 Claude Code (claude.ai/code)에게 지침을 제공합니다.
 
-## Development Commands
+## 개발 명령어
 
-### Core Commands
-- `npm run dev` - Start development server with Turbopack on port 3100
-- `npm run build` - Build production bundle
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint for code quality checks
+### 핵심 명령어
+- `npm run dev` - 포트 3100에서 Turbopack을 사용한 개발 서버 시작
+- `npm run build` - 프로덕션 번들 빌드
+- `npm start` - 프로덕션 서버 시작
+- `npm run lint` - 코드 품질 검사를 위한 ESLint 실행
 
-### Development Server
-The project runs on port 3100 (not the default 3000) with Turbopack enabled for faster development builds. Access at http://localhost:3100
+### 개발 서버
+이 프로젝트는 더 빠른 개발 빌드를 위해 Turbopack이 활성화된 포트 3100(기본값 3000이 아님)에서 실행됩니다. http://localhost:3100 에서 접근하세요.
 
-## Architecture Overview
+## 아키텍처 개요
 
-### Tech Stack
-- **Next.js 15** with App Router architecture
-- **React 19** for UI components
-- **TypeScript** for type safety
-- **Tailwind CSS v4** for styling (via PostCSS plugin)
-- **Geist fonts** (Sans and Mono) optimized via next/font
+### 기술 스택
+- **Next.js 15** with App Router 아키텍처
+- **React 19** UI 컴포넌트용
+- **TypeScript** 타입 안전성을 위한
+- **Tailwind CSS v4** 스타일링용 (PostCSS 플러그인을 통해)
+- **Geist 폰트** (Sans 및 Mono) next/font를 통해 최적화
 
-### Project Structure
+### 프로젝트 구조
 ```
-app/                    # App Router directory (Next.js 13+ structure)
-├── layout.tsx         # Root layout with font configuration
-├── page.tsx           # Home page component
-└── globals.css        # Global styles and Tailwind imports
+app/                    # App Router 디렉토리 (Next.js 13+ 구조)
+├── layout.tsx         # 폰트 구성이 포함된 루트 레이아웃
+├── page.tsx           # 홈 페이지 컴포넌트
+└── globals.css        # 전역 스타일 및 Tailwind 임포트
 
-public/                # Static assets
-├── *.svg              # Icon assets (file, globe, next, vercel, window)
+public/                # 정적 자원
+├── *.svg              # 아이콘 자원 (file, globe, next, vercel, window)
 
-Configuration files:
-├── next.config.ts     # Next.js configuration
-├── tsconfig.json      # TypeScript configuration with @/* path mapping
-├── eslint.config.mjs  # ESLint with Next.js + TypeScript rules
-└── postcss.config.mjs # PostCSS with Tailwind CSS v4 plugin
+설정 파일들:
+├── next.config.ts     # Next.js 설정
+├── tsconfig.json      # @/* 경로 매핑을 포함한 TypeScript 설정
+├── eslint.config.mjs  # Next.js + TypeScript 규칙이 포함된 ESLint
+└── postcss.config.mjs # Tailwind CSS v4 플러그인이 포함된 PostCSS
 ```
 
-### Key Architecture Patterns
+### 주요 아키텍처 패턴
 
-#### App Router Structure
-This project uses Next.js App Router (not Pages Router). All routes are defined in the `app/` directory:
-- `app/layout.tsx` - Root layout applied to all pages
-- `app/page.tsx` - Home page (maps to `/`)
-- Future routes should follow `app/[route]/page.tsx` pattern
+#### App Router 구조
+이 프로젝트는 Next.js App Router(Pages Router가 아님)를 사용합니다. 모든 라우트는 `app/` 디렉토리에 정의됩니다:
+- `app/layout.tsx` - 모든 페이지에 적용되는 루트 레이아웃
+- `app/page.tsx` - 홈 페이지 (`/`에 매핑)
+- 향후 라우트는 `app/[route]/page.tsx` 패턴을 따라야 합니다
 
-#### Font Optimization
-Fonts are configured in `layout.tsx` using `next/font/google` with Geist fonts:
-- Variables: `--font-geist-sans` and `--font-geist-mono`
-- Applied globally via CSS variables in the body className
+#### 폰트 최적화
+폰트는 `layout.tsx`에서 Geist 폰트와 함께 `next/font/google`을 사용하여 구성됩니다:
+- 변수: `--font-geist-sans` 및 `--font-geist-mono`
+- body className의 CSS 변수를 통해 전역적으로 적용
 
-#### Styling System
-- **Tailwind CSS v4** configured via PostCSS plugin
-- Uses modern features like CSS custom properties
-- Dark mode support implemented via `dark:` prefixes
-- Component styling follows utility-first approach
+#### 스타일링 시스템
+- **Tailwind CSS v4** PostCSS 플러그인을 통해 구성
+- CSS 커스텀 프로퍼티와 같은 최신 기능 사용
+- `dark:` 접두사를 통해 구현된 다크 모드 지원
+- 유틸리티 우선 접근 방식을 따르는 컴포넌트 스타일링
 
-#### TypeScript Configuration
-- Strict mode enabled for better type safety
-- Path mapping configured: `@/*` maps to `./src/*` (though src/ not currently used)
-- Next.js TypeScript plugin enabled for enhanced IDE support
+#### TypeScript 설정
+- 더 나은 타입 안전성을 위한 strict 모드 활성화
+- 경로 매핑 설정: `@/*`는 `./src/*`에 매핑 (현재 src/ 사용하지 않음)
+- 향상된 IDE 지원을 위한 Next.js TypeScript 플러그인 활성화
 
-### Development Patterns
+### 개발 패턴
 
-#### Component Structure
-Current home page demonstrates:
-- Responsive grid layouts (`grid md:grid-cols-3`)
-- Gradient backgrounds and text effects
-- Glass-morphism effects (`backdrop-blur-sm`)
-- Hover animations and transitions
-- Dark mode responsive design
+#### 컴포넌트 구조
+현재 홈 페이지는 다음을 보여줍니다:
+- 반응형 그리드 레이아웃 (`grid md:grid-cols-3`)
+- 그라데이션 배경 및 텍스트 효과
+- 글래스모피즘 효과 (`backdrop-blur-sm`)
+- 호버 애니메이션 및 전환
+- 다크 모드 반응형 디자인
 
-#### Code Conventions
-- TypeScript interfaces for component props
-- CSS modules not used - prefer Tailwind utilities
-- Next.js Image component for optimized images
-- Semantic HTML structure with accessibility considerations
+#### 코드 컨벤션
+- 컴포넌트 props를 위한 TypeScript 인터페이스
+- CSS 모듈 사용하지 않음 - Tailwind 유틸리티 선호
+- 최적화된 이미지를 위한 Next.js Image 컴포넌트
+- 접근성을 고려한 시맨틱 HTML 구조
 
-### Environment Notes
-- Development server uses Turbopack for faster builds
-- No custom domain or API routes currently configured
-- Default Next.js development and production optimizations apply
+### 환경 참고사항
+- 개발 서버는 더 빠른 빌드를 위해 Turbopack 사용
+- 현재 커스텀 도메인이나 API 라우트는 구성되지 않음
+- 기본 Next.js 개발 및 프로덕션 최적화 적용

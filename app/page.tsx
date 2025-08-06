@@ -199,29 +199,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">N</span>
-              </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                NextProject
-              </h1>
-            </div>
-            <div className="hidden md:flex items-center space-x-6">
-              <span className="text-sm text-gray-600 dark:text-gray-400">레벨(4)</span>
-              <span className="text-sm text-gray-600 dark:text-gray-400">포인트(250)</span>
-              <button className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 transition-colors">
-                로그아웃
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Tab Navigation */}
       <TabNavigation tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
 

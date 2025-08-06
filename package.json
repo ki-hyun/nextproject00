@@ -11,15 +11,19 @@
   "dependencies": {
     "@prisma/client": "^6.13.0",
     "@types/bcryptjs": "^2.4.6",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "iron-session": "^8.0.4",
     "next": "15.4.5",
     "prisma": "^6.13.0",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.0.15"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
