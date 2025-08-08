@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import TabNavigation from '../components/TabNavigation';
 import Link from 'next/link';
+import TabNavigation, { tabs } from '../components/TabNavigation';
 
 interface User {
   id: number;
@@ -13,29 +13,12 @@ interface User {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('home');
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const tabs = [
-    { id: 'home', name: '홈', icon: '🏠' },
-    { id: 'crypto', name: '암호화폐', icon: '₿' },
-    { id: 'futures', name: '선물/마진', icon: '📈' },
-    { id: 'community', name: '커뮤니티', icon: '💬' },
-    { id: 'p2e', name: 'P2E 게임', icon: '🎮' },
-    { id: 'forum', name: '포럼', icon: '📝' },
-    { id: 'gallery', name: '갤러리', icon: '🖼️' },
-    { id: 'exchange', name: '거래소/차트', icon: '📊' },
-  ];
+  // 홈페이지에서 보여줄 내비게이션 아이템들 (홈 제외)
+  const navigationItems = tabs.filter(tab => tab.href !== '/' && tab.description);
 
-  const cryptoData = [
-    { name: 'BTC', price: '7,892,099', change: '+0.59%', volume: '10,793 BTC' },
-    { name: 'XRP', price: '1,245', change: '+2.31%', volume: '1,234,567 XRP' },
-    { name: 'DOGE', price: '89', change: '-1.23%', volume: '5,678,901 DOGE' },
-    { name: 'BNB', price: '456,789', change: '+0.87%', volume: '2,345 BNB' },
-    { name: 'SOL', price: '123,456', change: '+3.45%', volume: '8,901 SOL' },
-    { name: 'ADA', price: '789', change: '-0.67%', volume: '12,345 ADA' },
-  ];
 
   useEffect(() => {
     // Check if user is logged in (you can implement proper session management here)
@@ -56,155 +39,126 @@ export default function Home() {
     checkAuth();
   }, []);
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'home':
-        return (
-          <div className="space-y-6">
-            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
-              <h3 className="text-xl font-bold mb-4">
-                {user ? `안녕하세요, ${user.username}님! 👋` : '환영합니다! 👋'}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                {user 
-                  ? '로그인하신 것을 환영합니다! 위의 탭을 클릭하여 다양한 기능을 탐색해보세요.'
-                  : 'Next.js 프로젝트에 오신 것을 환영합니다. 로그인하여 더 많은 기능을 이용해보세요.'
-                }
-              </p>
-              {!user && (
-                <div className="mt-4 flex space-x-4">
-                  <Link
-                    href="/login"
-                    className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
-                  >
-                    로그인
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
-                  >
-                    회원가입
-                  </Link>
-                </div>
-              )}
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
-                <h4 className="font-semibold mb-3">최신 소식</h4>
-                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                  <li>• Next.js 15 새로운 기능 발표</li>
-                  <li>• React 19 업데이트 소식</li>
-                  <li>• Tailwind CSS 4.0 베타 출시</li>
-                </ul>
-              </div>
-              
-              <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
-                <h4 className="font-semibold mb-3">빠른 링크</h4>
-                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                  <li>• <a href="#" className="text-blue-600 hover:underline">문서 보기</a></li>
-                  <li>• <a href="#" className="text-blue-600 hover:underline">예제 코드</a></li>
-                  <li>• <a href="#" className="text-blue-600 hover:underline">커뮤니티</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        );
-        
-      case 'crypto':
-        return (
-          <div className="space-y-6">
-            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
-              <h3 className="text-xl font-bold mb-4">암호화폐 시세</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-600">
-                      <th className="text-left py-2">코인</th>
-                      <th className="text-right py-2">가격 (KRW)</th>
-                      <th className="text-right py-2">변동률</th>
-                      <th className="text-right py-2">거래량</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cryptoData.map((crypto, index) => (
-                      <tr key={index} className="border-b border-gray-100 dark:border-gray-700">
-                        <td className="py-3 font-medium">{crypto.name}</td>
-                        <td className="text-right">{crypto.price}</td>
-                        <td className={`text-right ${crypto.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                          {crypto.change}
-                        </td>
-                        <td className="text-right text-gray-500">{crypto.volume}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        );
-        
-      case 'community':
-        return (
-          <div className="space-y-6">
-            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
-              <h3 className="text-xl font-bold mb-4">커뮤니티</h3>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-3">
-                  <h4 className="font-semibold">게시판</h4>
-                  <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    <li>• 자유게시판</li>
-                    <li>• 질문/답변</li>
-                    <li>• 유머/감동</li>
-                    <li>• HOT게시물</li>
-                  </ul>
-                </div>
-                <div className="space-y-3">
-                  <h4 className="font-semibold">최신글</h4>
-                  <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    <li>• Next.js 프로젝트 시작하기</li>
-                    <li>• React 19 새로운 기능</li>
-                    <li>• Tailwind CSS 팁과 트릭</li>
-                    <li>• TypeScript 베스트 프랙티스</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-        
-      case 'exchange':
-        return (
-          <div className="space-y-6">
-            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
-              <h3 className="text-xl font-bold mb-4">거래소/차트</h3>
-              <div className="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                <p className="text-gray-500 dark:text-gray-400">차트 영역 (실제 차트 라이브러리 연동 가능)</p>
-              </div>
-            </div>
-          </div>
-        );
-        
-      default:
-        return (
-          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50">
-            <h3 className="text-xl font-bold mb-4">{tabs.find(tab => tab.id === activeTab)?.name}</h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              이 탭의 내용은 개발 중입니다. 곧 업데이트될 예정입니다.
-            </p>
-          </div>
-        );
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Tab Navigation */}
-      <TabNavigation tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
+      <TabNavigation user={user} />
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-6 py-16">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            {user ? `안녕하세요, ${user.username}님! 👋` : '환영합니다! 👋'}
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+            {user 
+              ? '로그인하신 것을 환영합니다! 아래 기능들을 탐색해보세요.'
+              : 'Next.js 기반의 현대적인 웹 플랫폼입니다. 다양한 기능을 탐색해보세요.'
+            }
+          </p>
+          {!user && (
+            <div className="flex justify-center space-x-4">
+              <Link
+                href="/login"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all font-semibold text-lg"
+              >
+                시작하기
+              </Link>
+              <Link
+                href="/register"
+                className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-semibold text-lg"
+              >
+                회원가입
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Navigation Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {navigationItems.map((item, index) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="group bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              <div className="flex items-start space-x-4">
+                <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                  {item.icon}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {item.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                    {item.description}
+                  </p>
+                  <div className="mt-3 flex items-center text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform">
+                    <span className="text-sm font-medium">둘러보기</span>
+                    <span className="ml-2">→</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Info Sections */}
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-gray-700/50">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">🚀 주요 기능</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start space-x-3">
+                <span className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">✓</span>
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">실시간 데이터</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">암호화폐 시세 및 거래 정보</p>
+                </div>
+              </li>
+              <li className="flex items-start space-x-3">
+                <span className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">✓</span>
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">커뮤니티</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">개발자들과의 소통 공간</p>
+                </div>
+              </li>
+              <li className="flex items-start space-x-3">
+                <span className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-sm">✓</span>
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white">포트폴리오</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">작품 공유 및 갤러리</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-gray-700/50">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">📊 최신 소식</h3>
+            <div className="space-y-4">
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Next.js 15 새로운 기능</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300">App Router와 Server Components의 향상된 성능</p>
+                <span className="text-xs text-blue-600 dark:text-blue-400">2시간 전</span>
+              </div>
+              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">React 19 업데이트</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300">새로운 Hooks와 개선된 성능</p>
+                <span className="text-xs text-green-600 dark:text-green-400">5시간 전</span>
+              </div>
+              <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Tailwind CSS 4.0</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300">베타 버전 출시 및 새로운 기능들</p>
+                <span className="text-xs text-purple-600 dark:text-purple-400">1일 전</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
-        {renderTabContent()}
+        {/* Additional content can be added here */}
       </main>
 
       {/* Footer */}
@@ -234,9 +188,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-
-
-
-

@@ -1,21 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useActionState } from "react";
 import { addDataToRedis, getDataFromRedis, clearDataFromRedis, getRedisStats } from "./actions";
-
-interface RedisData {
-  key: string;
-  value: string;
-  timestamp: string;
-}
-
-interface RedisStats {
-  totalKeys: number;
-  testKeys: number;
-  memoryUsage: string;
-  redisInfo: string;
-}
+import { RedisData, RedisStats } from "./types";
+import TabNavigation from '../../components/TabNavigation';
 
 export default function RedisTestPage() {
   const [data, setData] = useState<RedisData[]>([]);
@@ -57,30 +46,27 @@ export default function RedisTestPage() {
     }
   };
 
-  // 서버 액션 결과 처리
-  if (addState?.success && addState.message) {
-    if (message !== addState.message) {
+  // 서버 액션 결과 처리 (useEffect 사용)
+  React.useEffect(() => {
+    if (addState?.success && addState.message) {
       setMessage(addState.message);
-    }
-  } else if (addState?.error) {
-    if (message !== `에러: ${addState.error}`) {
+    } else if (addState?.error) {
       setMessage(`에러: ${addState.error}`);
     }
-  }
+  }, [addState]);
 
-  if (clearState?.success && clearState.message) {
-    if (message !== clearState.message) {
+  React.useEffect(() => {
+    if (clearState?.success && clearState.message) {
       setMessage(clearState.message);
       setData([]); // 삭제 성공 시 화면의 데이터도 클리어
-    }
-  } else if (clearState?.error) {
-    if (message !== `에러: ${clearState.error}`) {
+    } else if (clearState?.error) {
       setMessage(`에러: ${clearState.error}`);
     }
-  }
+  }, [clearState]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <TabNavigation />
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -215,7 +201,7 @@ export default function RedisTestPage() {
                           {item.value}
                         </td>
                         <td className="py-3 px-4 text-gray-500 dark:text-gray-400">
-                          {item.timestamp}
+                          {new Date(item.timestamp).toLocaleString()}
                         </td>
                       </tr>
                     ))}

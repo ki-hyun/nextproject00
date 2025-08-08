@@ -1,12 +1,7 @@
 "use server";
 
 import { client, connectRedis } from "@/lib/redis";
-
-interface RedisData {
-  key: string;
-  value: string;
-  timestamp: string;
-}
+import { RedisData, RedisStats } from "./types";
 
 export async function addDataToRedis(prevState: unknown, formData: FormData) {
   try {
@@ -15,12 +10,21 @@ export async function addDataToRedis(prevState: unknown, formData: FormData) {
     const key = `test_${Date.now()}`;
     const value = `Test data ${new Date().toLocaleString()}`;
     
+    console.log("addDataToRedis------------------------")
+    
     // Redis에 데이터 저장 (타임스탬프 포함)
+    // const dataWithTimestamp = {
+    //   value: value,
+    //   timestamp: new Date().toISOString()
+    // };
+
     const dataWithTimestamp = {
       value: value,
-      timestamp: new Date().toISOString()
+      timestamp: Date.now() // 밀리초로 저장
     };
-    
+
+    console.log(JSON.stringify(dataWithTimestamp))
+
     await client.set(key, JSON.stringify(dataWithTimestamp));
     
     return { 
@@ -57,31 +61,35 @@ export async function getDataFromRedis(): Promise<{ success: boolean; data?: Red
     
     const data: RedisData[] = [];
     
+    console.log("getDataFromRedis()------------")
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const value = values[i];
       
+      console.log(key)
+      console.log(value)
+
       if (value) {
         try {
           const parsedData = JSON.parse(value);
           data.push({
             key: key,
             value: parsedData.value,
-            timestamp: new Date(parsedData.timestamp).toLocaleString()
+            timestamp: parsedData.timestamp
           });
         } catch (parseError) {
           // JSON 파싱 실패 시 원본 값 사용
           data.push({
             key: key,
             value: value,
-            timestamp: new Date().toLocaleString()
+            timestamp: Date.now()
           });
         }
       }
     }
     
     // 타임스탬프 기준 내림차순 정렬 (최신 데이터가 위에)
-    data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    data.sort((a, b) => b.timestamp - a.timestamp);
     
     return {
       success: true,
@@ -126,12 +134,7 @@ export async function clearDataFromRedis(prevState: unknown, formData: FormData)
 
 export async function getRedisStats(): Promise<{ 
   success: boolean; 
-  stats?: {
-    totalKeys: number;
-    testKeys: number;
-    memoryUsage: string;
-    redisInfo: string;
-  }; 
+  stats?: RedisStats; 
   error?: string 
 }> {
   try {
