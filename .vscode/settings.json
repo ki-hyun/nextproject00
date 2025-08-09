@@ -1,0 +1,10 @@
+{
+    // 노란 느낌의 워크벤치 색상 커스터마이징
+    "workbench.colorCustomizations": {
+
+        "titleBar.activeBackground": "#eb3b5a",
+        "titleBar.activeForeground": "#1a1710",
+        "titleBar.inactiveBackground": "#eb3b5a",
+        "titleBar.inactiveForeground": "#2a2416"
+    },    
+}
