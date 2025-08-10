@@ -12,7 +12,7 @@ export async function getPriceData(): Promise<{
   try {
     await connectRedis();
     
-    // price 키에서 데이터 가져오기 (요구사항대로)
+    // price00 키에서 데이터 가져오기
     const priceData = await client.get('price11');
     
     // console.log(priceData)

@@ -13,6 +13,8 @@
     "@types/bcryptjs": "^2.4.6",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "highcharts": "^12.3.0",
+    "highcharts-react-official": "^3.2.2",
     "iron-session": "^8.0.4",
     "next": "15.4.5",
     "prisma": "^6.13.0",

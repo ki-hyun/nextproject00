@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getPriceData } from './actions';
+import { getPrice11Data } from './actions';
 import TabNavigation from '../../components/TabNavigation';
 import dynamic from 'next/dynamic';
 
@@ -16,7 +16,7 @@ interface ChartData {
   price: number;
 }
 
-export default function Graph3Page() {
+export default function Graph2Page() {
   const [priceData, setPriceData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,14 +72,14 @@ export default function Graph3Page() {
     loadHighcharts();
   }, []);
 
-  // Redis에서 price 데이터 로드
+  // Redis에서 price11 데이터 로드
   useEffect(() => {
     const loadPriceData = async () => {
       try {
         setLoading(true);
-        const result = await getPriceData();
+        const result = await getPrice11Data();
         
-        console.log('Price data:', result);
+        console.log('Price11 data:', result);
 
         if (result.success && result.data) {
           // timestamp 기준으로 정렬 (과거 -> 최신)
@@ -147,12 +147,10 @@ export default function Graph3Page() {
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       },
       height: 500,
-      zooming: {
-        type: 'x'
-      }
-    } as any,
+      zoomType: 'x'
+    },
     title: {
-      text: 'Bitcoin Price Chart',
+      text: 'Bitcoin Hashrate Chart',
       style: {
         fontSize: '24px',
         fontWeight: 'bold',
@@ -160,7 +158,7 @@ export default function Graph3Page() {
       }
     },
     subtitle: {
-      text: 'Historical Bitcoin price data from Redis',
+      text: 'Historical hashrate data from Redis (price11)',
       style: {
         fontSize: '14px',
         color: '#666'
@@ -184,7 +182,7 @@ export default function Graph3Page() {
     },
     yAxis: {
       title: {
-        text: 'Price (USD)',
+        text: 'Hashrate (EH/s)',
         style: {
           color: '#666',
           fontSize: '14px'
@@ -199,11 +197,11 @@ export default function Graph3Page() {
         formatter: function(this: any) {
           const value = Number(this.value);
           if (value >= 1000000) {
-            return '$' + (value / 1000000).toFixed(1) + 'M';
+            return (value / 1000000).toFixed(1) + 'M';
           } else if (value >= 1000) {
-            return '$' + (value / 1000).toFixed(1) + 'K';
+            return (value / 1000).toFixed(1) + 'K';
           }
-          return '$' + value.toFixed(0);
+          return value.toFixed(2);
         }
       }
     },
@@ -218,7 +216,7 @@ export default function Graph3Page() {
         color: '#333'
       },
       xDateFormat: '%Y-%m-%d %H:%M',
-      pointFormat: '<b>{series.name}:</b> ${point.y:,.2f}'
+      pointFormat: '<b>{series.name}:</b> {point.y:.2f} EH/s'
     },
     plotOptions: {
       area: {
@@ -275,7 +273,7 @@ export default function Graph3Page() {
     },
     series: [{
       type: 'area',
-      name: 'Bitcoin Price',
+      name: 'Hashrate',
       data: getFilteredData(),
       turboThreshold: 0,  // 데이터 포인트 제한 없음
       boostThreshold: 0   // 부스트 모드 제한 없음
@@ -340,7 +338,7 @@ export default function Graph3Page() {
   const refreshData = async () => {
     try {
       setLoading(true);
-      const result = await getPriceData();
+      const result = await getPrice11Data();
       
       if (result.success && result.data) {
         const sortedData = [...result.data].sort((a, b) => a.timestamp - b.timestamp);
@@ -370,10 +368,10 @@ export default function Graph3Page() {
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Bitcoin Price Chart
+                  Bitcoin Network Hashrate
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Real-time Bitcoin price data from Redis
+                  Real-time hashrate data from Redis (price11)
                 </p>
               </div>
               <button 
@@ -462,21 +460,21 @@ export default function Graph3Page() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Latest Price</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Latest Value</p>
                   <p className="text-xl font-bold text-orange-500">
-                    ${priceData[priceData.length - 1]?.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {priceData[priceData.length - 1]?.price.toFixed(2)} EH/s
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Max Price</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Max Value</p>
                   <p className="text-xl font-bold text-green-500">
-                    ${Math.max(...priceData.map(d => d.price)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {Math.max(...priceData.map(d => d.price)).toFixed(2)} EH/s
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Min Price</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Min Value</p>
                   <p className="text-xl font-bold text-red-500">
-                    ${Math.min(...priceData.map(d => d.price)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {Math.min(...priceData.map(d => d.price)).toFixed(2)} EH/s
                   </p>
                 </div>
               </div>
