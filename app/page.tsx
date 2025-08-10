@@ -18,8 +18,7 @@ export default function Home() {
 
   // 홈페이지에서 보여줄 내비게이션 아이템들 (홈 제외)
   const navigationItems = tabs.filter(tab => tab.href !== '/' && tab.description);
-
-
+  
   useEffect(() => {
     // Check if user is logged in (you can implement proper session management here)
     const checkAuth = async () => {
