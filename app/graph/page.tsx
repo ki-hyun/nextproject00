@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { getPriceData } from './actions';
 import TabNavigation from '../../components/TabNavigation';
 import {
@@ -25,6 +25,8 @@ export default function GraphPage() {
   const [brushIndexes, setBrushIndexes] = useState<{ startIndex?: number; endIndex?: number }>({});
   const [brushControlled, setBrushControlled] = useState<boolean>(false); // Brush 수동 조작 여부
   const [baseTimestamp, setBaseTimestamp] = useState<number | undefined>(undefined); // 기준 날짜 저장
+  const [tempBrushIndexes, setTempBrushIndexes] = useState<{ startIndex?: number; endIndex?: number }>({}); // 임시 브러쉬 인덱스
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // timestamp를 읽기 쉬운 형식으로 변환
   const formatTimestamp = (timestamp: number): string => {
@@ -91,6 +93,15 @@ export default function GraphPage() {
     return filteredData;
   };
 
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
   // Redis에서 price00 데이터 로드
   useEffect(() => {
     const loadPriceData = async () => {
@@ -147,47 +158,61 @@ export default function GraphPage() {
     );
   };
 
-  // Brush onChange 핸들러
-  const handleBrushChange = (brushRange: any) => {
+  // Brush onChange 핸들러 (debounced)
+  const handleBrushChange = useCallback((brushRange: any) => {
     if (brushRange && brushRange.startIndex !== undefined && brushRange.endIndex !== undefined) {
       const startIdx = Math.max(0, brushRange.startIndex);
       const endIdx = Math.min(priceData.length - 1, brushRange.endIndex);
       
-      // 인덱스 유효성 검증
-      if (startIdx <= endIdx && startIdx < priceData.length && endIdx >= 0) {
-        setBrushIndexes({
-          startIndex: startIdx,
-          endIndex: endIdx
-        });
-        
-        // Brush로 선택된 범위의 데이터만 필터링 (전체 데이터 기준)
-        const selectedData = priceData.slice(startIdx, endIdx + 1);
-        
-        // 데이터 유효성 검증
-        const validatedData = validateChartData(selectedData);
-        
-        if (validatedData.length > 0) {
-          setFilteredData(validatedData);
-          setBrushControlled(true); // Brush가 수동으로 조작됨을 표시
-          setSelectedPeriod('custom'); // 기간을 custom으로 변경
-          
-          // 선택된 범위의 최신 날짜를 기준점으로 저장
-          const maxSelectedTimestamp = Math.max(...validatedData.map(d => d.timestamp));
-          setBaseTimestamp(maxSelectedTimestamp);
-          
-          console.log('Brush changed:', {
-            startIndex: startIdx,
-            endIndex: endIdx,
-            originalLength: selectedData.length,
-            validatedLength: validatedData.length,
-            baseTimestamp: new Date(maxSelectedTimestamp).toISOString()
-          });
-        } else {
-          console.warn('No valid data in brush selection, keeping current data');
-        }
+      // 임시 브러쉬 인덱스 즉시 업데이트 (UI 반응성 유지)
+      setTempBrushIndexes({
+        startIndex: startIdx,
+        endIndex: endIdx
+      });
+      
+      // 기존 타이머 취소
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
       }
+      
+      // 300ms 후 실제 차트 업데이트
+      debounceTimerRef.current = setTimeout(() => {
+        // 인덱스 유효성 검증
+        if (startIdx <= endIdx && startIdx < priceData.length && endIdx >= 0) {
+          setBrushIndexes({
+            startIndex: startIdx,
+            endIndex: endIdx
+          });
+          
+          // Brush로 선택된 범위의 데이터만 필터링 (전체 데이터 기준)
+          const selectedData = priceData.slice(startIdx, endIdx + 1);
+          
+          // 데이터 유효성 검증
+          const validatedData = validateChartData(selectedData);
+          
+          if (validatedData.length > 0) {
+            setFilteredData(validatedData);
+            setBrushControlled(true); // Brush가 수동으로 조작됨을 표시
+            setSelectedPeriod('custom'); // 기간을 custom으로 변경
+            
+            // 선택된 범위의 최신 날짜를 기준점으로 저장
+            const maxSelectedTimestamp = Math.max(...validatedData.map(d => d.timestamp));
+            setBaseTimestamp(maxSelectedTimestamp);
+            
+            console.log('Brush changed:', {
+              startIndex: startIdx,
+              endIndex: endIdx,
+              originalLength: selectedData.length,
+              validatedLength: validatedData.length,
+              baseTimestamp: new Date(maxSelectedTimestamp).toISOString()
+            });
+          } else {
+            console.warn('No valid data in brush selection, keeping current data');
+          }
+        }
+      }, 300); // 300ms debounce delay
     }
-  };
+  }, [priceData]);
 
   // 기간 선택 변경시 데이터 필터링 및 Brush 인덱스 설정
   useEffect(() => {
@@ -206,14 +231,17 @@ export default function GraphPage() {
       // Brush 인덱스 계산
       if (priceData.length === 0 || validatedData.length === 0) {
         setBrushIndexes({});
+        setTempBrushIndexes({}); // 임시 브러쉬 인덱스도 초기화
       } else {
         // 필터링된 데이터의 첫 번째 항목이 전체 데이터에서 몇 번째인지 찾기
         const startIndex = priceData.findIndex(item => item.timestamp === validatedData[0].timestamp);
         const endIndex = priceData.findIndex(item => item.timestamp === validatedData[validatedData.length - 1].timestamp);
-        setBrushIndexes({ 
+        const newIndexes = { 
           startIndex: startIndex >= 0 ? startIndex : 0, 
           endIndex: endIndex >= 0 ? endIndex : priceData.length - 1 
-        });
+        };
+        setBrushIndexes(newIndexes);
+        setTempBrushIndexes(newIndexes); // 임시 브러쉬 인덱스도 동기화
       }
       
       // brushControlled는 유지하되, 현재 기준 날짜는 계속 유지
@@ -415,8 +443,8 @@ export default function GraphPage() {
                           dataKey="Close" 
                           stroke="#6366f1" 
                           strokeWidth={2}
-                          dot={{ fill: '#6366f1', r: 4 }}
-                          activeDot={{ r: 6 }}
+                          dot={false}
+                          activeDot={{ r: 5 }}
                           name="종가"
                         />
                         <Brush 
@@ -425,8 +453,8 @@ export default function GraphPage() {
                           stroke="#6366f1"
                           fill="#e0e7ff"
                           tickFormatter={(value) => formatTimestamp(value)}
-                          startIndex={brushIndexes.startIndex}
-                          endIndex={brushIndexes.endIndex}
+                          startIndex={tempBrushIndexes.startIndex !== undefined ? tempBrushIndexes.startIndex : brushIndexes.startIndex}
+                          endIndex={tempBrushIndexes.endIndex !== undefined ? tempBrushIndexes.endIndex : brushIndexes.endIndex}
                           onChange={handleBrushChange}
                         />
                       </LineChart>
@@ -469,8 +497,8 @@ export default function GraphPage() {
                           stroke="#6366f1"
                           fill="#e0e7ff"
                           tickFormatter={(value) => formatTimestamp(value)}
-                          startIndex={brushIndexes.startIndex}
-                          endIndex={brushIndexes.endIndex}
+                          startIndex={tempBrushIndexes.startIndex !== undefined ? tempBrushIndexes.startIndex : brushIndexes.startIndex}
+                          endIndex={tempBrushIndexes.endIndex !== undefined ? tempBrushIndexes.endIndex : brushIndexes.endIndex}
                           onChange={handleBrushChange}
                         />
                       </BarChart>
@@ -521,8 +549,8 @@ export default function GraphPage() {
                           stroke="#6366f1"
                           fill="#e0e7ff"
                           tickFormatter={(value) => formatTimestamp(value)}
-                          startIndex={brushIndexes.startIndex}
-                          endIndex={brushIndexes.endIndex}
+                          startIndex={tempBrushIndexes.startIndex !== undefined ? tempBrushIndexes.startIndex : brushIndexes.startIndex}
+                          endIndex={tempBrushIndexes.endIndex !== undefined ? tempBrushIndexes.endIndex : brushIndexes.endIndex}
                           onChange={handleBrushChange}
                         />
                       </AreaChart>
