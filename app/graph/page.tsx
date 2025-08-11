@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import { getDataSimple } from "@/lib/data";
+import { saveToIndexedDB, loadFromIndexedDB, isCacheValid } from "@/lib/indexeddb";
 
 // Highcharts용 데이터 타입 [timestamp, value]
 type ChartDataPoint = [number, number];
@@ -282,36 +283,72 @@ export default function Graph3Page() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Redis에서 데이터 로드
-        const _coinprice = await getDataSimple<ChartDataPoint>("coinprice");
-        const _hashrate = await getDataSimple<ChartDataPoint>("hashrate");
-        const _blockreward = await getDataSimple<ChartDataPoint>("blockreward");
-        const _totalfee = await getDataSimple<ChartDataPoint>("totalfee");
+        let coinpriceData = null;
+        const CACHE_KEY = 'coinprice_data';
+        const CACHE_MAX_AGE = 60 * 60 * 1000; // 60분 캐시 유효 시간   현제 쓰지 않음
         
-        if (chartComponentRef.current && _coinprice.success && _coinprice.data) {
+        // 1. IndexedDB에서 캐시된 데이터 확인
+        const isCached = await isCacheValid(CACHE_KEY, CACHE_MAX_AGE);
+        
+        if (isCached) {
+          // 캐시가 유효하면 IndexedDB에서 데이터 로드
+          console.log('인덱스 db에서 가져옴 Loading coinprice data from IndexedDB cache...');
+          coinpriceData = await loadFromIndexedDB(CACHE_KEY);
+        }
+        
+        // 2. 캐시가 없거나 만료되었으면 서버에서 데이터 가져오기
+        if (!coinpriceData) {
+          console.log('서버에서 가져옴 Fetching coinprice data from server...');
+          const _coinprice = await getDataSimple<ChartDataPoint>("coinprice");
+          
+          if (_coinprice.success && _coinprice.data) {
+            coinpriceData = _coinprice.data;
+
+            // const date = new Date(timestamp);
+            // console.log(parseInt(coinpriceData[coinpriceData.length-1]))
+            // console.log("체크----------------",parseInt(coinpriceData[coinpriceData.length-1][0]))
+            // const _lasttimestemp = parseInt(coinpriceData[coinpriceData.length-1][0])
+            // console.log(new Date(_lasttimestemp))
+
+            // IndexedDB에 저장
+            await saveToIndexedDB(CACHE_KEY, coinpriceData, parseInt(coinpriceData[coinpriceData.length-1][0]));
+            // console.log('Coinprice data saved to IndexedDB');
+          } else {
+            console.log('Failed to fetch coinprice data:', _coinprice.error);
+          }
+        }
+        
+        // // 나머지 데이터는 항상 서버에서 가져오기 (필요시 이것도 캐싱 가능)
+        // const _hashrate = await getDataSimple<ChartDataPoint>("hashrate");
+        // const _blockreward = await getDataSimple<ChartDataPoint>("blockreward");
+        // const _totalfee = await getDataSimple<ChartDataPoint>("totalfee");
+        
+        // 차트 업데이트
+        if (chartComponentRef.current && coinpriceData) {
           const chart = chartComponentRef.current.chart;
+          
           // 첫 번째 시리즈: Bitcoin 데이터 업데이트
-          chart.series[0].setData(_coinprice.data, false);
+          chart.series[0].setData(coinpriceData, false);
           
-          // 두 번째 시리즈: Hash Rate 데이터 업데이트
-          if (_hashrate.success && _hashrate.data) {
-            chart.series[1].setData(_hashrate.data, false);
-          }
+          // // 두 번째 시리즈: Hash Rate 데이터 업데이트
+          // if (_hashrate.success && _hashrate.data) {
+          //   chart.series[1].setData(_hashrate.data, false);
+          // }
           
-          // 세 번째 시리즈: Block Reward 데이터 업데이트
-          if (_blockreward.success && _blockreward.data) {
-            chart.series[2].setData(_blockreward.data, false);
-          }
+          // // 세 번째 시리즈: Block Reward 데이터 업데이트
+          // if (_blockreward.success && _blockreward.data) {
+          //   chart.series[2].setData(_blockreward.data, false);
+          // }
           
-          // 네 번째 시리즈: Total Fee 데이터 업데이트
-          if (_totalfee.success && _totalfee.data) {
-            chart.series[3].setData(_totalfee.data, false);
-          }
+          // // 네 번째 시리즈: Total Fee 데이터 업데이트
+          // if (_totalfee.success && _totalfee.data) {
+          //   chart.series[3].setData(_totalfee.data, false);
+          // }
           
           // 차트 다시 그리기
           chart.redraw();
-        } else {
-          console.log('Data loading failed:', _coinprice.error);
+        } else if (!coinpriceData) {
+          console.log('No coinprice data available');
         }
       } catch (error) {
         console.error('Error loading data:', error);
