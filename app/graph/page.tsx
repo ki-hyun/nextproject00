@@ -13,7 +13,7 @@ const HighchartsReact = dynamic(
 
 interface ChartData {
   timestamp: number;
-  price: number;
+  value: number;
 }
 
 interface PriceData {
@@ -25,7 +25,7 @@ interface PriceData {
   Volume: string;    // 거래량
 }
 
-export default function Graph3Page() {
+export default function GraphPage() {
   const [priceData, setPriceData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -140,12 +140,12 @@ export default function Graph3Page() {
         break;
       case 'all':
       default:
-        return priceData.map(item => [item.timestamp, item.price]);
+        return priceData.map(item => [item.timestamp, item.value || 0]);
     }
     
     return priceData
       .filter(item => item.timestamp >= cutoffTime)
-      .map(item => [item.timestamp, item.price]);
+      .map(item => [item.timestamp, item.value || 0]);
   };
 
   // Highcharts 설정 (CoinWarz 스타일)
@@ -474,19 +474,19 @@ export default function Graph3Page() {
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Latest Price</p>
                   <p className="text-xl font-bold text-orange-500">
-                    ${priceData[priceData.length - 1]?.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    ${(priceData[priceData.length - 1]?.value || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Max Price</p>
                   <p className="text-xl font-bold text-green-500">
-                    ${Math.max(...priceData.map(d => d.price)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    ${Math.max(...priceData.map(d => d.value || 0)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Min Price</p>
                   <p className="text-xl font-bold text-red-500">
-                    ${Math.min(...priceData.map(d => d.price)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    ${Math.min(...priceData.map(d => d.value || 0)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
               </div>

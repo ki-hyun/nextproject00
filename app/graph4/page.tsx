@@ -3,12 +3,6 @@
 import { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import { getData, getData222 } from "@/lib/data";
-
-interface PriceData {
-  timestamp: number;
-  value: number;
-}
 
 // Highcharts helper 함수 정의
 if (typeof Highcharts === 'object') {
@@ -133,22 +127,10 @@ export default function Graph3Page() {
       series: {
         tooltip: {
           valueDecimals: 2
-        }
-      }
-    },
-    
-    xAxis: {
-      type: 'datetime',
-      labels: {
-        formatter: function() {
-          return Highcharts.dateFormat('%Y-%m-%d', this.value);
         },
-        style: {
-          color: '#6b7280'
-        }
-      },
-      lineColor: 'rgba(0, 0, 0, 0.1)',
-      tickColor: 'rgba(0, 0, 0, 0.1)'
+        pointStart: Date.UTC(2023, 0, 1),
+        pointIntervalUnit: 'day' as any
+      }
     },
 
     responsive: {
@@ -170,12 +152,19 @@ export default function Graph3Page() {
 
     series: [
       {
-        name: 'Bitcoin Price (Redis)',
+        name: 'Invested Amount',
         type: 'line',
         data: [],
+        step: true as any,
         color: '#3b82f6',
-        lineWidth: 2,
-        turboThreshold: 0  // 모든 데이터 포인트 표시
+        lineWidth: 2
+      },
+      {
+        name: 'Portfolio Value',
+        type: 'line',
+        data: [],
+        color: '#10b981',
+        lineWidth: 2
       }
     ],
 
@@ -205,50 +194,18 @@ export default function Graph3Page() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Redis에서 coinprice 데이터 로드
-        const result = await getData<PriceData>("coinprice");
-        const result2 = await getData222<PriceData>("hashrate");
-        // hashrate
+        // 데이터 로드
+        const response = await fetch(
+          'https://cdn.jsdelivr.net/gh/highcharts/highcharts@a9dcb12aad/samples/data/investment-simulator.json'
+        );
+        const data = await response.json();
 
-        // { timestamp: 1293840000000, value: 130.32210291 }
-
-        // console.log(result2)
-
-        // // 외부 데이터도 로드 (두 번째 시리즈용)
-        // const response = await fetch(
-        //   'https://cdn.jsdelivr.net/gh/highcharts/highcharts@a9dcb12aad/samples/data/investment-simulator.json'
-        // );
-        // const data = await response.json();
-
-
-
-        console.log('Redis result:', result);
-        
-        if (chartComponentRef.current && result.success && result.data) {
+        if (chartComponentRef.current) {
           const chart = chartComponentRef.current.chart;
           
-          console.log('Raw data:', result.data);
-          
-          // const naldata = result.data.map((item: PriceData) => {
-          //   // console.log('Processing item:', item, 'timestamp:', item.timestamp, 'value:', item.value);
-          //   // return [item.timestamp, item.value || 0];
-          //   return [item.timestamp];
-          // });
-
-          // 첫 번째 시리즈: Redis의 coinprice 데이터
-          const coinPriceData = result.data.map((item: PriceData) => {
-            console.log('Processing item:', item, 'timestamp:', item.timestamp, 'value:', item.value);
-            return [item.timestamp, item.value || 0];
-          });
-          
-          console.log('Processed coinPriceData:', coinPriceData);
-          console.log('First point:', coinPriceData[0]);
-          console.log('Last point:', coinPriceData[coinPriceData.length - 1]);
-
-          // 시리즈 데이터 업데이트 (Bitcoin 데이터만)
-          chart.series[0].setData(coinPriceData, true);
-        } else {
-          console.log('Data loading failed:', result.error);
+          // 시리즈 데이터 업데이트
+          chart.series[0].setData(data[0], false);
+          chart.series[1].setData(data[1], true);
         }
       } catch (error) {
         console.error('Error loading data:', error);
