@@ -97,17 +97,41 @@ export default function Graph3Page() {
           color: '#10b981'
         }
       }
+    }, {
+      // 세 번째 Y축: Block Reward
+      opposite: false,
+      labels: {
+        align: 'left',
+        x: 0,
+        style: {
+          color: '#6b7280'
+        }
+      },
+      gridLineColor: 'rgba(0, 0, 0, 0.05)',
+      title: {
+        // text: 'Block Reward (BTC)',
+        style: {
+          color: '#f59e0b'
+        }
+      }
+    }, {
+      // 네 번째 Y축: Total Fee
+      opposite: true,
+      labels: {
+        align: 'right',
+        x: 0,
+        style: {
+          color: '#6b7280'
+        }
+      },
+      gridLineColor: 'rgba(0, 0, 0, 0.05)',
+      title: {
+        // text: 'Total Fee (BTC)',
+        style: {
+          color: '#ef4444'
+        }
+      }
     }],
-
-    // xAxis: {
-    //   labels: {
-    //     style: {
-    //       color: '#6b7280'
-    //     }
-    //   },
-    //   lineColor: 'rgba(0, 0, 0, 0.1)',
-    //   tickColor: 'rgba(0, 0, 0, 0.1)'
-    // },
 
     legend: {
       enabled: true,
@@ -203,6 +227,32 @@ export default function Graph3Page() {
           valueDecimals: 2,
           valueSuffix: ' TH/s'
         }
+      },
+      {
+        name: 'Block Reward',
+        type: 'line',
+        data: [],
+        color: '#f59e0b',
+        lineWidth: 2,
+        turboThreshold: 0,  // 모든 데이터 포인트 표시
+        yAxis: 2,
+        tooltip: {
+          valueDecimals: 8,
+          valueSuffix: ' BTC'
+        }
+      },
+      {
+        name: 'Total Fee',
+        type: 'line',
+        data: [],
+        color: '#ef4444',
+        lineWidth: 2,
+        turboThreshold: 0,  // 모든 데이터 포인트 표시
+        yAxis: 3,
+        tooltip: {
+          valueDecimals: 8,
+          valueSuffix: ' BTC'
+        }
       }
     ],
 
@@ -232,28 +282,11 @@ export default function Graph3Page() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Redis에서 coinprice 데이터 로드
+        // Redis에서 데이터 로드
         const _coinprice = await getDataSimple<ChartDataPoint>("coinprice");
         const _hashrate = await getDataSimple<ChartDataPoint>("hashrate");
-        // const _hashrate = await getDataSimple<ChartDataPoint>("hashrate");
-        // const _hashrate = await getDataSimple<ChartDataPoint>("hashrate");
-
-        // hashrate
-
-        // { timestamp: 1293840000000, value: 130.32210291 }
-
-        // console.log(result2)
-
-        // // 외부 데이터도 로드 (두 번째 시리즈용)
-        // const response = await fetch(
-        //   'https://cdn.jsdelivr.net/gh/highcharts/highcharts@a9dcb12aad/samples/data/investment-simulator.json'
-        // );
-        // const data = await response.json();
-
-
-
-        // console.log('Redis result:', result);
-        // console.log('Redis result2:', result2);
+        const _blockreward = await getDataSimple<ChartDataPoint>("blockreward");
+        const _totalfee = await getDataSimple<ChartDataPoint>("totalfee");
         
         if (chartComponentRef.current && _coinprice.success && _coinprice.data) {
           const chart = chartComponentRef.current.chart;
@@ -263,6 +296,16 @@ export default function Graph3Page() {
           // 두 번째 시리즈: Hash Rate 데이터 업데이트
           if (_hashrate.success && _hashrate.data) {
             chart.series[1].setData(_hashrate.data, false);
+          }
+          
+          // 세 번째 시리즈: Block Reward 데이터 업데이트
+          if (_blockreward.success && _blockreward.data) {
+            chart.series[2].setData(_blockreward.data, false);
+          }
+          
+          // 네 번째 시리즈: Total Fee 데이터 업데이트
+          if (_totalfee.success && _totalfee.data) {
+            chart.series[3].setData(_totalfee.data, false);
           }
           
           // 차트 다시 그리기
