@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import { getData, getData222, getDataSimple } from "@/lib/data";
+import { getDataSimple } from "@/lib/data";
 
 // Highcharts용 데이터 타입 [timestamp, value]
 type ChartDataPoint = [number, number];
@@ -75,7 +75,7 @@ export default function Graph3Page() {
       },
       gridLineColor: 'rgba(0, 0, 0, 0.05)',
       title: {
-        text: 'Bitcoin Price (USD)',
+        // text: 'Bitcoin Price (USD)',
         style: {
           color: '#3b82f6'
         }
@@ -92,7 +92,7 @@ export default function Graph3Page() {
       },
       gridLineColor: 'rgba(0, 0, 0, 0.05)',
       title: {
-        text: 'Hash Rate (TH/s)',
+        // text: 'Hash Rate (TH/s)',
         style: {
           color: '#10b981'
         }
@@ -169,7 +169,7 @@ export default function Graph3Page() {
             legend: {
               align: 'right',
               layout: 'proximate',
-              labelFormat: '{name} <b>({lastValue} EUR)</b>'
+              labelFormat: '{name}'
             }
           }
         }
@@ -178,7 +178,7 @@ export default function Graph3Page() {
 
     series: [
       {
-        name: 'Bitcoin Price',
+        name: 'Price',
         type: 'line',
         data: [],
         color: '#3b82f6',
@@ -192,7 +192,7 @@ export default function Graph3Page() {
         }
       },
       {
-        name: 'Hash Rate',
+        name: 'HashRate',
         type: 'line',
         data: [],
         color: '#10b981',
@@ -233,8 +233,11 @@ export default function Graph3Page() {
     const loadData = async () => {
       try {
         // Redis에서 coinprice 데이터 로드
-        const result = await getDataSimple<ChartDataPoint>("coinprice");
-        const result2 = await getDataSimple<ChartDataPoint>("hashrate");
+        const _coinprice = await getDataSimple<ChartDataPoint>("coinprice");
+        const _hashrate = await getDataSimple<ChartDataPoint>("hashrate");
+        // const _hashrate = await getDataSimple<ChartDataPoint>("hashrate");
+        // const _hashrate = await getDataSimple<ChartDataPoint>("hashrate");
+
         // hashrate
 
         // { timestamp: 1293840000000, value: 130.32210291 }
@@ -252,20 +255,20 @@ export default function Graph3Page() {
         // console.log('Redis result:', result);
         // console.log('Redis result2:', result2);
         
-        if (chartComponentRef.current && result.success && result.data) {
+        if (chartComponentRef.current && _coinprice.success && _coinprice.data) {
           const chart = chartComponentRef.current.chart;
           // 첫 번째 시리즈: Bitcoin 데이터 업데이트
-          chart.series[0].setData(result.data, false);
+          chart.series[0].setData(_coinprice.data, false);
           
           // 두 번째 시리즈: Hash Rate 데이터 업데이트
-          if (result2.success && result2.data) {
-            chart.series[1].setData(result2.data, false);
+          if (_hashrate.success && _hashrate.data) {
+            chart.series[1].setData(_hashrate.data, false);
           }
           
           // 차트 다시 그리기
           chart.redraw();
         } else {
-          console.log('Data loading failed:', result.error);
+          console.log('Data loading failed:', _coinprice.error);
         }
       } catch (error) {
         console.error('Error loading data:', error);
