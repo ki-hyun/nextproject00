@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getPriceData } from './actions';
+import { getData } from "@/lib/data";
 import TabNavigation from '../../components/TabNavigation';
 import dynamic from 'next/dynamic';
 
@@ -14,6 +14,15 @@ const HighchartsReact = dynamic(
 interface ChartData {
   timestamp: number;
   price: number;
+}
+
+interface PriceData {
+  timestamp: string; // timestamp는 문자열로 제공됨
+  Open: string;      // Open 가격은 문자열로 제공됨
+  High: string;      // High 가격
+  Low: string;       // Low 가격
+  Close: string;     // Close 가격
+  Volume: string;    // 거래량
 }
 
 export default function Graph3Page() {
@@ -77,8 +86,9 @@ export default function Graph3Page() {
     const loadPriceData = async () => {
       try {
         setLoading(true);
-        const result = await getPriceData();
+        // const result = await getPriceData();
         
+        const result = await getData<PriceData>("coinprice")
         console.log('Price data:', result);
 
         if (result.success && result.data) {
