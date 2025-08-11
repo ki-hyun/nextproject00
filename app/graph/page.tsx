@@ -1,499 +1,303 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getData } from "@/lib/data";
-import TabNavigation from '../../components/TabNavigation';
-import dynamic from 'next/dynamic';
+import { useEffect, useRef } from 'react';
+import Highcharts from 'highcharts/highstock';
+import HighchartsReact from 'highcharts-react-official';
+import { getData, getData222, getDataSimple } from "@/lib/data";
 
-// Highcharts를 동적으로 import (SSR 비활성화)
-const HighchartsReact = dynamic(
-  () => import('highcharts-react-official'),
-  { ssr: false }
-);
+// Highcharts용 데이터 타입 [timestamp, value]
+type ChartDataPoint = [number, number];
 
-interface ChartData {
-  timestamp: number;
-  value: number;
-}
+export default function Graph3Page() {
+  const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
-interface PriceData {
-  timestamp: string; // timestamp는 문자열로 제공됨
-  Open: string;      // Open 가격은 문자열로 제공됨
-  High: string;      // High 가격
-  Low: string;       // Low 가격
-  Close: string;     // Close 가격
-  Volume: string;    // 거래량
-}
-
-export default function GraphPage() {
-  const [priceData, setPriceData] = useState<ChartData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedPeriod, setSelectedPeriod] = useState<string>('all');
-  const [Highcharts, setHighcharts] = useState<any>(null);
-  const [isClient, setIsClient] = useState(false);
-
-  // 클라이언트 사이드에서만 Highcharts 로드
-  useEffect(() => {
-    setIsClient(true);
-    const loadHighcharts = async () => {
-      try {
-        const HC = (await import('highcharts/highstock')).default;
-        
-        // Highstock은 이미 stock 기능이 포함되어 있음
-        // 추가 모듈은 선택적으로 로드
-        if (typeof HC === 'object' && HC) {
-          try {
-            // exporting 모듈 로드 (오류 시 무시)
-            const exportingModule = await import('highcharts/modules/exporting');
-            const Exporting: any = exportingModule.default || exportingModule;
-            if (typeof Exporting === 'function') {
-              Exporting(HC);
-            }
-          } catch (e) {
-            console.warn('Exporting module could not be loaded:', e);
-          }
-          
-          try {
-            // fullscreen 모듈 로드 (오류 시 무시)
-            const fullscreenModule = await import('highcharts/modules/full-screen');
-            const Fullscreen: any = fullscreenModule.default || fullscreenModule;
-            if (typeof Fullscreen === 'function') {
-              Fullscreen(HC);
-            }
-          } catch (e) {
-            console.warn('Fullscreen module could not be loaded:', e);
-          }
-          
-          setHighcharts(HC);
-        }
-      } catch (error) {
-        console.error('Failed to load Highcharts:', error);
-        // 기본 Highcharts만 로드 시도
-        try {
-          const basicHC = (await import('highcharts')).default;
-          setHighcharts(basicHC);
-        } catch (basicError) {
-          console.error('Failed to load basic Highcharts:', basicError);
-        }
-      }
-    };
-    loadHighcharts();
-  }, []);
-
-  // Redis에서 price 데이터 로드
-  useEffect(() => {
-    const loadPriceData = async () => {
-      try {
-        setLoading(true);
-        // const result = await getPriceData();
-        
-        const result = await getData<PriceData>("coinprice")
-        console.log('Price data:', result);
-
-        if (result.success && result.data) {
-          // timestamp 기준으로 정렬 (과거 -> 최신)
-          const sortedData = [...result.data].sort((a, b) => a.timestamp - b.timestamp);
-          
-          if (sortedData.length > 0) {
-            setPriceData(sortedData);
-            setError(null);
-          } else {
-            setError('데이터가 없습니다');
-          }
-        } else {
-          setError(result.error || '데이터를 불러올 수 없습니다');
-        }
-      } catch (err) {
-        setError('데이터 로드 중 오류가 발생했습니다');
-        console.error('Price data load error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadPriceData();
-  }, []);
-
-  // 기간별 데이터 필터링
-  const getFilteredData = () => {
-    if (priceData.length === 0) return [];
-    
-    const now = Date.now();
-    let cutoffTime = 0;
-    
-    switch(selectedPeriod) {
-      case '1d':
-        cutoffTime = now - (24 * 60 * 60 * 1000);
-        break;
-      case '7d':
-        cutoffTime = now - (7 * 24 * 60 * 60 * 1000);
-        break;
-      case '30d':
-        cutoffTime = now - (30 * 24 * 60 * 60 * 1000);
-        break;
-      case '90d':
-        cutoffTime = now - (90 * 24 * 60 * 60 * 1000);
-        break;
-      case '1y':
-        cutoffTime = now - (365 * 24 * 60 * 60 * 1000);
-        break;
-      case 'all':
-      default:
-        return priceData.map(item => [item.timestamp, item.value || 0]);
-    }
-    
-    return priceData
-      .filter(item => item.timestamp >= cutoffTime)
-      .map(item => [item.timestamp, item.value || 0]);
-  };
-
-  // Highcharts 설정 (CoinWarz 스타일)
-  const chartOptions: any = {
+  const options: Highcharts.Options = {
     chart: {
-      type: 'area',
-      backgroundColor: '#ffffff',
+      backgroundColor: 'transparent',
       style: {
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-      },
-      height: 500,
-      zooming: {
-        type: 'x'
-      }
-    } as any,
-    title: {
-      text: 'Bitcoin Price Chart',
-      style: {
-        fontSize: '24px',
-        fontWeight: 'bold',
-        color: '#333'
+        fontFamily: 'inherit'
       }
     },
-    subtitle: {
-      text: 'Historical Bitcoin price data from Redis',
-      style: {
-        fontSize: '14px',
-        color: '#666'
-      }
-    },
-    xAxis: {
-      type: 'datetime',
-      gridLineWidth: 1,
-      gridLineColor: '#f0f0f0',
-      labels: {
+    
+    rangeSelector: {
+      selected: 4,
+      buttonTheme: {
+        fill: 'rgba(59, 130, 246, 0.1)',
+        stroke: 'rgba(59, 130, 246, 0.5)',
         style: {
-          color: '#666',
-          fontSize: '12px'
-        }
-      },
-      crosshair: {
-        width: 1,
-        color: '#999',
-        dashStyle: 'Dash'
-      }
-    },
-    yAxis: {
-      title: {
-        text: 'Price (USD)',
-        style: {
-          color: '#666',
-          fontSize: '14px'
-        }
-      },
-      gridLineColor: '#f0f0f0',
-      labels: {
-        style: {
-          color: '#666',
-          fontSize: '12px'
+          color: '#3b82f6'
         },
-        formatter: function(this: any) {
-          const value = Number(this.value);
-          if (value >= 1000000) {
-            return '$' + (value / 1000000).toFixed(1) + 'M';
-          } else if (value >= 1000) {
-            return '$' + (value / 1000).toFixed(1) + 'K';
-          }
-          return '$' + value.toFixed(0);
-        }
-      }
-    },
-    tooltip: {
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-      borderColor: '#ccc',
-      borderRadius: 8,
-      borderWidth: 1,
-      shadow: true,
-      style: {
-        fontSize: '12px',
-        color: '#333'
-      },
-      xDateFormat: '%Y-%m-%d %H:%M',
-      pointFormat: '<b>{series.name}:</b> ${point.y:,.2f}'
-    },
-    plotOptions: {
-      area: {
-        fillColor: {
-          linearGradient: {
-            x1: 0,
-            y1: 0,
-            x2: 0,
-            y2: 1
-          },
-          stops: [
-            [0, 'rgba(255, 165, 0, 0.5)'],
-            [1, 'rgba(255, 165, 0, 0.1)']
-          ]
-        },
-        marker: {
-          radius: 2,
-          enabled: false,
-          states: {
-            hover: {
-              enabled: true,
-              radius: 4
-            }
-          }
-        },
-        lineWidth: 2,
-        lineColor: '#FF8C00',
         states: {
           hover: {
-            lineWidth: 3
+            fill: 'rgba(59, 130, 246, 0.2)',
+            stroke: '#3b82f6',
+            style: {
+              color: '#2563eb'
+            }
+          },
+          select: {
+            fill: '#3b82f6',
+            stroke: '#3b82f6',
+            style: {
+              color: 'white'
+            }
           }
-        },
-        threshold: null,
-        turboThreshold: 0,  // 모든 데이터 포인트 표시
-        boostThreshold: 0   // 부스트 모드 비활성화
+        }
       },
-      series: {
-        turboThreshold: 0,
-        boostThreshold: 0
+      inputBoxBorderColor: 'rgba(59, 130, 246, 0.3)',
+      inputStyle: {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        color: '#374151'
+      },
+      labelStyle: {
+        color: '#6b7280'
       }
     },
+
+    title: {
+      text: 'Investment Simulator',
+      style: {
+        color: '#111827',
+        fontSize: '24px',
+        fontWeight: 'bold'
+      }
+    },
+
+    yAxis: [{
+      // 첫 번째 Y축: Bitcoin Price
+      opposite: false,
+      labels: {
+        align: 'left',
+        x: 0,
+        style: {
+          color: '#6b7280'
+        }
+      },
+      gridLineColor: 'rgba(0, 0, 0, 0.05)',
+      title: {
+        text: 'Bitcoin Price (USD)',
+        style: {
+          color: '#3b82f6'
+        }
+      }
+    }, {
+      // 두 번째 Y축: Hash Rate
+      opposite: true,
+      labels: {
+        align: 'right',
+        x: 0,
+        style: {
+          color: '#6b7280'
+        }
+      },
+      gridLineColor: 'rgba(0, 0, 0, 0.05)',
+      title: {
+        text: 'Hash Rate (TH/s)',
+        style: {
+          color: '#10b981'
+        }
+      }
+    }],
+
+    // xAxis: {
+    //   labels: {
+    //     style: {
+    //       color: '#6b7280'
+    //     }
+    //   },
+    //   lineColor: 'rgba(0, 0, 0, 0.1)',
+    //   tickColor: 'rgba(0, 0, 0, 0.1)'
+    // },
+
     legend: {
       enabled: true,
-      align: 'center',
-      verticalAlign: 'bottom',
-      borderWidth: 0,
       itemStyle: {
-        color: '#666',
-        fontSize: '12px'
+        color: '#374151',
+        fontWeight: 'normal'
+      },
+      itemHoverStyle: {
+        color: '#111827'
       }
     },
+
+    tooltip: {
+      shared: false,
+      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+      borderColor: 'rgba(0, 0, 0, 0.1)',
+      borderRadius: 8,
+      shadow: {
+        color: 'rgba(0, 0, 0, 0.1)',
+        offsetX: 0,
+        offsetY: 2,
+        opacity: 0.5,
+        width: 3
+      },
+      style: {
+        color: '#374151'
+      }
+    },
+
+    plotOptions: {
+      series: {
+        tooltip: {
+          valueDecimals: 2
+        }
+      }
+    },
+    
+    xAxis: {
+      type: 'datetime',
+      labels: {
+        formatter: function() {
+          return Highcharts.dateFormat('%Y-%m-%d', this.value as number);
+        },
+        style: {
+          color: '#6b7280'
+        }
+      },
+      lineColor: 'rgba(0, 0, 0, 0.1)',
+      tickColor: 'rgba(0, 0, 0, 0.1)'
+    },
+
+    responsive: {
+      rules: [
+        {
+          condition: {
+            minWidth: 1200
+          },
+          chartOptions: {
+            legend: {
+              align: 'right',
+              layout: 'proximate',
+              labelFormat: '{name} <b>({lastValue} EUR)</b>'
+            }
+          }
+        }
+      ]
+    },
+
+    series: [
+      {
+        name: 'Bitcoin Price',
+        type: 'line',
+        data: [],
+        color: '#3b82f6',
+        lineWidth: 2,
+        turboThreshold: 0,  // 모든 데이터 포인트 표시
+        yAxis: 0,
+        tooltip: {
+          valueDecimals: 2,
+          valuePrefix: '$',
+          valueSuffix: ' USD'
+        }
+      },
+      {
+        name: 'Hash Rate',
+        type: 'line',
+        data: [],
+        color: '#10b981',
+        lineWidth: 2,
+        turboThreshold: 0,  // 모든 데이터 포인트 표시
+        yAxis: 1,
+        tooltip: {
+          valueDecimals: 2,
+          valueSuffix: ' TH/s'
+        }
+      }
+    ],
+
     credits: {
       enabled: false
     },
-    series: [{
-      type: 'area',
-      name: 'Bitcoin Price',
-      data: getFilteredData(),
-      turboThreshold: 0,  // 데이터 포인트 제한 없음
-      boostThreshold: 0   // 부스트 모드 제한 없음
-    }],
-    navigation: {
-      buttonOptions: {
-        theme: {
-          stroke: '#ccc',
-          fill: '#fff',
-          states: {
-            hover: {
-              fill: '#f5f5f5'
-            },
-            select: {
-              fill: '#e6e6e6'
-            }
-          }
-        }
-      }
-    },
-    rangeSelector: {
-      buttons: [{
-        type: 'day',
-        count: 1,
-        text: '1d'
-      }, {
-        type: 'week',
-        count: 1,
-        text: '7d'
-      }, {
-        type: 'month',
-        count: 1,
-        text: '30d'
-      }, {
-        type: 'month',
-        count: 3,
-        text: '90d'
-      }, {
-        type: 'year',
-        count: 1,
-        text: '1y'
-      }, {
-        type: 'all',
-        text: 'All'
-      }],
-      selected: 5,
-      inputEnabled: false
-    },
+
     navigator: {
-      enabled: true,
-      series: {
-        color: '#FF8C00',
-        lineWidth: 1
+      maskFill: 'rgba(59, 130, 246, 0.1)',
+      outlineColor: 'rgba(59, 130, 246, 0.3)',
+      handles: {
+        backgroundColor: '#3b82f6',
+        borderColor: '#2563eb'
       }
     },
+
     scrollbar: {
-      enabled: true
+      barBackgroundColor: 'rgba(0, 0, 0, 0.05)',
+      barBorderColor: 'rgba(0, 0, 0, 0.05)',
+      buttonBackgroundColor: 'rgba(0, 0, 0, 0.05)',
+      buttonBorderColor: 'rgba(0, 0, 0, 0.05)',
+      trackBackgroundColor: 'rgba(0, 0, 0, 0.02)',
+      trackBorderColor: 'rgba(0, 0, 0, 0.02)'
     }
   };
 
-  // 데이터 새로고침 함수
-  const refreshData = async () => {
-    try {
-      setLoading(true);
-      const result = await getPriceData();
-      
-      if (result.success && result.data) {
-        const sortedData = [...result.data].sort((a, b) => a.timestamp - b.timestamp);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        // Redis에서 coinprice 데이터 로드
+        const result = await getDataSimple<ChartDataPoint>("coinprice");
+        const result2 = await getDataSimple<ChartDataPoint>("hashrate");
+        // hashrate
+
+        // { timestamp: 1293840000000, value: 130.32210291 }
+
+        // console.log(result2)
+
+        // // 외부 데이터도 로드 (두 번째 시리즈용)
+        // const response = await fetch(
+        //   'https://cdn.jsdelivr.net/gh/highcharts/highcharts@a9dcb12aad/samples/data/investment-simulator.json'
+        // );
+        // const data = await response.json();
+
+
+
+        // console.log('Redis result:', result);
+        // console.log('Redis result2:', result2);
         
-        if (sortedData.length > 0) {
-          setPriceData(sortedData);
-          setError(null);
+        if (chartComponentRef.current && result.success && result.data) {
+          const chart = chartComponentRef.current.chart;
+          // 첫 번째 시리즈: Bitcoin 데이터 업데이트
+          chart.series[0].setData(result.data, false);
+          
+          // 두 번째 시리즈: Hash Rate 데이터 업데이트
+          if (result2.success && result2.data) {
+            chart.series[1].setData(result2.data, false);
+          }
+          
+          // 차트 다시 그리기
+          chart.redraw();
+        } else {
+          console.log('Data loading failed:', result.error);
         }
-      } else {
-        setError(result.error || '데이터를 불러올 수 없습니다');
+      } catch (error) {
+        console.error('Error loading data:', error);
       }
-    } catch (err) {
-      setError('데이터 새로고침 중 오류가 발생했습니다');
-      console.error('Price data refresh error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    loadData();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <TabNavigation />
-      <main className="container mx-auto px-6 py-16">
-        <div className="max-w-7xl mx-auto">
-          {/* Header Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Bitcoin Price Chart
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Real-time Bitcoin price data from Redis
-                </p>
-              </div>
-              <button 
-                onClick={refreshData}
-                disabled={loading}
-                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 transition-colors"
-              >
-                {loading ? '로딩...' : '새로고침'}
-              </button>
-            </div>
-
-            {loading && (
-              <div className="mt-4 text-sm text-blue-600 dark:text-blue-400">
-                🔄 데이터 로딩 중...
-              </div>
-            )}
-
-            {error && (
-              <div className="mt-4 text-sm text-red-600 dark:text-red-400">
-                ❌ {error}
-              </div>
-            )}
-          </div>
-
-          {/* Period Selection Buttons */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6">
-            <div className="flex gap-2">
-              {['1d', '7d', '30d', '90d', '1y', 'all'].map((period) => (
-                <button
-                  key={period}
-                  onClick={() => setSelectedPeriod(period)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    selectedPeriod === period
-                      ? 'bg-orange-500 text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                  }`}
-                >
-                  {period === '1d' && '1 Day'}
-                  {period === '7d' && '7 Days'}
-                  {period === '30d' && '30 Days'}
-                  {period === '90d' && '90 Days'}
-                  {period === '1y' && '1 Year'}
-                  {period === 'all' && 'All Time'}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Chart Container */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-            {!isClient || !Highcharts ? (
-              <div className="h-96 flex items-center justify-center">
-                <div className="text-center text-gray-500 dark:text-gray-400">
-                  <div className="text-6xl mb-4">⏳</div>
-                  <div className="text-lg">차트 로딩 중...</div>
-                </div>
-              </div>
-            ) : priceData.length > 0 ? (
-              <HighchartsReact
-                highcharts={Highcharts}
-                constructorType={'stockChart'}
-                options={chartOptions}
-              />
-            ) : (
-              <div className="h-96 flex items-center justify-center">
-                <div className="text-center text-gray-500 dark:text-gray-400">
-                  <div className="text-6xl mb-4">📊</div>
-                  <div className="text-lg">데이터가 없습니다</div>
-                  <div className="text-sm mt-2">새로고침 버튼을 눌러 데이터를 로드하세요</div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Stats Section */}
-          {priceData.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mt-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Statistics
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Data Points</p>
-                  <p className="text-xl font-bold text-gray-900 dark:text-white">
-                    {priceData.length.toLocaleString()}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Latest Price</p>
-                  <p className="text-xl font-bold text-orange-500">
-                    ${(priceData[priceData.length - 1]?.value || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Max Price</p>
-                  <p className="text-xl font-bold text-green-500">
-                    ${Math.max(...priceData.map(d => d.value || 0)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Min Price</p>
-                  <p className="text-xl font-bold text-red-500">
-                    ${Math.min(...priceData.map(d => d.value || 0)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent mb-2">
+            Investment Simulator Chart
+          </h1>
+          <p className="text-gray-600">
+            Track your investment performance over time with interactive charts
+          </p>
         </div>
-      </main>
+
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-100" style={{ height: '800px' }}>
+          <HighchartsReact
+            highcharts={Highcharts}
+            constructorType={'stockChart'}
+            options={options}
+            ref={chartComponentRef}
+            containerProps={{ style: { height: '100%', width: '100%' } }}
+          />
+        </div>
+        
+      </div>
     </div>
   );
 }
