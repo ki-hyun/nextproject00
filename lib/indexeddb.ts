@@ -88,10 +88,10 @@ export const loadFromIndexedDB = async (key: string): Promise<any | null> => {
       request.onsuccess = () => {
         const result = request.result;
         if (result) {
-          console.log(`Data loaded from IndexedDB with key: ${key}`);
+          // console.log(`Data loaded from IndexedDB with key: ${key}`);
           resolve(result.data);
         } else {
-          console.log(`No data found in IndexedDB for key: ${key}`);
+          // console.log(`No data found in IndexedDB for key: ${key}`);
           resolve(null);
         }
       };
@@ -120,7 +120,7 @@ export const isCacheValid = async (key: string, maxAgeMs: number = 3600000): Pro
           
           const age = Date.now() - result.timestamp;
           // console.log(`Cache timestamp: ${formatTimestamp(result.timestamp)}, Age: ${Math.round(age / 1000)}s`);
-          console.log(`저장된 Cache timestamp: ${formatTimestamp(result.timestamp)}`);
+          // console.log(`저장된 Cache timestamp: ${formatTimestamp(result.timestamp)}`);
           
           const yesterday = new Date();
           yesterday.setDate(yesterday.getDate() - 1);
@@ -135,7 +135,7 @@ export const isCacheValid = async (key: string, maxAgeMs: number = 3600000): Pro
           // const currentDateTime = new Date(yesterdayTimestamp).toISOString().slice(2,16).replace('T','_').replace(/[-:]/g,'');  // "241211_1530"
 
           // console.log(`시간: ${currentYYMMDD}, ${currentDateTime}`);
-          console.log(parseInt(_day_check), parseInt(formatTimestamp(result.timestamp)));
+          // console.log(parseInt(_day_check), parseInt(formatTimestamp(result.timestamp)));
 
           resolve(_day_check <= _day_cache); // 캐쉬된 날짜가 어제보다 뒤임
           // resolve(age < maxAgeMs);

@@ -32,15 +32,23 @@ export async function getDataSimple<T>(_key: string): Promise<{
       const dataArray = Array.isArray(parsedData) ? parsedData : [parsedData];      
       // console.log(dataArray)
 
+      // 파일 자체에 정렬해서 정렬 따로 필요 없음
       // 데이터 변환: [timestamp, value] 배열 형식으로 변환
+      // const transformedData = dataArray
+      //   .map((item: any) => [
+      //     parseInt(item.timestamp),
+      //     parseFloat(item.value)
+      //   ])
+      //   .sort((a, b) => a[0] - b[0]) as T[]; // timestamp(첫 번째 요소) 기준 오름차순 정렬
+
       const transformedData = dataArray
         .map((item: any) => [
           parseInt(item.timestamp),
           parseFloat(item.value)
-        ])
-        .sort((a, b) => a[0] - b[0]) as T[]; // timestamp(첫 번째 요소) 기준 오름차순 정렬
+        ]) as T[];
 
-      // console.log(transformedData)
+      console.log(transformedData[0])
+      console.log(transformedData[1000])
 
       return {
         success: true,
