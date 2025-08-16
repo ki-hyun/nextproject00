@@ -291,6 +291,13 @@ export default function Graph3Page() {
         const DBCACHE_KEY = ['coinprice','hashrate','blockreward','totalfee'];
         const CACHE_MAX_AGE = 60 * 60 * 1000; // 60분 캐시 유효 시간   현제 쓰지 않음
         
+        // 차트가 준비되지 않았으면 리턴
+        if (!chartComponentRef.current?.chart) {
+          console.log('Chart not ready yet, retrying...');
+          // setTimeout(() => loadData(), 100);
+          return;
+        }
+        
         const chart = chartComponentRef.current.chart;
 
         for (let index = 0; index < DBCACHE_KEY.length; index++) {
@@ -317,7 +324,7 @@ export default function Graph3Page() {
               coinpriceData = _coinprice.data;
 
               // IndexedDB에 저장
-              await saveToIndexedDB(element, coinpriceData, parseInt(coinpriceData[coinpriceData.length-1][0]));
+              await saveToIndexedDB(element, coinpriceData, coinpriceData[coinpriceData.length-1][0]);
               // console.log('Coinprice data saved to IndexedDB');
             } else {
               console.log('Failed to fetch coinprice data:', _coinprice.error);
