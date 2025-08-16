@@ -137,8 +137,9 @@ export const isCacheValid = async (key: string, maxAgeMs: number = 3600000): Pro
           // console.log(`시간: ${currentYYMMDD}, ${currentDateTime}`);
           // console.log(parseInt(_day_check), parseInt(formatTimestamp(result.timestamp)));
 
-          resolve(_day_check <= _day_cache); // 캐쉬된 날짜가 어제보다 뒤임
           // resolve(age < maxAgeMs);
+          // resolve(_day_check <= _day_cache); // 캐쉬된 날짜가 어제보다 뒤임
+          resolve(true)
         } else {
           resolve(false);
         }

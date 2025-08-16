@@ -9,6 +9,52 @@ import { saveToIndexedDB, loadFromIndexedDB, isCacheValid } from "@/lib/indexedd
 // Highcharts용 데이터 타입 [timestamp, value]
 type ChartDataPoint = [number, number];
 
+async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: boolean){
+
+  console.log('async function loadchart(chart: Highcharts.Chart, _chartnum: number){',_chartnum)
+
+  const DBCACHE_KEY = ['coinprice','hashrate','blockreward','totalfee'];
+  const CACHE_MAX_AGE = 60 * 60 * 1000; // 60분 캐시 유효 시간   현제 쓰지 않음
+
+  const element = DBCACHE_KEY[_chartnum];
+        
+  let coinpriceData = null;
+
+  // 1. IndexedDB에서 캐시된 데이터 확인
+  const isCached = await isCacheValid(element, CACHE_MAX_AGE);
+
+  if (isCached) {
+    // 캐시가 유효하면 IndexedDB에서 데이터 로드
+    console.log(element,'인덱스 db에서 가져옴 Loading coinprice data from IndexedDB cache...');
+    coinpriceData = await loadFromIndexedDB(element);
+  }
+
+  // 2. 캐시가 없거나 만료되었으면 서버에서 데이터 가져오기
+  if (!coinpriceData) {
+    console.log('서버에서 가져옴 Fetching coinprice data from server...');
+    const _coinprice = await getDataSimple<ChartDataPoint>(element);
+    
+    if (_coinprice.success && _coinprice.data) {
+      coinpriceData = _coinprice.data;
+
+      // IndexedDB에 저장
+      await saveToIndexedDB(element, coinpriceData, coinpriceData[coinpriceData.length-1][0]);
+      // console.log('Coinprice data saved to IndexedDB');
+    } else {
+      console.log('Failed to fetch coinprice data:', _coinprice.error);
+    }
+  }
+
+  // if (chartComponentRef.current && coinpriceData) {
+    chart.series[_chartnum].setData(coinpriceData, false);
+  // }
+
+  if(_redraw){
+    chart.redraw();
+  }
+}
+
+
 export default function Graph3Page() {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
@@ -166,6 +212,26 @@ export default function Graph3Page() {
       series: {
         tooltip: {
           valueDecimals: 2
+        },
+        events: {
+          legendItemClick: async function(this: Highcharts.Series) {
+            // console.log(`Legend item clicked: ${this.name}`);
+            // console.log(`Current visibility: ${this.visible ? 'visible' : 'hidden'}`);
+            
+            // 차트 객체는 this.chart로 가져옴
+            const chart = this.chart;
+            
+            // 시리즈 인덱스 찾기
+            const seriesIndex = chart.series.indexOf(this);
+            
+            // 현재 숨겨진 상태에서 활성화하려는 경우이고, 데이터가 없는 경우에만 로드
+            if (this.visible && (!this.data || this.data.length === 0)) {
+              console.log(`Loading data for ${this.name}...`);
+              await loadchart(chart, seriesIndex, false);
+            }
+            
+            // return false; // 기본 show/hide 동작 막기
+          }
         }
       }
     },
@@ -210,6 +276,7 @@ export default function Graph3Page() {
         lineWidth: 2,
         turboThreshold: 0,  // 모든 데이터 포인트 표시
         yAxis: 0,
+        visible: true,  // Price만 처음에 표시
         tooltip: {
           valueDecimals: 2,
           valuePrefix: '$',
@@ -224,6 +291,7 @@ export default function Graph3Page() {
         lineWidth: 2,
         turboThreshold: 0,  // 모든 데이터 포인트 표시
         yAxis: 1,
+        visible: true,  // 처음에는 숨김
         tooltip: {
           valueDecimals: 2,
           valueSuffix: ' TH/s'
@@ -237,6 +305,7 @@ export default function Graph3Page() {
         lineWidth: 2,
         turboThreshold: 0,  // 모든 데이터 포인트 표시
         yAxis: 2,
+        visible: false,  // 처음에는 숨김
         tooltip: {
           valueDecimals: 8,
           valueSuffix: ' BTC'
@@ -250,6 +319,7 @@ export default function Graph3Page() {
         lineWidth: 2,
         turboThreshold: 0,  // 모든 데이터 포인트 표시
         yAxis: 3,
+        visible: false,  // 처음에는 숨김
         tooltip: {
           valueDecimals: 8,
           valueSuffix: ' BTC'
@@ -300,43 +370,48 @@ export default function Graph3Page() {
         
         const chart = chartComponentRef.current.chart;
 
-        for (let index = 0; index < DBCACHE_KEY.length; index++) {
-        // for (let index = 0; index < 1; index++) {
-          const element = DBCACHE_KEY[index];
-          
-          let coinpriceData = null;
+        await loadchart(chart, 0, false);
+        await loadchart(chart, 1, false);
 
-          // 1. IndexedDB에서 캐시된 데이터 확인
-          const isCached = await isCacheValid(element, CACHE_MAX_AGE);
-
-          if (isCached) {
-            // 캐시가 유효하면 IndexedDB에서 데이터 로드
-            console.log(element,'인덱스 db에서 가져옴 Loading coinprice data from IndexedDB cache...');
-            coinpriceData = await loadFromIndexedDB(element);
-          }
-
-          // 2. 캐시가 없거나 만료되었으면 서버에서 데이터 가져오기
-          if (!coinpriceData) {
-            console.log('서버에서 가져옴 Fetching coinprice data from server...');
-            const _coinprice = await getDataSimple<ChartDataPoint>(element);
-            
-            if (_coinprice.success && _coinprice.data) {
-              coinpriceData = _coinprice.data;
-
-              // IndexedDB에 저장
-              await saveToIndexedDB(element, coinpriceData, coinpriceData[coinpriceData.length-1][0]);
-              // console.log('Coinprice data saved to IndexedDB');
-            } else {
-              console.log('Failed to fetch coinprice data:', _coinprice.error);
-            }
-          }
-
-          if (chartComponentRef.current && coinpriceData) {
-            chart.series[index].setData(coinpriceData, false);
-          }
-        }
-        
         chart.redraw();
+
+        // // for (let index = 0; index < DBCACHE_KEY.length; index++) {
+        // for (let index = 0; index < 1; index++) {
+        //   const element = DBCACHE_KEY[index];
+          
+        //   let coinpriceData = null;
+
+        //   // 1. IndexedDB에서 캐시된 데이터 확인
+        //   const isCached = await isCacheValid(element, CACHE_MAX_AGE);
+
+        //   if (isCached) {
+        //     // 캐시가 유효하면 IndexedDB에서 데이터 로드
+        //     console.log(element,'인덱스 db에서 가져옴 Loading coinprice data from IndexedDB cache...');
+        //     coinpriceData = await loadFromIndexedDB(element);
+        //   }
+
+        //   // 2. 캐시가 없거나 만료되었으면 서버에서 데이터 가져오기
+        //   if (!coinpriceData) {
+        //     console.log('서버에서 가져옴 Fetching coinprice data from server...');
+        //     const _coinprice = await getDataSimple<ChartDataPoint>(element);
+            
+        //     if (_coinprice.success && _coinprice.data) {
+        //       coinpriceData = _coinprice.data;
+
+        //       // IndexedDB에 저장
+        //       await saveToIndexedDB(element, coinpriceData, coinpriceData[coinpriceData.length-1][0]);
+        //       // console.log('Coinprice data saved to IndexedDB');
+        //     } else {
+        //       console.log('Failed to fetch coinprice data:', _coinprice.error);
+        //     }
+        //   }
+
+        //   if (chartComponentRef.current && coinpriceData) {
+        //     chart.series[index].setData(coinpriceData, false);
+        //   }
+        // }
+        
+        // chart.redraw();
         
 
         // // 1. IndexedDB에서 캐시된 데이터 확인
