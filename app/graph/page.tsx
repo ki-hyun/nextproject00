@@ -227,7 +227,7 @@ export default function Graph3Page() {
             // 현재 숨겨진 상태에서 활성화하려는 경우이고, 데이터가 없는 경우에만 로드
             if (this.visible && (!this.data || this.data.length === 0)) {
               console.log(`Loading data for ${this.name}...`);
-              await loadchart(chart, seriesIndex, false);
+              await loadchart(chart, seriesIndex, true);
             }
             
             // return false; // 기본 show/hide 동작 막기
