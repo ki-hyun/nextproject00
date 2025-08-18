@@ -10,12 +10,19 @@ import { saveToIndexedDB, loadFromIndexedDB, isCacheValid } from "@/lib/indexedd
 type ChartDataPoint = [number, number];
 
 async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: boolean){
-  console.log('async function loadchart(chart: Highcharts.Chart, _chartnum: number){',_chartnum)
 
-  const DBCACHE_KEY = ['coinprice','hashrate','blockreward','totalfee'];
   const CACHE_MAX_AGE = 60 * 60 * 1000; // 60분 캐시 유효 시간   현제 쓰지 않음
 
-  const element = DBCACHE_KEY[_chartnum];
+  // 시리즈의 customData에서 dataSource 가져오기
+  const series = chart.series[_chartnum];
+  const element = (series.options as any)?.customData?.dataSource;
+  
+  console.log('async function loadchart(chart: Highcharts.Chart, _chartnum: number){',element,_chartnum)
+
+  if (!element) {
+    console.log('No dataSource found in series customData');
+    return;
+  }
         
   let coinpriceData = null;
 
@@ -89,7 +96,14 @@ async function addchart(chart: Highcharts.Chart, seriesConfig: any){
   return newSeries;
 }
 
-export default function Graph() {
+// Props 타입 정의
+interface ChartProps {
+  series?: Highcharts.SeriesOptionsType[];
+  title?: string;
+  height?: number;
+}
+
+export default function Chart({ series = [], title = 'chart', height = 800 }: ChartProps) {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
   const options: Highcharts.Options = {
@@ -136,7 +150,7 @@ export default function Graph() {
     },
 
     title: {
-      text: 'Investment Simulator',
+      text: title,
       style: {
         color: '#111827',
         fontSize: '24px',
@@ -260,7 +274,7 @@ export default function Graph() {
             
             // 현재 숨겨진 상태에서 활성화하려는 경우이고, 데이터가 없는 경우에만 로드
             if (this.visible && (!this.data || this.data.length === 0)) {
-              console.log(`Loading data for ${this.name}...`);
+              // console.log(`Loading data for ${this.name}...`);
               await loadchart(chart, seriesIndex, true);
             }
             
@@ -301,65 +315,7 @@ export default function Graph() {
       ]
     },
 
-    series: [
-      {
-        name: 'Price',
-        type: 'line',
-        data: [],
-        color: '#3b82f6',
-        lineWidth: 2,
-        turboThreshold: 0,  // 모든 데이터 포인트 표시
-        yAxis: 0,
-        visible: true,  // Price만 처음에 표시
-        tooltip: {
-          valueDecimals: 2,
-          valuePrefix: '$',
-          valueSuffix: ' USD'
-        }
-      },
-      {
-        name: 'HashRate',
-        type: 'line',
-        data: [],
-        color: '#10b981',
-        lineWidth: 2,
-        turboThreshold: 0,  // 모든 데이터 포인트 표시
-        yAxis: 1,
-        visible: true,  // 처음에는 숨김
-        tooltip: {
-          valueDecimals: 2,
-          valueSuffix: ' TH/s'
-        }
-      },
-      {
-        name: 'Block Reward',
-        type: 'line',
-        data: [],
-        color: '#f59e0b',
-        lineWidth: 2,
-        turboThreshold: 0,  // 모든 데이터 포인트 표시
-        yAxis: 2,
-        visible: false,  // 처음에는 숨김
-        tooltip: {
-          valueDecimals: 8,
-          valueSuffix: ' BTC'
-        }
-      },
-      {
-        name: 'Total Fee',
-        type: 'line',
-        data: [],
-        color: '#ef4444',
-        lineWidth: 2,
-        turboThreshold: 0,  // 모든 데이터 포인트 표시
-        yAxis: 3,
-        visible: false,  // 처음에는 숨김
-        tooltip: {
-          valueDecimals: 8,
-          valueSuffix: ' BTC'
-        }
-      }
-    ],
+    series: series,
 
     credits: {
       enabled: false
@@ -387,23 +343,27 @@ export default function Graph() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        
-        // const CACHE_KEY = 'coinprice_data';
-        
-        const DBCACHE_KEY = ['coinprice','hashrate','blockreward','totalfee'];
-        const CACHE_MAX_AGE = 60 * 60 * 1000; // 60분 캐시 유효 시간   현제 쓰지 않음
-        
-        // 차트가 준비되지 않았으면 리턴
-        if (!chartComponentRef.current?.chart) {
-          console.log('Chart not ready yet, retrying...');
-          // setTimeout(() => loadData(), 100);
+        // 차트가 준비되지 않았거나 시리즈가 없으면 리턴
+        if (!chartComponentRef.current?.chart || !series.length) {
+          console.log('Chart or series not ready yet...');
           return;
         }
         
         const chart = chartComponentRef.current.chart;
+        // const DBCACHE_KEY = ['coinprice','hashrate','blockreward','totalfee'];
 
-        await loadchart(chart, 0, false);
-        await loadchart(chart, 1, false);
+        // // series에 해당하는 데이터만 로드
+        // for (let i = 0; i < Math.min(series.length, DBCACHE_KEY.length); i++) {
+        //   if (chart.series[i]) {
+        //     await loadchart(chart, i, false);
+        //   }
+        // }
+
+        for (let i = 0; i < 2; i++) {
+          if (chart.series[i]) {
+            await loadchart(chart, i, false);
+          }
+        }
 
         chart.redraw();
 
@@ -413,10 +373,10 @@ export default function Graph() {
     };
 
     loadData();
-  }, []);
+  }, [series]);
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-100" style={{ height: '800px' }}>
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-100" style={{ height: `${height}px` }}>
       <HighchartsReact
         highcharts={Highcharts}
         constructorType={'stockChart'}
