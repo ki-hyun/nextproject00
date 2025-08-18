@@ -1,7 +1,11 @@
+'use client';
+
+import { useState } from 'react';
 import Chart from '@/components/Chart';
 import TabNavigation from '../../components/TabNavigation';
 
 export default function GraphPage() {
+  const [chartHeight, setChartHeight] = useState(800);
   // 차트에 표시할 시리즈 데이터 정의
   const chartSeries = [
     {
@@ -91,11 +95,71 @@ export default function GraphPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <TabNavigation />
       <main className="container mx-auto px-1 py-5">
-        <div className="max-w-7xl mx-auto">
+        {/* <div className="max-w-7xl mx-auto"> */}
+        <div className="max-w-full mx-auto px-1">
+          {/* 높이 조절 버튼 */}
+          <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 mb-4 border border-gray-200/50">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-800">차트 높이 조절</h3>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setChartHeight(500)}
+                  className={`px-3 py-1 rounded-md text-sm transition-all ${
+                    chartHeight === 500 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  작게 (500px)
+                </button>
+                <button
+                  onClick={() => setChartHeight(700)}
+                  className={`px-3 py-1 rounded-md text-sm transition-all ${
+                    chartHeight === 700 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  보통 (700px)
+                </button>
+                <button
+                  onClick={() => setChartHeight(800)}
+                  className={`px-3 py-1 rounded-md text-sm transition-all ${
+                    chartHeight === 800 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  기본 (800px)
+                </button>
+                <button
+                  onClick={() => setChartHeight(1000)}
+                  className={`px-3 py-1 rounded-md text-sm transition-all ${
+                    chartHeight === 1000 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  크게 (1000px)
+                </button>
+                <button
+                  onClick={() => setChartHeight(1200)}
+                  className={`px-3 py-1 rounded-md text-sm transition-all ${
+                    chartHeight === 1200 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  매우 크게 (1200px)
+                </button>
+              </div>
+            </div>
+          </div>
+
           <Chart 
             series={chartSeries}
             title="Chart"
-            height={800}
+            height={chartHeight}
           />
         </div>
       </main>

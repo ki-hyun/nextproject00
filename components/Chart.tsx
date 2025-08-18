@@ -301,8 +301,8 @@ export default function Chart({ series = [], title = 'chart', height = 800 }: Ch
     responsive: {
       rules: [
         {
-          condition: {
-            minWidth: 1200
+          condition: { // 이 크기 넘으면 오른쪽에 배치
+            minWidth: 2000  // 예: 1400px로 변경
           },
           chartOptions: {
             legend: {
