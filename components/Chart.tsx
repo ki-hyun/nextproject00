@@ -100,10 +100,11 @@ async function addchart(chart: Highcharts.Chart, seriesConfig: any){
 interface ChartProps {
   series?: Highcharts.SeriesOptionsType[];
   title?: string;
+  firstloding?: number;
   height?: number;
 }
 
-export default function Chart({ series = [], title = 'chart', height = 800 }: ChartProps) {
+export default function Chart({ series = [], title = 'chart', firstloding = 2, height = 800 }: ChartProps) {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
   const options: Highcharts.Options = {
@@ -345,25 +346,33 @@ export default function Chart({ series = [], title = 'chart', height = 800 }: Ch
       try {
         // 차트가 준비되지 않았거나 시리즈가 없으면 리턴
         if (!chartComponentRef.current?.chart || !series.length) {
-          console.log('Chart or series not ready yet...');
+          console.log('아직 준비 안됨  Chart or series not ready yet...');
           return;
         }
         
         const chart = chartComponentRef.current.chart;
-        // const DBCACHE_KEY = ['coinprice','hashrate','blockreward','totalfee'];
 
-        // // series에 해당하는 데이터만 로드
-        // for (let i = 0; i < Math.min(series.length, DBCACHE_KEY.length); i++) {
-        //   if (chart.series[i]) {
-        //     await loadchart(chart, i, false);
-        //   }
-        // }
-
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < firstloding; i++) {
           if (chart.series[i]) {
             await loadchart(chart, i, false);
           }
         }
+
+        // // 시리즈가 준비될 때까지 기다림
+        // if (!chart.series || chart.series.length === 0) {
+        //   console.log('Chart series not ready yet...');
+        //   setTimeout(() => loadData(), 100);
+        //   return;
+        // }
+
+        // // 실제 존재하는 시리즈 개수만큼 로드
+        // const seriesToLoad = Math.min(chart.series.length, 2);
+        // for (let i = 0; i < seriesToLoad; i++) {
+        //   if (chart.series[i] && chart.series[i].options) {
+        //     await loadchart(chart, i, false);
+        //   }
+        // }
+
 
         chart.redraw();
 

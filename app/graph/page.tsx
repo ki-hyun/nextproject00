@@ -159,6 +159,7 @@ export default function GraphPage() {
           <Chart 
             series={chartSeries}
             title="Chart"
+            firstloding={2}
             height={chartHeight}
           />
         </div>

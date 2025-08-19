@@ -24,6 +24,8 @@ interface TabNavigationProps {
 
 export const tabs: Tab[] = [
   { href: '/', name: '홈', icon: '🏠', description: 'NextProject 메인 홈페이지' },
+  { href: '/hashrate', name: '해시레이트', icon: '⚡', description: '네트워크 해시레이트 정보' },
+  { href: '/mining', name: '마이닝', icon: '⛏️', description: '암호화폐 채굴 시뮬레이션' },
   { href: '/crypto', name: '암호화폐', icon: '₿', description: '실시간 암호화폐 시세 확인' },
   { href: '/futures', name: '선물/마진', icon: '📈', description: '레버리지 거래 및 선물 계약' },
   { href: '/community', name: '커뮤니티', icon: '💬', description: '개발자들과 소통하고 지식 공유' },
