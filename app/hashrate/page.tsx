@@ -44,6 +44,7 @@ export default async function HashratePage() {
   const difficultyChangePercent = ((adjustmentRatio - 1) * 100);
 
   console.log('HashratePage:', new Date(_realtimehashrate.timestamp).toLocaleString('ko-KR', {
+    timeZone: 'Asia/Seoul',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -189,6 +190,7 @@ export default async function HashratePage() {
                       <p className="text-sm text-gray-600 dark:text-gray-400">조정 예정 시간</p>
                       <p className="text-lg font-bold text-gray-600 dark:text-gray-400">
                         {nextAdjustmentTime.toLocaleString('ko-KR', {
+                          timeZone: 'Asia/Seoul',
                           month: '2-digit',
                           day: '2-digit',
                           hour: '2-digit',
@@ -239,6 +241,7 @@ export default async function HashratePage() {
             <div className="mt-8 text-center">
               <p className="text-xl text-gray-500 dark:text-gray-400">
                 마지막 업데이트: {new Date(_realtimehashrate.timestamp).toLocaleString('ko-KR', {
+                  timeZone: 'Asia/Seoul',
                   year: 'numeric',
                   month: '2-digit',
                   day: '2-digit',
