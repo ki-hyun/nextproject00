@@ -22,9 +22,32 @@ async function getRealTimeHashrate() {
     });
     const currentBlockHeight = await blockHeightResponse.text();
     
+    // 최근 난이도 조정 블록 높이 계산
+    const currentHeight = parseInt(currentBlockHeight);
+    const BLOCKS_PER_ADJUSTMENT = 2016;
+    const lastDifficultyAdjustmentBlock = Math.floor(currentHeight / BLOCKS_PER_ADJUSTMENT) * BLOCKS_PER_ADJUSTMENT;
+    
+    // 최근 난이도 조정 블록 정보 가져오기 (타임스탬프)
+    let lastDifficultyAdjustmentTime = null;
+    try {
+      const adjustmentBlockResponse = await fetch(`https://blockchain.info/block-height/${lastDifficultyAdjustmentBlock}?format=json`, {
+        next: { revalidate: 300 } // 5분 캐시
+      });
+      if (adjustmentBlockResponse.ok) {
+        const adjustmentBlockData = await adjustmentBlockResponse.json();
+        if (adjustmentBlockData.blocks && adjustmentBlockData.blocks.length > 0) {
+          lastDifficultyAdjustmentTime = adjustmentBlockData.blocks[0].time * 1000; // Unix timestamp to milliseconds
+        }
+      }
+    } catch (error) {
+      console.log('Failed to fetch difficulty adjustment block info:', error);
+    }
+    
     return {
       ...data, // API의 모든 데이터를 포함
-      currentBlockHeight: parseInt(currentBlockHeight)
+      currentBlockHeight: currentHeight,
+      lastDifficultyAdjustmentBlock,
+      lastDifficultyAdjustmentTime
     };
   } catch (error) {
     console.error('Failed to fetch Bitcoin hashrate:', error);

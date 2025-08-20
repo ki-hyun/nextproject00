@@ -17,8 +17,17 @@ export default async function HashratePage() {
   const blocksUntilAdjustment = BLOCKS_PER_ADJUSTMENT - (currentHeight % BLOCKS_PER_ADJUSTMENT);
   const nextAdjustmentBlock = currentHeight + blocksUntilAdjustment;
   
-  // 예상 시간 계산 (평균 블록 시간 * 남은 블록 수)
-  const minutesUntilAdjustment = blocksUntilAdjustment * (_realtimehashrate?.minutes_between_blocks || 10);
+  // 현재 난이도 기간의 평균 블록시간 계산
+  let currentDifficultyAvgBlockTime = 10; // 기본값 10분
+  if (_realtimehashrate?.lastDifficultyAdjustmentTime && currentHeight > _realtimehashrate?.lastDifficultyAdjustmentBlock) {
+    const blocksSinceDifficultyAdjustment = currentHeight - _realtimehashrate.lastDifficultyAdjustmentBlock;
+    const timeSinceDifficultyAdjustment = Date.now() - _realtimehashrate.lastDifficultyAdjustmentTime;
+    const minutesSinceDifficultyAdjustment = timeSinceDifficultyAdjustment / (1000 * 60);
+    currentDifficultyAvgBlockTime = minutesSinceDifficultyAdjustment / blocksSinceDifficultyAdjustment;
+  }
+  
+  // 예상 시간 계산 (현재 난이도 기간의 평균 블록 시간 * 남은 블록 수)
+  const minutesUntilAdjustment = blocksUntilAdjustment * currentDifficultyAvgBlockTime;
   const hoursUntilAdjustment = minutesUntilAdjustment / 60;
   const daysUntilAdjustment = hoursUntilAdjustment / 24;
   
@@ -29,7 +38,7 @@ export default async function HashratePage() {
   // 목표 블록 시간: 10분
   // 현재 평균 블록 시간이 목표보다 빠르면 난이도 증가, 느리면 감소
   const TARGET_BLOCK_TIME = 10; // 10분
-  const currentAvgBlockTime = _realtimehashrate?.minutes_between_blocks || 10;
+  const currentAvgBlockTime = currentDifficultyAvgBlockTime; // 현재 난이도 기간의 평균 사용
   const currentDifficulty = _realtimehashrate?.difficulty || 0;
   
   // 난이도 조정 비율 = 목표 시간 / 실제 시간
@@ -59,18 +68,54 @@ export default async function HashratePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <TabNavigation />
-      <main className="container mx-auto px-6 py-16">
+      <main className="container mx-auto px-6 py-8">
         <div className="max-w-4xl mx-auto">
-          {/* <div className="text-center mb-12">
-            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-2xl">⚡</span>
+            {/* 업데이트 시간 */}
+            <div className="mb-6 text-center space-y-2">
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                현재 시간: {new Date().toLocaleString('ko-KR', {
+                  timeZone: 'Asia/Seoul',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  hour12: false
+                })}
+              </p>
+              <p className="text-lg text-gray-500 dark:text-gray-400">
+                마지막 업데이트: {new Date(_realtimehashrate.timestamp).toLocaleString('ko-KR', {
+                  timeZone: 'Asia/Seoul',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  hour12: false
+                })}
+                <span className="text-sm ml-2 text-gray-400">
+                  ({(() => {
+                    const timeDiff = Date.now() - _realtimehashrate.timestamp;
+                    const seconds = Math.floor(timeDiff / 1000);
+                    const minutes = Math.floor(seconds / 60);
+                    const hours = Math.floor(minutes / 60);
+                    
+                    if (hours > 0) {
+                      return `${hours}시간 ${minutes % 60}분 전`;
+                    } else if (minutes > 0) {
+                      return `${minutes}분 ${seconds % 60}초 전`;
+                    } else {
+                      return `${seconds}초 전`;
+                    }
+                  })()})
+                </span>
+              </p>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">해시레이트</h1>
-            <p className="text-gray-600 dark:text-gray-300">비트코인 네트워크 해시레이트 정보</p>
-          </div> */}
 
           <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-gray-700/50">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* 해시레이트 */}
               <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
                 <div className="text-3xl mb-2">⚡</div>
@@ -89,19 +134,23 @@ export default async function HashratePage() {
                 </p>
               </div>
 
-              {/* 24시간 채굴 블록 */}
-              <div className="text-center p-4 bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
-                <div className="text-3xl mb-2">⛏️</div>
-                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">24시간 채굴 블록</h3>
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                  {_realtimehashrate?.n_blocks_mined || 'N/A'}
+              {/* 현재 난이도 기간 평균 블록시간 */}
+              <div className="text-center p-4 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-3xl mb-2">📊</div>
+                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">평균 블록시간</h3>
+                <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                  {currentDifficultyAvgBlockTime ? currentDifficultyAvgBlockTime.toFixed(2) + ' 분' : 'N/A'}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {_realtimehashrate?.lastDifficultyAdjustmentBlock ? 
+                    `블록 #${_realtimehashrate.lastDifficultyAdjustmentBlock.toLocaleString()} 이후` : ''}
                 </p>
               </div>
 
-              {/* 평균 블록 시간 */}
+              {/* 24시간 평균 블록 시간 */}
               <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
                 <div className="text-3xl mb-2">⏱️</div>
-                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">평균 블록 시간</h3>
+                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">24시간 평균 블록시간</h3>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                   {_realtimehashrate?.minutes_between_blocks ? _realtimehashrate.minutes_between_blocks.toFixed(2) + ' 분' : 'N/A'}
                 </p>
@@ -152,6 +201,16 @@ export default async function HashratePage() {
                     '$' + (_realtimehashrate.estimated_transaction_volume_usd / 1e9).toFixed(2) + 'B' : 'N/A'}
                 </p>
               </div>
+
+              {/* 24시간 채굴 블록 */}
+              <div className="text-center p-4 bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-3xl mb-2">⛏️</div>
+                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">24시간 채굴 블록</h3>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                  {_realtimehashrate?.n_blocks_mined || 'N/A'}
+                </p>
+              </div>
+
             </div>
 
             {/* 난이도 조정 정보 - 전체 너비로 표시 */}
@@ -226,9 +285,9 @@ export default async function HashratePage() {
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">현재 평균 블록 시간</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">현재 난이도 평균 블록시간</p>
                         <p className="text-xl font-bold text-gray-600 dark:text-gray-400">
-                          {currentAvgBlockTime ? currentAvgBlockTime.toFixed(2) + ' 분' : 'N/A'}
+                          {currentDifficultyAvgBlockTime ? currentDifficultyAvgBlockTime.toFixed(2) + ' 분' : 'N/A'}
                         </p>
                       </div>
                     </div>
@@ -237,21 +296,6 @@ export default async function HashratePage() {
               </div>
             </div>
 
-            {/* 업데이트 시간 */}
-            <div className="mt-8 text-center">
-              <p className="text-xl text-gray-500 dark:text-gray-400">
-                마지막 업데이트: {new Date(_realtimehashrate.timestamp).toLocaleString('ko-KR', {
-                  timeZone: 'Asia/Seoul',
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit',
-                  hour12: false
-                })}
-              </p>
-            </div>
           </div>
         </div>
       </main>
