@@ -3,9 +3,11 @@
 import TabNavigation from '../../components/TabNavigation';
 import { getRealTimeHashrate, formatHashrate } from "@/lib/getRealTimeInfo";
 
-// 페이지 레벨에서 캐싱 비활성화
+// 페이지 레벨에서 캐싱 비활성화 및 런타임 강제
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
+export const fetchCache = 'force-no-store';
 
 export default async function HashratePage() {
 
@@ -63,7 +65,7 @@ export default async function HashratePage() {
     hour12: false
   }))
 
-  console.log(_realtimehashrate)
+  // console.log(_realtimehashrate)
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">

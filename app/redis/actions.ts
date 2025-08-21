@@ -47,8 +47,10 @@ export async function getDataFromRedis(): Promise<{ success: boolean; data?: Red
     await connectRedis();
     
     // test_로 시작하는 모든 키 가져오기
-    const keys = await client.keys('test_*');
-    
+    // const keys = await client.keys('test_*');
+    // const keys = await client.keys('block_*');
+    const keys = await client.keys('*');
+
     if (keys.length === 0) {
       return {
         success: true,
@@ -61,22 +63,24 @@ export async function getDataFromRedis(): Promise<{ success: boolean; data?: Red
     
     const data: RedisData[] = [];
     
-    console.log("getDataFromRedis()------------")
+    console.log("getDataFromRedis()------------",keys.length)
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const value = values[i];
       
-      console.log(key)
-      console.log(value)
+      // console.log(key)
+      // console.log(value)
 
       if (value) {
         try {
           const parsedData = JSON.parse(value);
+
           data.push({
             key: key,
             value: parsedData.value,
             timestamp: parsedData.timestamp
           });
+
         } catch (parseError) {
           // JSON 파싱 실패 시 원본 값 사용
           data.push({
@@ -145,7 +149,7 @@ export async function getRedisStats(): Promise<{
     const totalKeys = allKeys.length;
     
     // 테스트 키 개수 조회
-    const testKeys = await client.keys('test_*');
+    const testKeys = await client.keys('block_*');
     const testKeyCount = testKeys.length;
     
     // Redis 메모리 사용량 조회
