@@ -43,7 +43,20 @@ async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: bo
     if (_coinprice.success && _coinprice.data) {
       coinpriceData = _coinprice.data;
 
-      // IndexedDB에 저장
+      // timestamp가 초 단위인지 밀리초 단위인지 확인 (13자리 미만이면 초 단위로 간주)
+      if (coinpriceData && coinpriceData.length > 0) {
+        const firstTimestamp = coinpriceData[0][0];
+        // timestamp가 10자리 전후면 초 단위로 간주 (Unix timestamp는 보통 10자리)
+        if (firstTimestamp < 10000000000) {
+          console.log('Converting timestamps from seconds to milliseconds...');
+          coinpriceData = coinpriceData.map(([timestamp, value]) => [
+            timestamp * 1000, // 초를 밀리초로 변환
+            value
+          ]);
+        }
+      }
+
+      // IndexedDB에 저장 (변환된 밀리초 단위로 저장)
       await saveToIndexedDB(element, coinpriceData, coinpriceData[coinpriceData.length-1][0]);
       // console.log('Coinprice data saved to IndexedDB');
     } else {
