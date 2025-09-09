@@ -66,6 +66,17 @@ async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: bo
 
   // 차트와 시리즈가 존재하는지 확인
   if (chart && chart.series && chart.series[_chartnum] && coinpriceData) {
+    
+    // // displayUnit이 trillion인 경우 데이터를 1조로 나누기
+    // const displayUnit = (series.options as any)?.customData?.displayUnit;
+    // if (displayUnit === 'trillion') {
+    //   coinpriceData = coinpriceData.map(([timestamp, value]) => [
+    //     timestamp,
+    //     value / 1e12 // 1조로 나누기
+    //   ]);
+    // }
+
+
     chart.series[_chartnum].setData(coinpriceData, false);
   }
 

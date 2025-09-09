@@ -2,6 +2,8 @@
 
 import TabNavigation from '../../components/TabNavigation';
 import { getRealTimeHashrate, formatHashrate } from "@/lib/getRealTimeInfo";
+import Chart from '@/components/Chart';
+// import { useState } from 'react';
 
 // 페이지 레벨에서 캐싱 비활성화 및 런타임 강제
 export const dynamic = 'force-dynamic';
@@ -10,6 +12,64 @@ export const runtime = 'nodejs';
 export const fetchCache = 'force-no-store';
 
 export default async function HashratePage() {
+
+  // const [chartHeight, setChartHeight] = useState(800);
+
+  const chartSeries = [
+    {
+      name: 'Price',
+      type: 'line' as const,
+      data: [],
+      color: '#3b82f6',
+      lineWidth: 1,
+      turboThreshold: 0,  // 모든 데이터 포인트 표시
+      yAxis: 0,
+      visible: true,  // Price만 처음에 표시
+      tooltip: {
+        valueDecimals: 2,
+        valuePrefix: '$',
+        valueSuffix: ' USD'
+      },
+      customData: {
+        dataSource: 'coinprice',
+      }
+    },
+    {
+      name: 'HashRate',
+      type: 'line' as const,
+      data: [],
+      color: '#10b981',
+      lineWidth: 1,
+      turboThreshold: 0,  // 모든 데이터 포인트 표시
+      yAxis: 1,
+      visible: true,  // 처음에 표시
+      tooltip: {
+        valueDecimals: 2,
+        valueSuffix: 'TH/s'
+      },
+      customData: {
+        dataSource: 'hashrate',
+      }
+    },
+    {
+      name: 'Difficulty',
+      type: 'line' as const,
+      data: [],
+      color: '#f59e0b',
+      lineWidth: 1,
+      turboThreshold: 0,  // 모든 데이터 포인트 표시
+      yAxis: 2,
+      visible: true,  // 처음에 표시
+      tooltip: {
+        valueDecimals: 2,
+        valueSuffix: ''
+      },
+      customData: {
+        dataSource: 'difficulty',
+        displayUnit: 'trillion' // Chart 컴포넌트에서 처리하도록 표시
+      }
+    },
+  ]
 
   const _realtimehashrate = await getRealTimeHashrate()
 
@@ -67,11 +127,15 @@ export default async function HashratePage() {
 
   // console.log(_realtimehashrate)
   
+  // <div className="max-w-full mx-auto px-1">
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <TabNavigation />
       <main className="container mx-auto px-4 py-6 md:px-6 md:py-8">
-        <div className="max-w-4xl mx-auto">
+        {/* <div className="max-w-4xl mx-auto"> */}
+        <div className="max-w-full mx-auto px-1 mt-1">
+          
             {/* 업데이트 시간 */}
             <div className="mb-4 md:mb-6 text-center space-y-2">
               <p className="text-sm md:text-lg text-gray-600 dark:text-gray-400">
@@ -307,8 +371,17 @@ export default async function HashratePage() {
                 </div>
               </div>
             </div>
-
           </div>
+
+          <div className="mt-5">
+            <Chart 
+              series={chartSeries}
+              title="Chart"
+              firstloding={3}
+              height={800}
+              />
+          </div>
+
         </div>
       </main>
     </div>
