@@ -3,6 +3,7 @@
 import TabNavigation from '../../components/TabNavigation';
 import { getRealTimeHashrate, formatHashrate } from "@/lib/getRealTimeInfo";
 import Chart from '@/components/Chart';
+import DeleteIndexButton from '@/components/DeleteIndexButton';
 // import { useState } from 'react';
 
 // 페이지 레벨에서 캐싱 비활성화 및 런타임 강제
@@ -294,53 +295,99 @@ export default async function HashratePage() {
             {/* 난이도 조정 정보 - 전체 너비로 표시 */}
             <div className="mt-4 md:mt-6 p-4 md:p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
               <div className="w-full">
-                <h3 className="text-base md:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3 md:mb-4">
-                  🎯 다음 난이도 조정 예측
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 mb-3 md:mb-4">
-                  <div>
-                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">남은 블록</p>
-                    <p className="text-base md:text-xl lg:text-2xl font-bold text-indigo-600 dark:text-indigo-400">
-                      {blocksUntilAdjustment}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">예상 시간</p>
-                    <p className="text-base md:text-xl lg:text-2xl font-bold text-purple-600 dark:text-purple-400">
-                      {daysUntilAdjustment.toFixed(2)}일
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">현재 블록</p>
-                    <p className="text-base md:text-xl lg:text-2xl font-bold text-gray-600 dark:text-gray-400">
-                      {currentHeight.toLocaleString()}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">조정 블록</p>
-                    <p className="text-base md:text-xl lg:text-2xl font-bold text-orange-600 dark:text-orange-400">
-                      {nextAdjustmentBlock.toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="col-span-2 sm:col-span-1">
-                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">예정 시간</p>
-                    <p className="text-sm md:text-base lg:text-lg font-bold text-gray-600 dark:text-gray-400">
-                        {nextAdjustmentTime.toLocaleString('ko-KR', {
-                          timeZone: 'Asia/Seoul',
-                          month: '2-digit',
-                          day: '2-digit',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          hour12: false
-                        })}
-                    </p>
+                
+                {/* 현재 난이도 블록 진행상황 */}
+                <div className="border-t border-gray-200 dark:border-gray-600 pt-3 md:pt-4">
+                  
+                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl p-4 md:p-6">
+                    {/* 진행률 표시 */}
+                    <div className="text-center mb-4 md:mb-6">
+                      <div className="text-3xl md:text-5xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">
+                        {((currentHeight % BLOCKS_PER_ADJUSTMENT) / BLOCKS_PER_ADJUSTMENT * 100).toFixed(1)}%
+                      </div>
+                      <div className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+                        {(currentHeight % BLOCKS_PER_ADJUSTMENT).toLocaleString()} / {BLOCKS_PER_ADJUSTMENT.toLocaleString()} 블록
+                      </div>
+                    </div>
+
+                    {/* 큰 진행률 바 */}
+                    <div className="mb-4 md:mb-6">
+                      {/* 블록 넘버 표시 */}
+                      <div className="flex justify-between text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-2">
+                        <div className="font-medium">
+                          시작: {(_realtimehashrate?.lastDifficultyAdjustmentBlock || (currentHeight - (currentHeight % BLOCKS_PER_ADJUSTMENT))).toLocaleString()}
+                        </div>
+                        <div className="font-medium">
+                          종료: {nextAdjustmentBlock.toLocaleString()}
+                        </div>
+                      </div>
+                      
+                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-6 md:h-8 shadow-inner">
+                        <div 
+                          className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-6 md:h-8 rounded-full transition-all duration-500 ease-out shadow-lg relative overflow-hidden"
+                          style={{
+                            width: `${((currentHeight % BLOCKS_PER_ADJUSTMENT) / BLOCKS_PER_ADJUSTMENT * 100).toFixed(1)}%`
+                          }}
+                        >
+                          {/* 애니메이션 효과 */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 상세 정보 */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4 text-center">
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
+                        <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">남은 블록</div>
+                        <div className="text-lg md:text-xl font-bold text-orange-600 dark:text-orange-400">
+                          {blocksUntilAdjustment.toLocaleString()}
+                        </div>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
+                        <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">예상 완료</div>
+                        <div className="text-lg md:text-xl font-bold text-purple-600 dark:text-purple-400">
+                          {(() => {
+                            const days = Math.floor(hoursUntilAdjustment / 24);
+                            const hours = Math.floor(hoursUntilAdjustment % 24);
+                            if (days > 0) {
+                              return `${days}일 ${hours}시간`;
+                            } else {
+                              return `${hours}시간`;
+                            }
+                          })()}
+                        </div>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
+                        <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">평균 블록시간</div>
+                        <div className={`text-lg md:text-xl font-bold ${
+                          currentDifficultyAvgBlockTime <= TARGET_BLOCK_TIME 
+                            ? 'text-green-600 dark:text-green-400' 
+                            : 'text-red-600 dark:text-red-400'
+                        }`}>
+                          {currentDifficultyAvgBlockTime ? currentDifficultyAvgBlockTime.toFixed(2) : 'N/A'} 분
+                        </div>
+                        <div className={`text-xs ${
+                          currentDifficultyAvgBlockTime <= TARGET_BLOCK_TIME 
+                            ? 'text-green-600 dark:text-green-400' 
+                            : 'text-red-600 dark:text-red-400'
+                        }`}>
+                          {currentDifficultyAvgBlockTime <= TARGET_BLOCK_TIME ? '⚡ 빠름' : '🐌 느림'}
+                        </div>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
+                        <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">현재 블록</div>
+                        <div className="text-lg md:text-xl font-bold text-orange-600 dark:text-orange-400">
+                        {currentHeight.toLocaleString()}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
+
                 {/* 난이도 예측 섹션 */}
-                <div className="border-t border-gray-200 dark:border-gray-600 pt-3 md:pt-4">
+                <div className="border-t border-gray-200 dark:border-gray-600 pt-3 md:pt-4 mt-3 md:mt-4">
                   <h4 className="text-sm md:text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 md:mb-3">
-                    📊 예상 난이도 변화
+                    🎯 예상 난이도 변화
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-6">
                     <div>
@@ -381,6 +428,9 @@ export default async function HashratePage() {
               height={800}
               />
           </div>
+
+          {/* 사이트 관리 버튼 */}
+          <DeleteIndexButton />
 
         </div>
       </main>
