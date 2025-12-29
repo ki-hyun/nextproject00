@@ -163,7 +163,7 @@ export default async function BlockPage() {
           
             {/* 업데이트 시간 */}
             <div className="mb-4 md:mb-6 text-center space-y-2">
-              <p className="text-sm md:text-lg text-gray-600 dark:text-gray-400">
+              {/* <p className="text-sm md:text-lg text-gray-600 dark:text-gray-400">
                 현재 시간: {new Date().toLocaleString('ko-KR', {
                   timeZone: 'Asia/Seoul',
                   month: '2-digit',
@@ -173,7 +173,7 @@ export default async function BlockPage() {
                   second: '2-digit',
                   hour12: false
                 })}
-              </p>
+              </p> */}
               <p className="text-sm md:text-lg text-gray-500 dark:text-gray-400">
                 <span className="block sm:inline">마지막 업데이트:</span> {new Date(_realtimehashrate.timestamp).toLocaleString('ko-KR', {
                   timeZone: 'Asia/Seoul',
@@ -184,7 +184,7 @@ export default async function BlockPage() {
                   second: '2-digit',
                   hour12: false
                 })}
-                <span className="text-sm ml-2 text-gray-400">
+                <span className="text-sm md:text-lg ml-2 text-gray-400">
                   ({(() => {
                     const timeDiff = Date.now() - _realtimehashrate.timestamp;
                     const seconds = Math.floor(timeDiff / 1000);
@@ -372,8 +372,8 @@ export default async function BlockPage() {
             </div>
           </div>
 
-          <div className="mt-5">
-            <Chart 
+          <div className="mt-150">
+            <Chart
               series={chartSeries}
               title="Chart"
               firstloding={3}
