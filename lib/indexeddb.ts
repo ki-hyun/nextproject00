@@ -154,14 +154,14 @@ export const isCacheValid = async (key: string, maxAgeMs: number = 3600000): Pro
   }
 };
 
-// Clear all cached data (optional)
+// Clear all cached data (optional) // 지워지는지 잘 모르겠음
 export const clearCache = async (): Promise<void> => {
   try {
     const db = await initDB();
     const transaction = db.transaction([STORE_NAME], 'readwrite');
     const store = transaction.objectStore(STORE_NAME);
     const request = store.clear();
-    
+
     return new Promise((resolve, reject) => {
       request.onsuccess = () => {
         console.log('IndexedDB cache cleared');

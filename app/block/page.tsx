@@ -2,8 +2,8 @@
 
 import TabNavigation from '../../components/TabNavigation';
 import { getRealTimeHashrate, formatHashrate } from "@/lib/getRealTimeInfo";
-import Chart from '@/components/Chart';
-import DeleteIndexButton from '@/components/DeleteIndexButton';
+// import Chart from '@/components/Chart';
+// import DeleteIndexButton from '@/components/DeleteIndexButton';
 // import { useState } from 'react';
 
 // 페이지 레벨에서 캐싱 비활성화 및 런타임 강제
@@ -12,65 +12,7 @@ export const revalidate = 0;
 export const runtime = 'nodejs';
 export const fetchCache = 'force-no-store';
 
-export default async function BlockPage() {
-
-  // const [chartHeight, setChartHeight] = useState(800);
-
-  const chartSeries = [
-    {
-      name: 'Price',
-      type: 'line' as const,
-      data: [],
-      color: '#3b82f6',
-      lineWidth: 1,
-      turboThreshold: 0,  // 모든 데이터 포인트 표시
-      yAxis: 0,
-      visible: true,  // Price만 처음에 표시
-      tooltip: {
-        valueDecimals: 2,
-        valuePrefix: '$',
-        valueSuffix: ' USD'
-      },
-      customData: {
-        dataSource: 'coinprice',
-      }
-    },
-    {
-      name: 'HashRate',
-      type: 'line' as const,
-      data: [],
-      color: '#10b981',
-      lineWidth: 1,
-      turboThreshold: 0,  // 모든 데이터 포인트 표시
-      yAxis: 1,
-      visible: true,  // 처음에 표시
-      tooltip: {
-        valueDecimals: 2,
-        valueSuffix: 'TH/s'
-      },
-      customData: {
-        dataSource: 'hashrate',
-      }
-    },
-    {
-      name: 'Difficulty',
-      type: 'line' as const,
-      data: [],
-      color: '#f59e0b',
-      lineWidth: 1,
-      turboThreshold: 0,  // 모든 데이터 포인트 표시
-      yAxis: 2,
-      visible: true,  // 처음에 표시
-      tooltip: {
-        valueDecimals: 2,
-        valueSuffix: ''
-      },
-      customData: {
-        dataSource: 'difficulty',
-        displayUnit: 'trillion' // Chart 컴포넌트에서 처리하도록 표시
-      }
-    },
-  ]
+export default async function HashratePage() {
 
   const _realtimehashrate = await getRealTimeHashrate()
 
@@ -126,31 +68,6 @@ export default async function BlockPage() {
     hour12: false
   }))
   console.log(_realtimehashrate)
-  // {
-  //   timestamp: 1758719814000,                    // 데이터 수집 시점 (Unix 타임스탬프, 밀리초)
-  //   market_price_usd: 112979.79,                 // 비트코인 현재 시장 가격 (USD)
-  //   hash_rate: 1082611043219.257,                // 네트워크 해시레이트 (H/s, 약 1.08 EH/s)
-  //   total_fees_btc: -47812500000,                // 총 거래 수수료 (사토시 단위)
-  //   n_btc_mined: 47812500000,                    // 최근 채굴된 BTC (사토시 단위, 478.125 BTC)
-  //   n_tx: 552322,                                // 최근 24시간 총 거래 수
-  //   n_blocks_mined: 153,                         // 최근 24시간 채굴된 블록 수
-  //   minutes_between_blocks: 8.6776,              // 최근 블록 간 평균 시간 (분)
-  //   totalbc: 1992558125000000,                   // 현재까지 총 발행된 BTC (사토시 단위, 약 19.93M BTC)
-  //   n_blocks_total: 916186,                      // 전체 채굴된 블록 수 (현재 블록 높이와 동일)
-  //   estimated_transaction_volume_usd: 12763303078.197489,  // 예상 거래량 (USD)
-  //   blocks_size: 219168003,                      // 최근 블록들의 총 크기 (바이트)
-  //   miners_revenue_usd: 0,                       // 채굴자 수익 (USD)
-  //   nextretarget: 917279,                        // 다음 난이도 조정 예정 블록 높이
-  //   difficulty: 142342602928674,                 // 현재 채굴 난이도 (약 142.34T)
-  //   estimated_btc_sent: 11296978935965,          // 예상 전송된 BTC 총량 (사토시 단위)
-  //   miners_revenue_btc: 0,                       // 채굴자 수익 (BTC)
-  //   total_btc_sent: 71667806263676,              // 전체 전송된 BTC 총량 (사토시 단위)
-  //   trade_volume_btc: 2917.11,                   // 거래소 거래량 (BTC)
-  //   trade_volume_usd: 329574475.2069,            // 거래소 거래량 (USD)
-  //   currentBlockHeight: 916186,                  // 현재 블록 높이 (커스텀 필드)
-  //   lastDifficultyAdjustmentBlock: 915264,       // 마지막 난이도 조정된 블록 (커스텀 필드)
-  //   lastDifficultyAdjustmentTime: 1758206848000  // 마지막 난이도 조정 시간 (커스텀 필드)
-  // }
   
   // <div className="max-w-full mx-auto px-1">
 
@@ -203,7 +120,8 @@ export default async function BlockPage() {
               </p>
             </div>
 
-          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-gray-200/50 dark:border-gray-700/50">
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-gray-200/50 dark:border-gray-700/50">
+
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
               {/* 해시레이트 */}
@@ -249,6 +167,70 @@ export default async function BlockPage() {
                 </p>
               </div>
 
+              {/* 24시간 평균 블록 시간 */}
+              <div className="text-center p-3 md:p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-2xl md:text-3xl mb-1 md:mb-2">⏱️</div>
+                <h3 className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">24시간 평균 블록시간</h3>
+                <p className="text-lg md:text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  {_realtimehashrate?.minutes_between_blocks ? _realtimehashrate.minutes_between_blocks.toFixed(2) + ' 분' : 'N/A'}
+                </p>
+              </div>
+
+              {/* 총 채굴량 */}
+              <div className="text-center p-3 md:p-4 bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-2xl md:text-3xl mb-1 md:mb-2">💰</div>
+                <h3 className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">총 채굴량</h3>
+                <p className="text-lg md:text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+                  {_realtimehashrate?.totalbc ? (_realtimehashrate.totalbc / 1e8).toLocaleString() + ' BTC' : 'N/A'}
+                </p>
+              </div>
+
+              {/* 24시간 BTC 발행량 */}
+              <div className="text-center p-3 md:p-4 bg-gradient-to-br from-pink-50 to-rose-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-2xl md:text-3xl mb-1 md:mb-2">📈</div>
+                <h3 className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">24시간 BTC 발행</h3>
+                <p className="text-lg md:text-2xl font-bold text-pink-600 dark:text-pink-400">
+                  {_realtimehashrate?.n_btc_mined ? (_realtimehashrate.n_btc_mined / 1e8).toFixed(2) + ' BTC' : 'N/A'}
+                </p>
+              </div>
+
+              {/* 24시간 거래 수수료 */}
+              <div className="text-center p-3 md:p-4 bg-gradient-to-br from-purple-50 to-violet-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-2xl md:text-3xl mb-1 md:mb-2">💸</div>
+                <h3 className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">24시간 거래 수수료</h3>
+                <p className="text-lg md:text-2xl font-bold text-purple-600 dark:text-purple-400">
+                  {_realtimehashrate?.total_fees_btc ? (_realtimehashrate.total_fees_btc / 1e8).toFixed(4) + ' BTC' : 'N/A'}
+                </p>
+              </div>
+
+              {/* 블록 크기 */}
+              <div className="text-center p-3 md:p-4 bg-gradient-to-br from-cyan-50 to-sky-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-2xl md:text-3xl mb-1 md:mb-2">📦</div>
+                <h3 className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">평균 블록 크기</h3>
+                <p className="text-lg md:text-2xl font-bold text-cyan-600 dark:text-cyan-400">
+                  {_realtimehashrate?.blocks_size ? (_realtimehashrate.blocks_size / 1e6).toFixed(2) + ' MB' : 'N/A'}
+                </p>
+              </div>
+
+              {/* 예상 거래 볼륨 */}
+              <div className="text-center p-3 md:p-4 bg-gradient-to-br from-lime-50 to-green-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-2xl md:text-3xl mb-1 md:mb-2">💳</div>
+                <h3 className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">예상 거래 볼륨</h3>
+                <p className="text-lg md:text-2xl font-bold text-lime-600 dark:text-lime-400">
+                  {_realtimehashrate?.estimated_transaction_volume_usd ? 
+                    '$' + (_realtimehashrate.estimated_transaction_volume_usd / 1e9).toFixed(2) + 'B' : 'N/A'}
+                </p>
+              </div>
+
+              {/* 24시간 채굴 블록 */}
+              <div className="text-center p-3 md:p-4 bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
+                <div className="text-2xl md:text-3xl mb-1 md:mb-2">⛏️</div>
+                <h3 className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">24시간 채굴 블록</h3>
+                <p className="text-lg md:text-2xl font-bold text-green-600 dark:text-green-400">
+                  {_realtimehashrate?.n_blocks_mined || 'N/A'}
+                </p>
+              </div>
+
             </div>
 
             {/* 난이도 조정 정보 - 전체 너비로 표시 */}
@@ -274,10 +256,10 @@ export default async function BlockPage() {
                       {/* 블록 넘버 표시 */}
                       <div className="flex justify-between text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-2">
                         <div className="font-medium">
-                          {(_realtimehashrate?.lastDifficultyAdjustmentBlock || (currentHeight - (currentHeight % BLOCKS_PER_ADJUSTMENT))).toLocaleString()}
+                          시작: {(_realtimehashrate?.lastDifficultyAdjustmentBlock || (currentHeight - (currentHeight % BLOCKS_PER_ADJUSTMENT))).toLocaleString()}
                         </div>
                         <div className="font-medium">
-                          {nextAdjustmentBlock.toLocaleString()}
+                          종료: {nextAdjustmentBlock.toLocaleString()}
                         </div>
                       </div>
                       
@@ -303,12 +285,6 @@ export default async function BlockPage() {
                         </div>
                       </div>
                       <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
-                        <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">현재 블록</div>
-                        <div className="text-lg md:text-xl font-bold text-blue-600 dark:text-blue-400">
-                        {currentHeight.toLocaleString()}
-                        </div>
-                      </div>
-                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
                         <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">예상 완료</div>
                         <div className="text-lg md:text-xl font-bold text-purple-600 dark:text-purple-400">
                           {(() => {
@@ -322,7 +298,7 @@ export default async function BlockPage() {
                           })()}
                         </div>
                       </div>
-                      {/* <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
                         <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">평균 블록시간</div>
                         <div className={`text-lg md:text-xl font-bold ${
                           currentDifficultyAvgBlockTime <= TARGET_BLOCK_TIME 
@@ -331,13 +307,26 @@ export default async function BlockPage() {
                         }`}>
                           {currentDifficultyAvgBlockTime ? currentDifficultyAvgBlockTime.toFixed(2) : 'N/A'} 분
                         </div>
-                      </div> */}
+                        <div className={`text-xs ${
+                          currentDifficultyAvgBlockTime <= TARGET_BLOCK_TIME 
+                            ? 'text-green-600 dark:text-green-400' 
+                            : 'text-red-600 dark:text-red-400'
+                        }`}>
+                          {currentDifficultyAvgBlockTime <= TARGET_BLOCK_TIME ? '⚡ 빠름' : '🐌 느림'}
+                        </div>
+                      </div>
+                      <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
+                        <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">현재 블록</div>
+                        <div className="text-lg md:text-xl font-bold text-orange-600 dark:text-orange-400">
+                        {currentHeight.toLocaleString()}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 {/* 난이도 예측 섹션 */}
-                {/* <div className="border-t border-gray-200 dark:border-gray-600 pt-3 md:pt-4 mt-3 md:mt-4">
+                <div className="border-t border-gray-200 dark:border-gray-600 pt-3 md:pt-4 mt-3 md:mt-4">
                   <h4 className="text-sm md:text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 md:mb-3">
                     🎯 예상 난이도 변화
                   </h4>
@@ -367,22 +356,10 @@ export default async function BlockPage() {
                       </p>
                     </div>
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="mt-5">
-            <Chart 
-              series={chartSeries}
-              title="Chart"
-              firstloding={3}
-              height={800}
-              />
-          </div>
-
-          {/* 사이트 관리 버튼 */}
-          <DeleteIndexButton />
 
         </div>
       </main>

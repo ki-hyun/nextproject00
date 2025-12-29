@@ -1,27 +1,30 @@
 'use client';
 
+// import { clearCache } from '@/lib/indexeddb';
+
 export default function DeleteIndexButton() {
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm('정말로 사이트 인덱스 디비전부를 지우시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-      fetch('/api/clear-index-division', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('사이트 인덱스 디비전부가 성공적으로 삭제되었습니다.');
-          window.location.reload();
-        } else {
-          alert('삭제 중 오류가 발생했습니다: ' + data.error);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('삭제 중 오류가 발생했습니다.');
-      });
+      try {
+        // console.log('IndexedDB 삭제 시작...');
+        // await clearCache();
+        // console.log('IndexedDB 삭제 완료');
+        // alert('사이트 인덱스 디비전부가 성공적으로 삭제되었습니다.');
+        
+        // 추가: 전체 IndexedDB 데이터베이스 삭제 시도
+        const deleteRequest = indexedDB.deleteDatabase('ChartDataCache');
+        deleteRequest.onsuccess = () => {
+          console.log('IndexedDB 데이터베이스 완전 삭제 완료');
+        };
+        deleteRequest.onerror = () => {
+          console.log('IndexedDB 데이터베이스 삭제 중 오류');
+        };
+        
+        window.location.reload();
+      } catch (error) {
+        console.error('Error clearing IndexedDB cache:', error);
+        alert('삭제 중 오류가 발생했습니다: ' + error);
+      }
     }
   };
 
