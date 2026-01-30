@@ -125,7 +125,8 @@ export default async function BlockPage() {
     second: '2-digit',
     hour12: false
   }))
-  console.log(_realtimehashrate)
+  // console.log(_realtimehashrate)
+  
   // {
   //   timestamp: 1758719814000,                    // 데이터 수집 시점 (Unix 타임스탬프, 밀리초)
   //   market_price_usd: 112979.79,                 // 비트코인 현재 시장 가격 (USD)

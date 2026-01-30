@@ -29,11 +29,11 @@ async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: bo
   // 1. IndexedDB에서 캐시된 데이터 확인
   const isCached = await isCacheValid(element, CACHE_MAX_AGE);
 
-  if (isCached) {
-    // 캐시가 유효하면 IndexedDB에서 데이터 로드
-    console.log(element,'인덱스 db에서 가져옴 Loading coinprice data from IndexedDB cache...');
-    coinpriceData = await loadFromIndexedDB(element);
-  }
+  // if (isCached) {
+  //   // 캐시가 유효하면 IndexedDB에서 데이터 로드
+  //   console.log(element,'인덱스 db에서 가져옴 Loading coinprice data from IndexedDB cache...');
+  //   coinpriceData = await loadFromIndexedDB(element);
+  // }
 
   // 2. 캐시가 없거나 만료되었으면 서버에서 데이터 가져오기
   if (!coinpriceData) {

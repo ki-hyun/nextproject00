@@ -90,6 +90,8 @@ async function getRealTimeHashrate() {
           }
         }
       }
+
+
     } catch (error) {
       console.log('Failed to fetch difficulty adjustment block info:', error);
     }
