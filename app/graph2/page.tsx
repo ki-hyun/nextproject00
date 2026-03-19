@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { getPrice11Data } from './actions';
-import TabNavigation from '../../components/TabNavigation';
 import dynamic from 'next/dynamic';
 
 // Highcharts를 동적으로 import (SSR 비활성화)
@@ -360,7 +359,6 @@ export default function Graph2Page() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}

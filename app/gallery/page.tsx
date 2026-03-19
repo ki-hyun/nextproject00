@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import TabNavigation from '../../components/TabNavigation';
 
 export default function GalleryPage() {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -120,7 +119,6 @@ export default function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">

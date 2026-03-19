@@ -1,6 +1,5 @@
 'use client';
 
-import TabNavigation from '../../components/TabNavigation';
 
 export default function ExchangePage() {
   const tradingPairs = [
@@ -35,7 +34,6 @@ export default function ExchangePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">

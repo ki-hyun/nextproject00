@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import TabNavigation, { tabs } from '../components/TabNavigation';
+import { tabs } from '../components/Sidebar';
 
 interface User {
   id: number;
@@ -42,8 +42,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Tab Navigation */}
-      <TabNavigation user={user} />
-
       {/* Hero Section */}
       <section className="container mx-auto px-6 py-16">
         <div className="text-center mb-16">

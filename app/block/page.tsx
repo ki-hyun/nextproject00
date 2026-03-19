@@ -1,6 +1,5 @@
 // 'use client';
 
-import TabNavigation from '../../components/TabNavigation';
 import { getRealTimeHashrate, formatHashrate } from "@/lib/getRealTimeInfo";
 // import Chart from '@/components/Chart';
 // import DeleteIndexButton from '@/components/DeleteIndexButton';
@@ -73,7 +72,6 @@ export default async function HashratePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-4 py-6 md:px-6 md:py-8">
         {/* <div className="max-w-4xl mx-auto"> */}
         <div className="max-w-full mx-auto px-1 mt-1">

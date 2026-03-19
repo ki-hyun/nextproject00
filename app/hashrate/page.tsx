@@ -1,6 +1,5 @@
 // 'use client';
 
-import TabNavigation from '../../components/TabNavigation';
 import { getRealTimeHashrate, formatHashrate } from "@/lib/getRealTimeInfo";
 import Chart from '@/components/Chart';
 import DeleteIndexButton from '@/components/DeleteIndexButton';
@@ -21,8 +20,8 @@ export default async function BlockPage() {
       name: 'Price',
       type: 'line' as const,
       data: [],
-      color: '#3b82f6',
-      lineWidth: 1,
+      color: '#d35400',
+      lineWidth: 2,
       turboThreshold: 0,  // 모든 데이터 포인트 표시
       yAxis: 0,
       visible: true,  // Price만 처음에 표시
@@ -32,15 +31,15 @@ export default async function BlockPage() {
         valueSuffix: ' USD'
       },
       customData: {
-        dataSource: 'coinprice',
+        dataSource: 'price',
       }
     },
     {
       name: 'HashRate',
       type: 'line' as const,
       data: [],
-      color: '#10b981',
-      lineWidth: 1,
+      color: '#27ae60',
+      lineWidth: 2,
       turboThreshold: 0,  // 모든 데이터 포인트 표시
       yAxis: 1,
       visible: true,  // 처음에 표시
@@ -52,24 +51,24 @@ export default async function BlockPage() {
         dataSource: 'hashrate',
       }
     },
-    {
-      name: 'Difficulty',
-      type: 'line' as const,
-      data: [],
-      color: '#f59e0b',
-      lineWidth: 1,
-      turboThreshold: 0,  // 모든 데이터 포인트 표시
-      yAxis: 2,
-      visible: true,  // 처음에 표시
-      tooltip: {
-        valueDecimals: 2,
-        valueSuffix: ''
-      },
-      customData: {
-        dataSource: 'difficulty',
-        displayUnit: 'trillion' // Chart 컴포넌트에서 처리하도록 표시
-      }
-    },
+    // {
+    //   name: 'Difficulty',
+    //   type: 'line' as const,
+    //   data: [],
+    //   color: '#f1c40f',
+    //   lineWidth: 2,
+    //   turboThreshold: 0,  // 모든 데이터 포인트 표시
+    //   yAxis: 2,
+    //   visible: true,  // 처음에 표시
+    //   tooltip: {
+    //     valueDecimals: 2,
+    //     valueSuffix: ''
+    //   },
+    //   customData: {
+    //     dataSource: 'difficulty',
+    //     displayUnit: 'trillion' // Chart 컴포넌트에서 처리하도록 표시
+    //   }
+    // },
   ]
 
   const _realtimehashrate = await getRealTimeHashrate()
@@ -79,7 +78,7 @@ export default async function BlockPage() {
   const currentHeight = _realtimehashrate?.currentBlockHeight || 0;
   const blocksUntilAdjustment = BLOCKS_PER_ADJUSTMENT - (currentHeight % BLOCKS_PER_ADJUSTMENT);
   const nextAdjustmentBlock = currentHeight + blocksUntilAdjustment;
-  
+
   // 현재 난이도 기간의 평균 블록시간 계산
   let currentDifficultyAvgBlockTime = 10; // 기본값 10분
   if (_realtimehashrate?.lastDifficultyAdjustmentTime && currentHeight > _realtimehashrate?.lastDifficultyAdjustmentBlock) {
@@ -88,30 +87,30 @@ export default async function BlockPage() {
     const minutesSinceDifficultyAdjustment = timeSinceDifficultyAdjustment / (1000 * 60);
     currentDifficultyAvgBlockTime = minutesSinceDifficultyAdjustment / blocksSinceDifficultyAdjustment;
   }
-  
+
   // 예상 시간 계산 (현재 난이도 기간의 평균 블록 시간 * 남은 블록 수)
   const minutesUntilAdjustment = blocksUntilAdjustment * currentDifficultyAvgBlockTime;
   const hoursUntilAdjustment = minutesUntilAdjustment / 60;
   const daysUntilAdjustment = hoursUntilAdjustment / 24;
-  
+
   // 예상 난이도 조정 시간
   const nextAdjustmentTime = new Date(Date.now() + minutesUntilAdjustment * 60 * 1000);
-  
+
   // 다음 난이도 예측 계산
   // 목표 블록 시간: 10분
   // 현재 평균 블록 시간이 목표보다 빠르면 난이도 증가, 느리면 감소
   const TARGET_BLOCK_TIME = 10; // 10분
   const currentAvgBlockTime = currentDifficultyAvgBlockTime; // 현재 난이도 기간의 평균 사용
   const currentDifficulty = _realtimehashrate?.difficulty || 0;
-  
+
   // 난이도 조정 비율 = 목표 시간 / 실제 시간
   // 최대 4배, 최소 0.25배로 제한 (비트코인 프로토콜 규칙)
   let adjustmentRatio = TARGET_BLOCK_TIME / currentAvgBlockTime;
   adjustmentRatio = Math.max(0.25, Math.min(4, adjustmentRatio));
-  
+
   // 예상 다음 난이도
   const expectedNextDifficulty = currentDifficulty * adjustmentRatio;
-  
+
   // 난이도 변화율 (%)
   const difficultyChangePercent = ((adjustmentRatio - 1) * 100);
 
@@ -126,7 +125,7 @@ export default async function BlockPage() {
     hour12: false
   }))
   // console.log(_realtimehashrate)
-  
+
   // {
   //   timestamp: 1758719814000,                    // 데이터 수집 시점 (Unix 타임스탬프, 밀리초)
   //   market_price_usd: 112979.79,                 // 비트코인 현재 시장 가격 (USD)
@@ -152,19 +151,18 @@ export default async function BlockPage() {
   //   lastDifficultyAdjustmentBlock: 915264,       // 마지막 난이도 조정된 블록 (커스텀 필드)
   //   lastDifficultyAdjustmentTime: 1758206848000  // 마지막 난이도 조정 시간 (커스텀 필드)
   // }
-  
+
   // <div className="max-w-full mx-auto px-1">
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-4 py-6 md:px-6 md:py-8">
         {/* <div className="max-w-4xl mx-auto"> */}
         <div className="max-w-full mx-auto px-1 mt-1">
-          
-            {/* 업데이트 시간 */}
-            <div className="mb-4 md:mb-6 text-center space-y-2">
-              {/* <p className="text-sm md:text-lg text-gray-600 dark:text-gray-400">
+
+          {/* 업데이트 시간 */}
+          <div className="mb-4 md:mb-6 text-center space-y-2">
+            {/* <p className="text-sm md:text-lg text-gray-600 dark:text-gray-400">
                 현재 시간: {new Date().toLocaleString('ko-KR', {
                   timeZone: 'Asia/Seoul',
                   month: '2-digit',
@@ -175,34 +173,34 @@ export default async function BlockPage() {
                   hour12: false
                 })}
               </p> */}
-              <p className="text-sm md:text-lg text-gray-500 dark:text-gray-400">
-                <span className="block sm:inline">마지막 업데이트:</span> {new Date(_realtimehashrate.timestamp).toLocaleString('ko-KR', {
-                  timeZone: 'Asia/Seoul',
-                  month: '2-digit',
-                  day: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit',
-                  hour12: false
-                })}
-                <span className="text-sm md:text-lg ml-2 text-gray-400">
-                  ({(() => {
-                    const timeDiff = Date.now() - _realtimehashrate.timestamp;
-                    const seconds = Math.floor(timeDiff / 1000);
-                    const minutes = Math.floor(seconds / 60);
-                    const hours = Math.floor(minutes / 60);
-                    
-                    if (hours > 0) {
-                      return `${hours}시간 ${minutes % 60}분 전`;
-                    } else if (minutes > 0) {
-                      return `${minutes}분 ${seconds % 60}초 전`;
-                    } else {
-                      return `${seconds}초 전`;
-                    }
-                  })()})
-                </span>
-              </p>
-            </div>
+            <p className="text-sm md:text-lg text-gray-500 dark:text-gray-400">
+              <span className="block sm:inline">마지막 업데이트:</span> {new Date(_realtimehashrate.timestamp).toLocaleString('ko-KR', {
+                timeZone: 'Asia/Seoul',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+              })}
+              <span className="text-sm md:text-lg ml-2 text-gray-400">
+                ({(() => {
+                  const timeDiff = Date.now() - _realtimehashrate.timestamp;
+                  const seconds = Math.floor(timeDiff / 1000);
+                  const minutes = Math.floor(seconds / 60);
+                  const hours = Math.floor(minutes / 60);
+
+                  if (hours > 0) {
+                    return `${hours}시간 ${minutes % 60}분 전`;
+                  } else if (minutes > 0) {
+                    return `${minutes}분 ${seconds % 60}초 전`;
+                  } else {
+                    return `${seconds}초 전`;
+                  }
+                })()})
+              </span>
+            </p>
+          </div>
 
           <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-gray-200/50 dark:border-gray-700/50">
 
@@ -224,7 +222,7 @@ export default async function BlockPage() {
                   {currentDifficultyAvgBlockTime ? currentDifficultyAvgBlockTime.toFixed(2) + ' 분' : 'N/A'}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {_realtimehashrate?.lastDifficultyAdjustmentBlock ? 
+                  {_realtimehashrate?.lastDifficultyAdjustmentBlock ?
                     `블록 #${_realtimehashrate.lastDifficultyAdjustmentBlock.toLocaleString()} 이후` : ''}
                 </p>
               </div>
@@ -255,10 +253,10 @@ export default async function BlockPage() {
             {/* 난이도 조정 정보 - 전체 너비로 표시 */}
             <div className="mt-4 md:mt-6 p-4 md:p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 rounded-xl">
               <div className="w-full">
-                
+
                 {/* 현재 난이도 블록 진행상황 */}
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-3 md:pt-4">
-                  
+
                   <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl p-4 md:p-6">
                     {/* 진행률 표시 */}
                     <div className="text-center mb-4 md:mb-6">
@@ -281,9 +279,9 @@ export default async function BlockPage() {
                           {nextAdjustmentBlock.toLocaleString()}
                         </div>
                       </div>
-                      
+
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-6 md:h-8 shadow-inner">
-                        <div 
+                        <div
                           className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-6 md:h-8 rounded-full transition-all duration-500 ease-out shadow-lg relative overflow-hidden"
                           style={{
                             width: `${((currentHeight % BLOCKS_PER_ADJUSTMENT) / BLOCKS_PER_ADJUSTMENT * 100).toFixed(1)}%`
@@ -306,7 +304,7 @@ export default async function BlockPage() {
                       <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
                         <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1">현재 블록</div>
                         <div className="text-lg md:text-xl font-bold text-blue-600 dark:text-blue-400">
-                        {currentHeight.toLocaleString()}
+                          {currentHeight.toLocaleString()}
                         </div>
                       </div>
                       <div className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-3 md:p-4">
@@ -373,13 +371,13 @@ export default async function BlockPage() {
             </div>
           </div>
 
-          <div className="mt-150">
+          <div className="mt-2">
             <Chart
               series={chartSeries}
               title="Chart"
               firstloding={3}
-              height={800}
-              />
+              height={600}
+            />
           </div>
 
           {/* 사이트 관리 버튼 */}

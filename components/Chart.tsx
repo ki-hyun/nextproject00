@@ -9,25 +9,25 @@ import { saveToIndexedDB, loadFromIndexedDB, isCacheValid } from "@/lib/indexedd
 // Highcharts용 데이터 타입 [timestamp, value]
 type ChartDataPoint = [number, number];
 
-async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: boolean){
+async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: boolean) {
 
   const CACHE_MAX_AGE = 60 * 60 * 1000; // 60분 캐시 유효 시간   현제 쓰지 않음
 
   // 시리즈의 customData에서 dataSource 가져오기
   const series = chart.series[_chartnum];
   const element = (series.options as any)?.customData?.dataSource;
-  
-  console.log('async function loadchart(chart: Highcharts.Chart, _chartnum: number){',element,_chartnum)
+
+  console.log('async function loadchart(chart: Highcharts.Chart, _chartnum: number){', element, _chartnum)
 
   if (!element) {
     console.log('No dataSource found in series customData');
     return;
   }
-        
+
   let coinpriceData = null;
 
   // 1. IndexedDB에서 캐시된 데이터 확인
-  const isCached = await isCacheValid(element, CACHE_MAX_AGE);
+  // const isCached = await isCacheValid(element, CACHE_MAX_AGE);
 
   // if (isCached) {
   //   // 캐시가 유효하면 IndexedDB에서 데이터 로드
@@ -39,7 +39,7 @@ async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: bo
   if (!coinpriceData) {
     console.log('서버에서 가져옴 Fetching coinprice data from server...');
     const _coinprice = await getDataSimple<ChartDataPoint>(element);
-    
+
     if (_coinprice.success && _coinprice.data) {
       coinpriceData = _coinprice.data;
 
@@ -54,11 +54,10 @@ async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: bo
             value
           ]);
         }
-      }
 
-      // IndexedDB에 저장 (변환된 밀리초 단위로 저장)
-      await saveToIndexedDB(element, coinpriceData, coinpriceData[coinpriceData.length-1][0]);
-      // console.log('Coinprice data saved to IndexedDB');
+        // 데이터가 있을 때만 IndexedDB에 저장
+        await saveToIndexedDB(element, coinpriceData, coinpriceData[coinpriceData.length - 1][0]);
+      }
     } else {
       console.log('Failed to fetch coinprice data:', _coinprice.error);
     }
@@ -66,7 +65,7 @@ async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: bo
 
   // 차트와 시리즈가 존재하는지 확인
   if (chart && chart.series && chart.series[_chartnum] && coinpriceData) {
-    
+
     // // displayUnit이 trillion인 경우 데이터를 1조로 나누기
     // const displayUnit = (series.options as any)?.customData?.displayUnit;
     // if (displayUnit === 'trillion') {
@@ -80,43 +79,43 @@ async function loadchart(chart: Highcharts.Chart, _chartnum: number, _redraw: bo
     chart.series[_chartnum].setData(coinpriceData, false);
   }
 
-  if(_redraw){
+  if (_redraw) {
     chart.redraw();
   }
 }
 
-async function addchart(chart: Highcharts.Chart, seriesConfig: any){
-  
-    // // 사용 예시
-    // const newSeriesConfig = {
-    //   name: 'New Data',
-    //   type: 'line',
-    //   color: '#ff6b6b',
-    //   lineWidth: 2,
-    //   yAxis: 0,
-    //   visible: true,
-    //   tooltip: {
-    //     valueDecimals: 2,
-    //     valueSuffix: ' units'
-    //   }
-    // };
-  
-    // // 새 시리즈 추가
-    // await addchart(chart, newSeriesConfig);
+async function addchart(chart: Highcharts.Chart, seriesConfig: any) {
+
+  // // 사용 예시
+  // const newSeriesConfig = {
+  //   name: 'New Data',
+  //   type: 'line',
+  //   color: '#ff6b6b',
+  //   lineWidth: 2,
+  //   yAxis: 0,
+  //   visible: true,
+  //   tooltip: {
+  //     valueDecimals: 2,
+  //     valueSuffix: ' units'
+  //   }
+  // };
+
+  // // 새 시리즈 추가
+  // await addchart(chart, newSeriesConfig);
 
 
   // 새로운 시리즈를 차트에 추가
   const newSeries = chart.addSeries(seriesConfig, false); // false: 즉시 redraw하지 않음
-  
+
   // 새로 추가된 시리즈의 인덱스 가져오기
   const seriesIndex = chart.series.indexOf(newSeries);
-  
+
   // 데이터 로드
   await loadchart(chart, seriesIndex, false);
-  
+
   // 차트 다시 그리기
   chart.redraw();
-  
+
   return newSeries;
 }
 
@@ -131,6 +130,23 @@ interface ChartProps {
 export default function Chart({ series = [], title = 'chart', firstloding = 2, height = 800 }: ChartProps) {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
+  // 브라우저 로컬 시간대 오프셋(분)
+  const timezoneOffset = -new Date().getTimezoneOffset();
+
+  // timestamp + offset(분) → 'YYYY-MM-DD HH:mm' 문자열
+  const formatWithOffset = (timestamp: number, offsetMin: number) => {
+    const d = new Date(timestamp + offsetMin * 60 * 1000);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+  };
+
+  // tzLabel 표시용
+  const tzSign = timezoneOffset >= 0 ? '+' : '-';
+  const tzAbs = Math.abs(timezoneOffset);
+  const tzHour = Math.floor(tzAbs / 60);
+  const tzMin = tzAbs % 60 !== 0 ? ':' + String(tzAbs % 60).padStart(2, '0') : '';
+  const currentTzLabel = `UTC${tzSign}${tzHour}${tzMin}`;
+
   const options: Highcharts.Options = {
     chart: {
       backgroundColor: 'transparent',
@@ -138,9 +154,36 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
         fontFamily: 'inherit'
       }
     },
-    
+
     rangeSelector: {
-      selected: 4,
+      selected: 0,
+      buttons: [{
+        type: 'week',
+        count: 1,
+        text: '1w'
+      }, {
+        type: 'month',
+        count: 1,
+        text: '1m'
+      }, {
+        type: 'month',
+        count: 3,
+        text: '3m'
+      }, {
+        type: 'month',
+        count: 6,
+        text: '6m'
+      }, {
+        type: 'ytd',
+        text: 'YTD'
+      }, {
+        type: 'year',
+        count: 1,
+        text: '1y'
+      }, {
+        type: 'all',
+        text: 'All'
+      }],
       buttonTheme: {
         fill: 'rgba(59, 130, 246, 0.1)',
         stroke: 'rgba(59, 130, 246, 0.5)',
@@ -278,6 +321,12 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
       },
       style: {
         color: '#374151'
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      formatter: function (this: any) {
+        const timeStr = formatWithOffset(this.x as number, timezoneOffset);
+        const value = typeof this.y === 'number' ? this.y.toLocaleString(undefined, { maximumFractionDigits: 2 }) : this.y;
+        return `<b>${this.series?.name ?? ''}</b><br/>${timeStr} (${currentTzLabel})<br/>${value}`;
       }
     },
 
@@ -287,33 +336,33 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
           valueDecimals: 2
         },
         events: {
-          legendItemClick: async function(this: Highcharts.Series) {
+          legendItemClick: async function (this: Highcharts.Series) {
             // console.log(`Legend item clicked: ${this.name}`);
             // console.log(`Current visibility: ${this.visible ? 'visible' : 'hidden'}`);
-            
+
             // 차트 객체는 this.chart로 가져옴
             const chart = this.chart;
-            
+
             // 시리즈 인덱스 찾기
             const seriesIndex = chart.series.indexOf(this);
-            
+
             // 현재 숨겨진 상태에서 활성화하려는 경우이고, 데이터가 없는 경우에만 로드
             if (this.visible && (!this.data || this.data.length === 0)) {
               // console.log(`Loading data for ${this.name}...`);
               await loadchart(chart, seriesIndex, true);
             }
-            
+
             // return false; // 기본 show/hide 동작 막기
           }
         }
       }
     },
-    
+
     xAxis: {
       type: 'datetime',
       labels: {
-        formatter: function() {
-          return Highcharts.dateFormat('%Y-%m-%d', this.value as number);
+        formatter: function () {
+          return formatWithOffset(this.value as number, timezoneOffset).slice(0, 10); // YYYY-MM-DD
         },
         style: {
           color: '#6b7280'
@@ -366,6 +415,8 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadData = async () => {
       try {
         // 차트가 준비되지 않았거나 시리즈가 없으면 리턴
@@ -373,43 +424,40 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
           console.log('아직 준비 안됨  Chart or series not ready yet...');
           return;
         }
-        
+
         const chart = chartComponentRef.current.chart;
 
         for (let i = 0; i < firstloding; i++) {
-          if (chart.series[i]) {
+          // 언마운트 됐거나 차트가 이미 파괴된 경우 중단
+          if (!isMounted || !chart.series) break;
+
+          if (i < chart.series.length && chart.series[i]) {
             await loadchart(chart, i, false);
           }
         }
 
-        // // 시리즈가 준비될 때까지 기다림
-        // if (!chart.series || chart.series.length === 0) {
-        //   console.log('Chart series not ready yet...');
-        //   setTimeout(() => loadData(), 100);
-        //   return;
-        // }
-
-        // // 실제 존재하는 시리즈 개수만큼 로드
-        // const seriesToLoad = Math.min(chart.series.length, 2);
-        // for (let i = 0; i < seriesToLoad; i++) {
-        //   if (chart.series[i] && chart.series[i].options) {
-        //     await loadchart(chart, i, false);
-        //   }
-        // }
-
-
-        chart.redraw();
+        // 아직 마운트 상태이고 차트가 유효할 때만 redraw
+        if (isMounted && chart.series) {
+          chart.redraw();
+        }
 
       } catch (error) {
-        console.error('Error loading data:', error);
+        if (isMounted) {
+          console.error('Error loading data:', error);
+        }
       }
     };
 
     loadData();
+
+    // 언마운트 시 플래그 해제
+    return () => {
+      isMounted = false;
+    };
   }, [series]);
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-gray-100" style={{ height: `${height}px` }}>
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-4 border border-gray-100" style={{ height: `${height}px` }}>
       <HighchartsReact
         highcharts={Highcharts}
         constructorType={'stockChart'}

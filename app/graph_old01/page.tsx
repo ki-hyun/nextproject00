@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { getData } from "@/lib/data";
-import TabNavigation from '../../components/TabNavigation';
 import dynamic from 'next/dynamic';
 
 // Highcharts를 동적으로 import (SSR 비활성화)
@@ -363,7 +362,6 @@ export default function GraphPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}

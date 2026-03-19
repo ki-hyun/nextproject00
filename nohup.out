@@ -1,0 +1,1075 @@
+
+> nextproject00@0.1.0 dev
+> next dev --turbopack -p 3000
+
+▲ Next.js 16.1.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.19.0.3:3000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 983ms
+ GET /trans 200 in 1097ms (compile: 962ms, render: 135ms)
+⚠ Cross origin request detected from 192.168.0.3 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 42ms (compile: 24ms, render: 19ms)
+ GET /mining 200 in 68ms (compile: 55ms, render: 13ms)
+ GET /crypto 200 in 66ms (compile: 48ms, render: 18ms)
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 02:30:57
+{
+  timestamp: 1770744657000,
+  market_price_usd: 69313.23,
+  hash_rate: 1001082033866.0582,
+  total_fees_btc: -50000000000,
+  n_btc_mined: 50000000000,
+  n_tx: 376345,
+  n_blocks_mined: 160,
+  minutes_between_blocks: 8.5157,
+  totalbc: 1998729062500000,
+  n_blocks_total: 935933,
+  estimated_transaction_volume_usd: 11081377779.97533,
+  blocks_size: 296439359,
+  miners_revenue_usd: 0,
+  nextretarget: 937439,
+  difficulty: 125864590119494,
+  estimated_btc_sent: 15987391988478,
+  miners_revenue_btc: 0,
+  total_btc_sent: 105997396781726,
+  trade_volume_btc: 7726.69,
+  trade_volume_usd: 535561841.1086999,
+  currentBlockHeight: 935932,
+  lastDifficultyAdjustmentBlock: 935424,
+  lastDifficultyAdjustmentTime: 1770472605000
+}
+ GET /block 200 in 5.3s (compile: 210ms, render: 5.1s)
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 02:30:57
+{
+  timestamp: 1770744657000,
+  market_price_usd: 69313.23,
+  hash_rate: 1001082033866.0582,
+  total_fees_btc: -50000000000,
+  n_btc_mined: 50000000000,
+  n_tx: 376345,
+  n_blocks_mined: 160,
+  minutes_between_blocks: 8.5157,
+  totalbc: 1998729062500000,
+  n_blocks_total: 935933,
+  estimated_transaction_volume_usd: 11081377779.97533,
+  blocks_size: 296439359,
+  miners_revenue_usd: 0,
+  nextretarget: 937439,
+  difficulty: 125864590119494,
+  estimated_btc_sent: 15987391988478,
+  miners_revenue_btc: 0,
+  total_btc_sent: 105997396781726,
+  trade_volume_btc: 7726.69,
+  trade_volume_usd: 535561841.1086999,
+  currentBlockHeight: 935932,
+  lastDifficultyAdjustmentBlock: 935424,
+  lastDifficultyAdjustmentTime: 1770472605000
+}
+ GET /block 200 in 4.4s (compile: 9ms, render: 4.3s)
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 02:30:57
+{
+  timestamp: 1770744657000,
+  market_price_usd: 69313.23,
+  hash_rate: 1001082033866.0582,
+  total_fees_btc: -50000000000,
+  n_btc_mined: 50000000000,
+  n_tx: 376345,
+  n_blocks_mined: 160,
+  minutes_between_blocks: 8.5157,
+  totalbc: 1998729062500000,
+  n_blocks_total: 935933,
+  estimated_transaction_volume_usd: 11081377779.97533,
+  blocks_size: 296439359,
+  miners_revenue_usd: 0,
+  nextretarget: 937439,
+  difficulty: 125864590119494,
+  estimated_btc_sent: 15987391988478,
+  miners_revenue_btc: 0,
+  total_btc_sent: 105997396781726,
+  trade_volume_btc: 7726.69,
+  trade_volume_usd: 535561841.1086999,
+  currentBlockHeight: 935932,
+  lastDifficultyAdjustmentBlock: 935424,
+  lastDifficultyAdjustmentTime: 1770472605000
+}
+ GET /block 200 in 4.2s (compile: 5ms, render: 4.2s)
+ GET / 200 in 42ms (compile: 12ms, render: 30ms)
+ GET / 200 in 67ms (compile: 10ms, render: 57ms)
+ GET /mining 200 in 33ms (compile: 8ms, render: 24ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 02:30:57
+ GET /hashrate 200 in 758ms (compile: 353ms, render: 405ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 12ms (compile: 3ms, render: 9ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 8ms (compile: 2ms, render: 6ms)
+ GET /wp-content/plugins/hellopress/wp_filemanager.php 404 in 122ms (compile: 72ms, render: 51ms)
+ GET /new4.php 404 in 50ms (compile: 10ms, render: 39ms)
+ GET /nw.php 404 in 45ms (compile: 8ms, render: 37ms)
+ GET /god.php 404 in 32ms (compile: 6ms, render: 26ms)
+ GET /act.php 404 in 47ms (compile: 9ms, render: 37ms)
+ GET /bbn.php 404 in 46ms (compile: 10ms, render: 35ms)
+ GET /aec.php 404 in 35ms (compile: 6ms, render: 29ms)
+ GET /666.php 404 in 48ms (compile: 8ms, render: 40ms)
+ GET /kj.php 404 in 32ms (compile: 4ms, render: 28ms)
+ GET /un.php 404 in 45ms (compile: 9ms, render: 36ms)
+ GET /fs.php 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /lts.php 404 in 46ms (compile: 8ms, render: 37ms)
+ GET /ms.php 404 in 43ms (compile: 9ms, render: 35ms)
+ GET /login8.php 404 in 46ms (compile: 9ms, render: 37ms)
+ GET /nnyvn.php 404 in 47ms (compile: 9ms, render: 38ms)
+ GET /cu.php 404 in 44ms (compile: 8ms, render: 36ms)
+ GET /lul.php 404 in 43ms (compile: 11ms, render: 32ms)
+ GET /0.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /lp5.php 404 in 36ms (compile: 7ms, render: 29ms)
+ GET /ee8.php 404 in 50ms (compile: 5ms, render: 44ms)
+ GET /ms-edit.php 404 in 28ms (compile: 4ms, render: 23ms)
+ GET /ya.php 404 in 46ms (compile: 8ms, render: 38ms)
+ GET /grsiuk.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /wp-blog.php 404 in 33ms (compile: 12ms, render: 21ms)
+ GET /ftem.php 404 in 40ms (compile: 6ms, render: 34ms)
+ GET /Ova-Simple.php 404 in 41ms (compile: 9ms, render: 32ms)
+ GET /wp-access.php 404 in 27ms (compile: 5ms, render: 22ms)
+ GET /a1vx.php 404 in 47ms (compile: 8ms, render: 39ms)
+ GET /sbhu.php 404 in 32ms (compile: 7ms, render: 26ms)
+ GET /wp-the.php 404 in 25ms (compile: 4ms, render: 21ms)
+ GET /06.php 404 in 45ms (compile: 9ms, render: 36ms)
+ GET /wp5.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /te.php 404 in 46ms (compile: 8ms, render: 37ms)
+ GET /fot.php 404 in 36ms (compile: 7ms, render: 28ms)
+ GET /ff1.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /forbidals.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /R57.php 404 in 41ms (compile: 13ms, render: 28ms)
+ GET /erty.php 404 in 22ms (compile: 3ms, render: 19ms)
+ GET /dev1s.php 404 in 43ms (compile: 8ms, render: 34ms)
+ GET /ffd.php 404 in 30ms (compile: 6ms, render: 23ms)
+ GET /admiin.php 404 in 34ms (compile: 7ms, render: 26ms)
+ GET /ol.php 404 in 25ms (compile: 4ms, render: 21ms)
+ GET /jmfi2.php 404 in 32ms (compile: 5ms, render: 26ms)
+ GET /Sanskrit.php 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /vxrl.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /re.php 404 in 25ms (compile: 4ms, render: 21ms)
+ GET /cfile.php 404 in 45ms (compile: 9ms, render: 36ms)
+ GET /num.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /axx.php 404 in 45ms (compile: 8ms, render: 37ms)
+ GET /vxrl.php 404 in 50ms (compile: 10ms, render: 40ms)
+ GET /in.php 404 in 25ms (compile: 4ms, render: 20ms)
+ GET /style.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /we.php 404 in 41ms (compile: 8ms, render: 32ms)
+ GET /zwso.php 404 in 40ms (compile: 8ms, render: 31ms)
+ GET /karak.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /trd.php 404 in 47ms (compile: 9ms, render: 38ms)
+ GET /past.php 404 in 39ms (compile: 8ms, render: 31ms)
+ GET /prv8.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /i.php 404 in 27ms (compile: 4ms, render: 23ms)
+ GET /admin/admin.php 404 in 23ms (compile: 4ms, render: 19ms)
+ GET /xmlrpc.php 404 in 44ms (compile: 8ms, render: 36ms)
+ GET /aw.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /dev.php 404 in 39ms (compile: 9ms, render: 31ms)
+ GET /lock360.php 404 in 42ms (compile: 9ms, render: 33ms)
+ GET /155.php 404 in 37ms (compile: 7ms, render: 30ms)
+ GET /goat.php 404 in 34ms (compile: 7ms, render: 26ms)
+ GET /tcp.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /ext.php 404 in 23ms (compile: 4ms, render: 19ms)
+ GET /199.php 404 in 24ms (compile: 5ms, render: 19ms)
+ GET /inputs.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /ioxi.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /fe5.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /ov.php 404 in 22ms (compile: 4ms, render: 18ms)
+ GET /past1.php 404 in 39ms (compile: 14ms, render: 25ms)
+ GET /wp-content/plugins/index.php 404 in 40ms (compile: 8ms, render: 32ms)
+ GET /default.php 404 in 36ms (compile: 7ms, render: 29ms)
+ GET /goods.php 404 in 42ms (compile: 9ms, render: 33ms)
+ GET /abcd.php 404 in 38ms (compile: 9ms, render: 29ms)
+ GET /ioxi2.php 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /nope.php 404 in 36ms (compile: 7ms, render: 29ms)
+ GET /class.1.php 404 in 38ms (compile: 8ms, render: 31ms)
+ GET /file5.php 404 in 24ms (compile: 4ms, render: 20ms)
+ GET /async.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /ff.php 404 in 39ms (compile: 8ms, render: 31ms)
+ GET /ioxi-o.php 404 in 39ms (compile: 8ms, render: 30ms)
+ GET /pp.php 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /manager.php 404 in 52ms (compile: 7ms, render: 45ms)
+ GET /wp-update.php 404 in 34ms (compile: 7ms, render: 27ms)
+ GET /file.php? 404 in 33ms (compile: 7ms, render: 26ms)
+ GET /wp-includes/certificates/plugins.php 404 in 22ms (compile: 3ms, render: 18ms)
+ GET /lc.php 404 in 35ms (compile: 8ms, render: 27ms)
+ GET /hexx.php 404 in 32ms (compile: 7ms, render: 26ms)
+ GET /cbrfo.php 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /inc.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /jquery.php 404 in 31ms (compile: 7ms, render: 24ms)
+ GET /gifclass.php 404 in 36ms (compile: 6ms, render: 30ms)
+ GET /miansha.php 404 in 38ms (compile: 9ms, render: 29ms)
+ GET /tinyfilemanager.php 404 in 40ms (compile: 8ms, render: 32ms)
+ GET /xfile25.php 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /ok.php 404 in 41ms (compile: 7ms, render: 33ms)
+ GET /fi.php 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /muzu.php 404 in 36ms (compile: 7ms, render: 28ms)
+ GET /reze.php 404 in 37ms (compile: 9ms, render: 28ms)
+ GET /styll.php 404 in 22ms (compile: 3ms, render: 18ms)
+ GET /x7.php 404 in 32ms (compile: 7ms, render: 25ms)
+ GET /thebe.php 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /ddd.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /ccs.php 404 in 41ms (compile: 7ms, render: 33ms)
+ GET /bgymj.php 404 in 33ms (compile: 6ms, render: 27ms)
+ GET /8xyz.php 404 in 39ms (compile: 10ms, render: 29ms)
+ GET /la.php 404 in 24ms (compile: 4ms, render: 20ms)
+ GET /ioxi.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /xpwer1.php 404 in 29ms (compile: 7ms, render: 22ms)
+ GET /lala.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /about.php 404 in 34ms (compile: 6ms, render: 27ms)
+ GET /wp-admin/images/commentv.php 404 in 29ms (compile: 6ms, render: 23ms)
+ GET /cgi-bin/index.php 404 in 36ms (compile: 8ms, render: 29ms)
+ GET /wp-admin/images/wp-conflg.php 404 in 33ms (compile: 7ms, render: 26ms)
+ GET /wp-admin/images/wp-conflg.php 404 in 31ms (compile: 6ms, render: 25ms)
+ GET /info.php 404 in 42ms (compile: 9ms, render: 33ms)
+ GET /about.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /x 404 in 24ms (compile: 4ms, render: 20ms)
+ GET /222.php 404 in 32ms (compile: 6ms, render: 27ms)
+ GET /adminfuns.php 404 in 37ms (compile: 9ms, render: 28ms)
+ GET /wp-includes/PHPMailer 404 in 44ms (compile: 8ms, render: 36ms)
+ GET /xx.php 404 in 24ms (compile: 4ms, render: 20ms)
+ GET /wp-admin/js/wp-conflg.php 404 in 38ms (compile: 8ms, render: 31ms)
+ GET /f5.php 404 in 31ms (compile: 6ms, render: 25ms)
+ GET /flower.php 404 in 42ms (compile: 15ms, render: 27ms)
+ GET /f6.php 404 in 25ms (compile: 4ms, render: 21ms)
+ GET /edit.php 404 in 41ms (compile: 9ms, render: 32ms)
+ GET /aa.php 404 in 35ms (compile: 7ms, render: 28ms)
+ GET /wp-includes/js/dist 404 in 46ms (compile: 9ms, render: 37ms)
+ GET /wp-includes/SimplePie 404 in 43ms (compile: 9ms, render: 35ms)
+ GET /av.php 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /wp-includes/Text/Diff/Engine/about.php 404 in 38ms (compile: 8ms, render: 29ms)
+ GET /wsd.php 404 in 31ms (compile: 7ms, render: 24ms)
+ GET /jane.php 404 in 24ms (compile: 4ms, render: 20ms)
+ GET /css.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /alfa.php 404 in 39ms (compile: 9ms, render: 29ms)
+ GET /wen.php 404 in 36ms (compile: 7ms, render: 28ms)
+ GET /x.php 404 in 31ms (compile: 7ms, render: 24ms)
+ GET /xxxx.php 404 in 28ms (compile: 6ms, render: 22ms)
+ GET /class.php 404 in 41ms (compile: 8ms, render: 32ms)
+ GET /f35.php 404 in 34ms (compile: 8ms, render: 27ms)
+ GET /wp-admin/about.php 404 in 35ms (compile: 7ms, render: 27ms)
+ GET /update/f35.php 404 in 37ms (compile: 7ms, render: 30ms)
+ GET /wp-content/themes/about.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /class-t.api.php 404 in 46ms (compile: 8ms, render: 38ms)
+ GET /blurbs18.php 404 in 31ms (compile: 6ms, render: 25ms)
+ GET /.well-known/gecko-litespeed.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /wp-admin/maint/about.php 404 in 37ms (compile: 9ms, render: 27ms)
+ GET /wp-content/admin.php 404 in 38ms (compile: 12ms, render: 26ms)
+ GET /wp-admin/setup-config.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /wp-includes/ID3/about.php?p= 404 in 39ms (compile: 7ms, render: 32ms)
+ GET /.well-known/admin.php 404 in 21ms (compile: 3ms, render: 17ms)
+ GET /bless11.php 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /init.php 404 in 40ms (compile: 13ms, render: 26ms)
+ GET /wp-content/plugins/pwnd/as.php 404 in 38ms (compile: 8ms, render: 31ms)
+ GET /k.php 404 in 44ms (compile: 8ms, render: 36ms)
+ GET /bless.php 404 in 21ms (compile: 4ms, render: 17ms)
+ GET /X7x.php 404 in 40ms (compile: 8ms, render: 32ms)
+ GET /166.php 404 in 40ms (compile: 8ms, render: 31ms)
+ GET /plss3.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /wp-admin/user/about.php 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /admins.php 404 in 51ms (compile: 8ms, render: 42ms)
+ GET /wp.php 404 in 27ms (compile: 7ms, render: 20ms)
+ GET /main.php 404 in 28ms (compile: 3ms, render: 24ms)
+ GET /a1.php 404 in 25ms (compile: 4ms, render: 22ms)
+ GET /lala.php 404 in 21ms (compile: 3ms, render: 18ms)
+ GET /aaa.php 404 in 35ms (compile: 7ms, render: 28ms)
+ GET /a2.php 404 in 31ms (compile: 4ms, render: 26ms)
+ GET /wp-includes/assets/index.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /admin/function.php 404 in 43ms (compile: 7ms, render: 36ms)
+ GET /nyan.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /jsond.php 404 in 40ms (compile: 9ms, render: 31ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 02:37:57
+ GET /hashrate 200 in 536ms (compile: 5ms, render: 530ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 10ms (compile: 2ms, render: 8ms)
+ GET /mining 200 in 33ms (compile: 13ms, render: 20ms)
+ GET /graph 200 in 82ms (compile: 70ms, render: 13ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /graph 200 in 8ms (compile: 2ms, render: 6ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /graph 200 in 7ms (compile: 1826µs, render: 5ms)
+ GET / 200 in 29ms (compile: 7ms, render: 22ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 02:37:57
+ GET /hashrate 200 in 969ms (compile: 7ms, render: 962ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 11ms (compile: 3ms, render: 8ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 9ms (compile: 2ms, render: 7ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 02:37:57
+ GET /hashrate 200 in 383ms (compile: 7ms, render: 376ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 9ms (compile: 3ms, render: 6ms)
+ GET /robots.txt 404 in 37ms (compile: 5ms, render: 32ms)
+ GET / 200 in 61ms (compile: 8ms, render: 52ms)
+ GET /robots.txt 404 in 40ms (compile: 8ms, render: 32ms)
+ GET / 200 in 48ms (compile: 9ms, render: 39ms)
+ GET / 200 in 47ms (compile: 9ms, render: 38ms)
+ GET / 200 in 48ms (compile: 7ms, render: 41ms)
+⚠ Cross origin request detected from bitcoinboard.info to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /robots.txt 404 in 90ms (compile: 28ms, render: 62ms)
+ GET /wp-content/plugins/hellopress/wp_filemanager.php 404 in 53ms (compile: 11ms, render: 41ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 04:01:57
+ GET /hashrate 200 in 858ms (compile: 13ms, render: 845ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 19ms (compile: 7ms, render: 12ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 04:29:57
+ GET /hashrate 200 in 379ms (compile: 8ms, render: 371ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 21ms (compile: 7ms, render: 14ms)
+ GET /ads.txt 404 in 52ms (compile: 12ms, render: 40ms)
+ GET / 200 in 64ms (compile: 14ms, render: 50ms)
+ POST /xmlrpc.php 404 in 75ms (compile: 8ms, render: 66ms)
+ POST /xmlrpc.php 404 in 33ms (compile: 7ms, render: 26ms)
+ GET / 200 in 56ms (compile: 17ms, render: 39ms)
+ GET / 200 in 56ms (compile: 10ms, render: 45ms)
+ GET /public_html.rar 404 in 46ms (compile: 12ms, render: 34ms)
+ GET /backups/directory.zip 404 in 53ms (compile: 9ms, render: 44ms)
+ GET /back/bak.tar 404 in 36ms (compile: 7ms, render: 29ms)
+ GET /application.zip 404 in 42ms (compile: 8ms, render: 33ms)
+ HEAD /bak/credentials.txt 404 in 35ms (compile: 11ms, render: 24ms)
+ GET /backup/website.zip 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /bak/website.gz 404 in 29ms (compile: 4ms, render: 25ms)
+ GET /old/application.zip 404 in 40ms (compile: 8ms, render: 32ms)
+ GET /backups/public_html.tar 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /backups/www.tar.gz 404 in 39ms (compile: 9ms, render: 30ms)
+ HEAD /backup/config.json 404 in 37ms (compile: 8ms, render: 28ms)
+ GET /latest.zip 404 in 40ms (compile: 8ms, render: 32ms)
+ GET / 200 in 71ms (compile: 18ms, render: 53ms)
+ GET /robots.txt 404 in 48ms (compile: 10ms, render: 38ms)
+ GET / 200 in 46ms (compile: 9ms, render: 38ms)
+ HEAD /bak/www.sql 404 in 39ms (compile: 10ms, render: 29ms)
+ GET /restore/directory.gz 404 in 44ms (compile: 10ms, render: 33ms)
+ GET /backup/bak.tar 404 in 42ms (compile: 9ms, render: 33ms)
+ GET /old/public_html.zip 404 in 30ms (compile: 5ms, render: 26ms)
+ HEAD /back/wallet.dat 404 in 31ms (compile: 8ms, render: 24ms)
+ GET /back/backup.zip 404 in 29ms (compile: 5ms, render: 24ms)
+ HEAD /backup/credentials.txt 404 in 35ms (compile: 8ms, render: 27ms)
+ GET /old/backup.zip 404 in 38ms (compile: 10ms, render: 28ms)
+ GET /old/backup.rar 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /backup/backup.sql.gz 404 in 42ms (compile: 11ms, render: 30ms)
+ GET /bak/www.tar.gz 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /bak/bak.gz 404 in 36ms (compile: 8ms, render: 28ms)
+ GET / 200 in 31ms (compile: 5ms, render: 27ms)
+ GET /robots.txt 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /ads.txt 404 in 43ms (compile: 9ms, render: 34ms)
+ GET / 200 in 33ms (compile: 3ms, render: 29ms)
+ GET / 200 in 48ms (compile: 7ms, render: 41ms)
+ GET / 200 in 45ms (compile: 6ms, render: 39ms)
+ GET / 200 in 27ms (compile: 3ms, render: 25ms)
+ GET / 200 in 55ms (compile: 7ms, render: 48ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 10:26:57
+ GET /hashrate 200 in 822ms (compile: 8ms, render: 813ms)
+ GET /robots.txt 404 in 47ms (compile: 11ms, render: 35ms)
+ GET /graph 200 in 54ms (compile: 7ms, render: 47ms)
+ GET / 200 in 52ms (compile: 8ms, render: 44ms)
+ GET /redis 200 in 185ms (compile: 125ms, render: 61ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 13:28:57
+ GET /hashrate 200 in 816ms (compile: 9ms, render: 807ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 13ms (compile: 3ms, render: 10ms)
+ GET /robots.txt 404 in 63ms (compile: 15ms, render: 48ms)
+ GET / 200 in 38ms (compile: 3ms, render: 35ms)
+ GET /exchange 200 in 97ms (compile: 63ms, render: 34ms)
+ GET /mining 200 in 60ms (compile: 8ms, render: 52ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 14:17:57
+ GET /hashrate 200 in 355ms (compile: 3ms, render: 352ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 25ms (compile: 7ms, render: 18ms)
+ GET / 200 in 33ms (compile: 9ms, render: 23ms)
+ GET / 200 in 28ms (compile: 7ms, render: 21ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 14:24:57
+ GET /hashrate 200 in 358ms (compile: 7ms, render: 351ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 22ms (compile: 7ms, render: 15ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 10ms (compile: 3ms, render: 7ms)
+ GET / 200 in 56ms (compile: 7ms, render: 49ms)
+ GET / 200 in 35ms (compile: 3ms, render: 32ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 15:27:57
+ GET /hashrate 200 in 794ms (compile: 10ms, render: 784ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 17ms (compile: 6ms, render: 12ms)
+ GET /robots.txt 404 in 44ms (compile: 9ms, render: 34ms)
+ GET / 200 in 47ms (compile: 7ms, render: 41ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 15:34:57
+ GET /hashrate 200 in 887ms (compile: 6ms, render: 881ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 25ms (compile: 7ms, render: 18ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 15:41:57
+ GET /hashrate 200 in 799ms (compile: 7ms, render: 792ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 24ms (compile: 8ms, render: 16ms)
+ GET /wp-login.php 404 in 46ms (compile: 8ms, render: 37ms)
+ GET /wp-login.php 404 in 44ms (compile: 9ms, render: 35ms)
+ GET /wp-admin 404 in 34ms (compile: 6ms, render: 28ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 16:09:57
+ GET /hashrate 200 in 362ms (compile: 9ms, render: 353ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 21ms (compile: 7ms, render: 14ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 16:09:57
+ GET /hashrate 200 in 372ms (compile: 8ms, render: 364ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 18ms (compile: 5ms, render: 13ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 16:44:57
+ GET /hashrate 200 in 983ms (compile: 24ms, render: 959ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 12ms (compile: 4ms, render: 8ms)
+ GET / 200 in 59ms (compile: 9ms, render: 50ms)
+ GET /bak.tar 404 in 45ms (compile: 10ms, render: 34ms)
+ HEAD /backups/www.sql 404 in 38ms (compile: 9ms, render: 30ms)
+ GET /backups/backup.zip 404 in 54ms (compile: 10ms, render: 43ms)
+ HEAD /bak/config.json 404 in 34ms (compile: 8ms, render: 26ms)
+ GET /www.rar 404 in 42ms (compile: 9ms, render: 34ms)
+ GET /bak/directory.tar 404 in 45ms (compile: 9ms, render: 35ms)
+ GET /backups/public_html.zip 404 in 43ms (compile: 10ms, render: 33ms)
+ GET /backup/backup.sql.zip 404 in 42ms (compile: 9ms, render: 33ms)
+ GET /bak/bak.tar.gz 404 in 39ms (compile: 8ms, render: 31ms)
+ GET /restore/www.rar 404 in 41ms (compile: 8ms, render: 33ms)
+ HEAD /backups/mysql.sql 404 in 34ms (compile: 9ms, render: 25ms)
+ GET /backups/full_backup.zip 404 in 31ms (compile: 5ms, render: 26ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 16:58:57
+ GET /hashrate 200 in 955ms (compile: 8ms, render: 947ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 12ms (compile: 3ms, render: 9ms)
+ GET / 200 in 55ms (compile: 7ms, render: 47ms)
+ GET /trans 200 in 56ms (compile: 11ms, render: 45ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 17:19:57
+ GET /hashrate 200 in 793ms (compile: 7ms, render: 787ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 21ms (compile: 7ms, render: 14ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 17:19:57
+ GET /hashrate 200 in 842ms (compile: 7ms, render: 835ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 15ms (compile: 5ms, render: 11ms)
+ GET / 200 in 57ms (compile: 11ms, render: 46ms)
+ GET / 200 in 49ms (compile: 6ms, render: 43ms)
+ GET / 200 in 32ms (compile: 3ms, render: 29ms)
+{ type: 'email', placeholder: '이메일', required: true }
+{ type: 'password', placeholder: '비밀번호', required: true, minLength: 4 }
+ GET /login 200 in 264ms (compile: 229ms, render: 35ms)
+ GET /trans 200 in 52ms (compile: 10ms, render: 42ms)
+{
+  type: 'text',
+  placeholder: '사용자명',
+  required: true,
+  minLength: 3,
+  maxLength: 10
+}
+{ type: 'email', placeholder: '이메일', required: true }
+{ type: 'password', placeholder: '비밀번호', required: true, minLength: 4 }
+{
+  type: 'password',
+  placeholder: '비밀번호 확인',
+  required: true,
+  minLength: 4
+}
+ GET /register 200 in 113ms (compile: 83ms, render: 30ms)
+ GET /redis 200 in 50ms (compile: 8ms, render: 42ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 17:26:57
+ GET /hashrate 200 in 747ms (compile: 5ms, render: 742ms)
+ GET /graph 200 in 51ms (compile: 10ms, render: 40ms)
+ GET /mining 200 in 54ms (compile: 10ms, render: 44ms)
+ GET /exchange 200 in 52ms (compile: 9ms, render: 43ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 17:26:57
+{
+  timestamp: 1770798417000,
+  market_price_usd: 67101.95,
+  hash_rate: 919744118614.441,
+  total_fees_btc: -45937500000,
+  n_btc_mined: 45937500000,
+  n_tx: 444969,
+  n_blocks_mined: 147,
+  minutes_between_blocks: 9.0068,
+  totalbc: 1998758750000000,
+  n_blocks_total: 936028,
+  estimated_transaction_volume_usd: 8258677681.427919,
+  blocks_size: 235515042,
+  miners_revenue_usd: 0,
+  nextretarget: 937439,
+  difficulty: 125864590119494,
+  estimated_btc_sent: 12307656754279,
+  miners_revenue_btc: 0,
+  total_btc_sent: 90411842667727,
+  trade_volume_btc: 7714.87,
+  trade_volume_usd: 517682820.99649996,
+  currentBlockHeight: 936029,
+  lastDifficultyAdjustmentBlock: 935424,
+  lastDifficultyAdjustmentTime: 1770472605000
+}
+ GET /block 200 in 419ms (compile: 11ms, render: 408ms)
+ GET /community 200 in 80ms (compile: 52ms, render: 27ms)
+ GET /crypto 200 in 48ms (compile: 11ms, render: 37ms)
+ GET /robots.txt 404 in 50ms (compile: 11ms, render: 40ms)
+ GET /community/humor 404 in 44ms (compile: 9ms, render: 35ms)
+ GET /crypto 200 in 96ms (compile: 23ms, render: 72ms)
+ GET /community 200 in 113ms (compile: 26ms, render: 87ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 19:04:57
+ GET /hashrate 200 in 820ms (compile: 7ms, render: 813ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 11ms (compile: 3ms, render: 8ms)
+ GET /robots.txt 404 in 51ms (compile: 13ms, render: 38ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 20:28:57
+ GET /hashrate 200 in 429ms (compile: 18ms, render: 411ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 13ms (compile: 3ms, render: 9ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 20:49:57
+ GET /hashrate 200 in 365ms (compile: 6ms, render: 359ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 16ms (compile: 3ms, render: 13ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 20:49:57
+ GET /hashrate 200 in 749ms (compile: 3ms, render: 746ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 11ms (compile: 3ms, render: 8ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 20:56:57
+ GET /hashrate 200 in 897ms (compile: 12ms, render: 885ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 11ms (compile: 3ms, render: 7ms)
+ GET /.env 404 in 48ms (compile: 8ms, render: 40ms)
+ POST / 200 in 51ms (compile: 5ms, render: 46ms)
+ GET /.env 404 in 41ms (compile: 7ms, render: 35ms)
+ POST / 200 in 47ms (compile: 5ms, render: 42ms)
+ GET / 200 in 55ms (compile: 7ms, render: 47ms)
+ GET / 200 in 33ms (compile: 3ms, render: 30ms)
+ GET / 200 in 35ms (compile: 3ms, render: 32ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 21:38:57
+ GET /hashrate 200 in 769ms (compile: 8ms, render: 761ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 21ms (compile: 7ms, render: 14ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 21:38:57
+ GET /hashrate 200 in 320ms (compile: 7ms, render: 313ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 22ms (compile: 7ms, render: 16ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 21:45:57
+ GET /hashrate 200 in 818ms (compile: 12ms, render: 806ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 21ms (compile: 7ms, render: 15ms)
+ GET /wp-content/plugins/hellopress/wp_filemanager.php 404 in 76ms (compile: 22ms, render: 54ms)
+ GET /zwso.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /wp-admin/css/colors/blue/index.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /class19.php 404 in 45ms (compile: 9ms, render: 36ms)
+ GET /class20.php 404 in 37ms (compile: 7ms, render: 30ms)
+ GET /admin.php?p= 404 in 42ms (compile: 5ms, render: 37ms)
+ GET /randkeyword.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /fwe.php 404 in 44ms (compile: 10ms, render: 34ms)
+ GET /ioxi-o.php 404 in 44ms (compile: 8ms, render: 35ms)
+ GET /images/m.php 404 in 42ms (compile: 9ms, render: 33ms)
+ GET /g.php 404 in 29ms (compile: 5ms, render: 24ms)
+ GET /tx1.php 404 in 44ms (compile: 8ms, render: 36ms)
+ GET /xv.php 404 in 43ms (compile: 8ms, render: 34ms)
+ GET /x56.php 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /htaccess.php 404 in 39ms (compile: 8ms, render: 31ms)
+ GET /readme.php 404 in 43ms (compile: 9ms, render: 35ms)
+ GET /x50.php 404 in 29ms (compile: 5ms, render: 24ms)
+ GET /fv.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /file.php? 404 in 40ms (compile: 9ms, render: 32ms)
+ GET /lsd.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /as.php 404 in 39ms (compile: 9ms, render: 31ms)
+ GET /wsd.php 404 in 21ms (compile: 4ms, render: 18ms)
+ GET /gtc.php 404 in 23ms (compile: 4ms, render: 19ms)
+ GET /atx.php 404 in 40ms (compile: 10ms, render: 30ms)
+ GET /z60.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /403.php 404 in 37ms (compile: 9ms, render: 29ms)
+ GET /m.php 404 in 35ms (compile: 8ms, render: 27ms)
+ GET /themes.php 404 in 37ms (compile: 9ms, render: 28ms)
+ GET /wp-admin/maint/about.php 404 in 41ms (compile: 8ms, render: 32ms)
+ GET /wp-admin/network/wp-conflg.php?p= 404 in 40ms (compile: 8ms, render: 32ms)
+ GET /click.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /install.php 404 in 43ms (compile: 15ms, render: 28ms)
+ GET /lv.php 404 in 28ms (compile: 5ms, render: 23ms)
+ GET /simple.php 404 in 35ms (compile: 7ms, render: 27ms)
+ GET /css.php 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /cong.php 404 in 38ms (compile: 9ms, render: 30ms)
+ GET /wp-includes/images/wp-login.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /cong.php 404 in 34ms (compile: 7ms, render: 28ms)
+ GET /w.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /404.php 404 in 23ms (compile: 4ms, render: 19ms)
+ GET /0x.php 404 in 36ms (compile: 8ms, render: 28ms)
+ GET /css.php 404 in 44ms (compile: 9ms, render: 35ms)
+ GET /222.php 404 in 29ms (compile: 5ms, render: 24ms)
+ GET /wp-content/index.php 404 in 37ms (compile: 9ms, render: 29ms)
+ GET /admin.php 404 in 37ms (compile: 8ms, render: 28ms)
+ GET /wp-admin/maint/maint.php 404 in 34ms (compile: 8ms, render: 27ms)
+ GET /classwithtostring.php 404 in 25ms (compile: 6ms, render: 19ms)
+ GET /abcd.php 404 in 34ms (compile: 6ms, render: 28ms)
+ GET /autoload_classmap.php?p= 404 in 41ms (compile: 9ms, render: 32ms)
+ GET /inputs.php 404 in 31ms (compile: 7ms, render: 25ms)
+ GET /about.php 404 in 37ms (compile: 9ms, render: 29ms)
+ GET /alfa.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /themes/twentytwentytwo/index.php 404 in 45ms (compile: 9ms, render: 37ms)
+ GET /wp-admin/js/wp-conflg.php?p= 404 in 32ms (compile: 7ms, render: 26ms)
+ GET /wp-admin/wp-conflg.php?p= 404 in 31ms (compile: 8ms, render: 23ms)
+ GET /wp-admin/css/wp-conflg.php?p= 404 in 33ms (compile: 8ms, render: 25ms)
+ GET /manager.php?p= 404 in 37ms (compile: 8ms, render: 28ms)
+ GET /item.php 404 in 44ms (compile: 8ms, render: 36ms)
+ GET /plugins/Cache/footer.php 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /404.php 404 in 36ms (compile: 8ms, render: 28ms)
+ GET /mail.php 404 in 41ms (compile: 10ms, render: 32ms)
+ GET /wp-content/plugins/index.php 404 in 34ms (compile: 8ms, render: 27ms)
+ GET /sx.php 404 in 38ms (compile: 9ms, render: 29ms)
+ GET /wp-admin/maint/admin.php 404 in 27ms (compile: 4ms, render: 23ms)
+ GET /alfa.php 404 in 30ms (compile: 5ms, render: 25ms)
+ GET /1.php 404 in 41ms (compile: 9ms, render: 31ms)
+ GET /byp.php 404 in 30ms (compile: 6ms, render: 24ms)
+ GET /wp-trackback.php 404 in 39ms (compile: 8ms, render: 31ms)
+ GET /.well-known/index.php 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /wp-admin/network/plugins.php 404 in 22ms (compile: 4ms, render: 18ms)
+ GET /wp-admin/about.php 404 in 29ms (compile: 6ms, render: 24ms)
+ GET /gmo.php 404 in 36ms (compile: 8ms, render: 28ms)
+ GET /wp-includes/ID3/about.php 404 in 38ms (compile: 9ms, render: 29ms)
+ GET /css/index.php 404 in 45ms (compile: 13ms, render: 32ms)
+ GET /wp-includes/SimplePie/wp-login.php 404 in 35ms (compile: 8ms, render: 27ms)
+ GET /wp-content/themes/about.php 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /filemanager/dialog.php 404 in 38ms (compile: 9ms, render: 29ms)
+ GET /wp-admin/maint/index.php 404 in 32ms (compile: 7ms, render: 26ms)
+ GET /wp-includes/customize/about.php 404 in 26ms (compile: 5ms, render: 21ms)
+ GET /index/function.php 404 in 44ms (compile: 9ms, render: 35ms)
+ GET /uploads/autoload_classmap.php 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /wp-includes/style-engine/about.php 404 in 36ms (compile: 8ms, render: 28ms)
+ GET /ww1.php 404 in 37ms (compile: 9ms, render: 28ms)
+ GET /about/function.php 404 in 40ms (compile: 14ms, render: 25ms)
+ GET /admin/function.php 404 in 39ms (compile: 8ms, render: 31ms)
+ GET /.well-known/acme-challenge/index.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /css/colors/blue/index.php 404 in 37ms (compile: 9ms, render: 28ms)
+ GET /security.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /wp-admin/user/about.php 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /wp-admin/js/index.php 404 in 66ms (compile: 14ms, render: 53ms)
+ GET /wp-content/upgrade/about.php 404 in 32ms (compile: 8ms, render: 24ms)
+ GET /wp-includes/assets/index.php 404 in 41ms (compile: 8ms, render: 32ms)
+ GET /wp-content/radio.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /wp-includes/fonts/index.php?p= 404 in 32ms (compile: 7ms, render: 25ms)
+ GET /.well-known/admin.php 404 in 33ms (compile: 7ms, render: 26ms)
+ GET /wp-content/admin.php 404 in 45ms (compile: 9ms, render: 36ms)
+ GET /wp-content/plugins/admin.php 404 in 35ms (compile: 8ms, render: 27ms)
+ GET /wp-content/themes/twentytwentytwo/index.php?p= 404 in 43ms (compile: 8ms, render: 34ms)
+ GET /.well-known/log.php 404 in 43ms (compile: 8ms, render: 34ms)
+ GET /class.php 404 in 34ms (compile: 8ms, render: 26ms)
+ GET /bless5.php 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /wp-includes/js/codemirror/index.php 404 in 33ms (compile: 7ms, render: 26ms)
+ GET /wp-includes/block-patterns/index.php 404 in 39ms (compile: 8ms, render: 30ms)
+ GET /lock360.php 404 in 38ms (compile: 9ms, render: 29ms)
+ GET /ioxi-o1.php 404 in 44ms (compile: 9ms, render: 35ms)
+ GET /juuuu.php 404 in 43ms (compile: 9ms, render: 34ms)
+ GET /ha.php 404 in 39ms (compile: 9ms, render: 31ms)
+ GET /gg.php 404 in 36ms (compile: 8ms, render: 28ms)
+ GET /we2.php 404 in 41ms (compile: 9ms, render: 32ms)
+ GET /04.php 404 in 37ms (compile: 8ms, render: 28ms)
+ GET /333.php 404 in 41ms (compile: 10ms, render: 32ms)
+ GET /520.php 404 in 38ms (compile: 9ms, render: 29ms)
+ GET /ar.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /x.php 404 in 38ms (compile: 9ms, render: 30ms)
+ GET /xx.php 404 in 26ms (compile: 6ms, render: 20ms)
+ GET /gifclass4.php 404 in 44ms (compile: 9ms, render: 35ms)
+ GET /2clas.php 404 in 35ms (compile: 8ms, render: 27ms)
+ GET /ave.php 404 in 39ms (compile: 9ms, render: 29ms)
+ GET /wrt.php 404 in 42ms (compile: 8ms, render: 34ms)
+ GET /bibil.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /radio.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /files.php 404 in 36ms (compile: 8ms, render: 27ms)
+ GET /file7.php 404 in 31ms (compile: 6ms, render: 25ms)
+ GET /gifclass.php 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /wp-admin/css/colors/midnight/about.php 404 in 43ms (compile: 13ms, render: 30ms)
+ GET /nox.php 404 in 37ms (compile: 7ms, render: 30ms)
+ GET /file48.php 404 in 43ms (compile: 8ms, render: 35ms)
+ GET /info.php 404 in 42ms (compile: 14ms, render: 28ms)
+ GET /class9.php 404 in 44ms (compile: 9ms, render: 35ms)
+ GET /la.php 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /bless11.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /ccou.php 404 in 39ms (compile: 9ms, render: 30ms)
+ GET /ton.php 404 in 37ms (compile: 9ms, render: 28ms)
+ GET /403.php 404 in 41ms (compile: 8ms, render: 33ms)
+ GET /file9.php 404 in 38ms (compile: 9ms, render: 29ms)
+ GET /ac.php 404 in 37ms (compile: 8ms, render: 29ms)
+ GET /new4.php 404 in 41ms (compile: 9ms, render: 33ms)
+ GET /pop.php 404 in 37ms (compile: 9ms, render: 29ms)
+ GET /az.php 404 in 44ms (compile: 9ms, render: 34ms)
+ GET /xaz.php 404 in 34ms (compile: 7ms, render: 27ms)
+ GET /up4.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /1aa.php 404 in 40ms (compile: 8ms, render: 32ms)
+ GET /elp.php 404 in 36ms (compile: 8ms, render: 28ms)
+ GET /wtz.php 404 in 44ms (compile: 8ms, render: 36ms)
+ GET /galex.php 404 in 44ms (compile: 8ms, render: 36ms)
+ GET /xb.php 404 in 31ms (compile: 4ms, render: 27ms)
+ GET /ova.php 404 in 38ms (compile: 8ms, render: 30ms)
+ GET /vx.php 404 in 35ms (compile: 7ms, render: 27ms)
+ GET /rh.php 404 in 35ms (compile: 8ms, render: 28ms)
+ GET /wp-includes/certificates/index.php 404 in 23ms (compile: 4ms, render: 19ms)
+ GET /wp-content/uploads/gravity_forms/g/e/e/a/Casper.php 404 in 38ms (compile: 8ms, render: 29ms)
+ GET /spip.php 404 in 40ms (compile: 7ms, render: 33ms)
+ GET /scripts/wpup.php 404 in 36ms (compile: 11ms, render: 25ms)
+ GET /wordpress/update/wpupex.php 404 in 35ms (compile: 8ms, render: 27ms)
+ GET /ho/wpup.php 404 in 41ms (compile: 9ms, render: 32ms)
+ GET /wp-admin/maint 404 in 39ms (compile: 10ms, render: 29ms)
+ GET /wp/wp-content/plugins/classic-editor/js/geido.php 404 in 42ms (compile: 9ms, render: 34ms)
+ GET /myy.php 404 in 35ms (compile: 7ms, render: 28ms)
+ GET /wp-content/halo.php 404 in 42ms (compile: 8ms, render: 34ms)
+ GET /wp-content/themes/twentytwentyfour/assets/css/geido.php 404 in 42ms (compile: 9ms, render: 33ms)
+ GET /wp-includes/Requests/library/upload.php 404 in 28ms (compile: 5ms, render: 22ms)
+ GET /wp-admin/css/colors/coffee/index.php 404 in 44ms (compile: 8ms, render: 35ms)
+ GET /wp-admin/js/index.php 404 in 40ms (compile: 9ms, render: 30ms)
+ GET /dapa.php? 404 in 39ms (compile: 8ms, render: 30ms)
+ GET /robots.txt 404 in 49ms (compile: 14ms, render: 36ms)
+{
+  type: 'text',
+  placeholder: '사용자명',
+  required: true,
+  minLength: 3,
+  maxLength: 10
+}
+{ type: 'email', placeholder: '이메일', required: true }
+{ type: 'password', placeholder: '비밀번호', required: true, minLength: 4 }
+{
+  type: 'password',
+  placeholder: '비밀번호 확인',
+  required: true,
+  minLength: 4
+}
+ GET /register 200 in 56ms (compile: 13ms, render: 43ms)
+ GET /wp-login.php?al=true 404 in 46ms (compile: 11ms, render: 35ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 22:20:57
+ GET /hashrate 200 in 910ms (compile: 11ms, render: 899ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 8ms (compile: 2ms, render: 6ms)
+ GET /.env 404 in 48ms (compile: 19ms, render: 29ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 11. 23:23:57
+ GET /hashrate 200 in 1144ms (compile: 21ms, render: 1123ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 15ms (compile: 5ms, render: 9ms)
+ GET / 200 in 38ms (compile: 6ms, render: 32ms)
+ GET / 200 in 72ms (compile: 17ms, render: 56ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 00:33:57
+ GET /hashrate 200 in 824ms (compile: 23ms, render: 801ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 24ms (compile: 10ms, render: 14ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 00:40:57
+ GET /hashrate 200 in 823ms (compile: 29ms, render: 795ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 10ms (compile: 4ms, render: 7ms)
+ GET / 200 in 43ms (compile: 8ms, render: 35ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 01:36:57
+ GET /hashrate 200 in 753ms (compile: 5ms, render: 748ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 11ms (compile: 4ms, render: 7ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 01:36:57
+ GET /hashrate 200 in 310ms (compile: 7ms, render: 303ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 19ms (compile: 7ms, render: 12ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 02:04:57
+ GET /hashrate 200 in 335ms (compile: 2ms, render: 333ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 11ms (compile: 3ms, render: 8ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 02:04:57
+ GET /hashrate 200 in 368ms (compile: 9ms, render: 359ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 9ms (compile: 3ms, render: 6ms)
+ GET / 200 in 76ms (compile: 14ms, render: 62ms)
+ GET /mining 200 in 31ms (compile: 10ms, render: 21ms)
+ GET / 200 in 30ms (compile: 8ms, render: 22ms)
+ GET /mining 200 in 64ms (compile: 9ms, render: 55ms)
+ GET / 200 in 61ms (compile: 9ms, render: 52ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 02:18:57
+ GET /hashrate 200 in 836ms (compile: 9ms, render: 827ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 25ms (compile: 7ms, render: 19ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 14ms (compile: 5ms, render: 9ms)
+ GET /mining 200 in 31ms (compile: 8ms, render: 23ms)
+ GET / 200 in 30ms (compile: 7ms, render: 23ms)
+ GET /trans 200 in 21ms (compile: 9ms, render: 13ms)
+ GET / 200 in 26ms (compile: 8ms, render: 18ms)
+ GET / 200 in 52ms (compile: 7ms, render: 45ms)
+ GET / 200 in 54ms (compile: 8ms, render: 46ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 02:25:57
+ GET /hashrate 200 in 887ms (compile: 6ms, render: 881ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 10ms (compile: 3ms, render: 7ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 9ms (compile: 3ms, render: 7ms)
+ GET / 200 in 49ms (compile: 7ms, render: 41ms)
+ GET /mining 200 in 32ms (compile: 10ms, render: 23ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 02:25:57
+ GET /hashrate 200 in 852ms (compile: 7ms, render: 845ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 8ms (compile: 2ms, render: 6ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 7ms (compile: 1983µs, render: 5ms)
+ GET / 200 in 50ms (compile: 7ms, render: 43ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 02:32:57
+ GET /hashrate 200 in 867ms (compile: 7ms, render: 859ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 9ms (compile: 3ms, render: 6ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 02:32:57
+ GET /hashrate 200 in 774ms (compile: 9ms, render: 765ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 10ms (compile: 3ms, render: 7ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 03:00:57
+ GET /hashrate 200 in 887ms (compile: 10ms, render: 878ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 9ms (compile: 3ms, render: 6ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 03:00:57
+ GET /hashrate 200 in 870ms (compile: 7ms, render: 863ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 8ms (compile: 2ms, render: 6ms)
+ GET / 200 in 15ms (compile: 3ms, render: 12ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 03:07:57
+ GET /hashrate 200 in 366ms (compile: 7ms, render: 359ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 16ms (compile: 5ms, render: 11ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 12ms (compile: 3ms, render: 9ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 03:14:57
+ GET /hashrate 200 in 761ms (compile: 4ms, render: 757ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 8ms (compile: 3ms, render: 6ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 03:21:57
+ GET /hashrate 200 in 849ms (compile: 4ms, render: 845ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 8ms (compile: 2ms, render: 5ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 03:56:57
+ GET /hashrate 200 in 892ms (compile: 19ms, render: 874ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 18ms (compile: 7ms, render: 11ms)
+ GET / 200 in 49ms (compile: 7ms, render: 42ms)
+ GET / 200 in 55ms (compile: 8ms, render: 47ms)
+ GET /robots.txt 404 in 46ms (compile: 10ms, render: 36ms)
+ GET /robots.txt 404 in 39ms (compile: 6ms, render: 33ms)
+ GET /ads.txt 404 in 39ms (compile: 7ms, render: 32ms)
+ GET / 200 in 53ms (compile: 10ms, render: 43ms)
+ GET /robots.txt 404 in 48ms (compile: 12ms, render: 36ms)
+ GET / 200 in 47ms (compile: 7ms, render: 41ms)
+ GET / 200 in 53ms (compile: 8ms, render: 45ms)
+ GET /robots.txt 404 in 52ms (compile: 10ms, render: 41ms)
+ GET / 200 in 49ms (compile: 8ms, render: 41ms)
+ GET /robots.txt 404 in 44ms (compile: 13ms, render: 31ms)
+ GET / 200 in 48ms (compile: 7ms, render: 40ms)
+ GET / 200 in 49ms (compile: 8ms, render: 40ms)
+ HEAD /old/config.json 404 in 37ms (compile: 9ms, render: 28ms)
+ HEAD /bak/sql.sql 404 in 32ms (compile: 7ms, render: 25ms)
+ GET /back/www.zip 404 in 40ms (compile: 10ms, render: 30ms)
+ HEAD /www.sql 404 in 41ms (compile: 10ms, render: 31ms)
+ GET /restore/index.zip 404 in 39ms (compile: 10ms, render: 30ms)
+ GET /old/bak.tar.gz 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /restore/www.tar.gz 404 in 46ms (compile: 9ms, render: 37ms)
+ HEAD /back/config.json 404 in 37ms (compile: 12ms, render: 24ms)
+ GET /restore/wallet.zip 404 in 41ms (compile: 13ms, render: 28ms)
+ GET /public_html.tar 404 in 42ms (compile: 8ms, render: 34ms)
+ GET /backup/directory.tar.gz 404 in 41ms (compile: 13ms, render: 28ms)
+ GET /backup/website.tar.gz 404 in 48ms (compile: 9ms, render: 39ms)
+ GET /ads.txt 404 in 40ms (compile: 9ms, render: 31ms)
+ GET /robots.txt 404 in 38ms (compile: 10ms, render: 29ms)
+ GET / 200 in 51ms (compile: 10ms, render: 41ms)
+ GET / 200 in 48ms (compile: 8ms, render: 40ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 11:59:57
+ GET /hashrate 200 in 358ms (compile: 9ms, render: 349ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 23ms (compile: 7ms, render: 16ms)
+ GET /apple-touch-icon.png 404 in 63ms (compile: 13ms, render: 50ms)
+ GET /apple-touch-icon-precomposed.png 404 in 59ms (compile: 33ms, render: 26ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 12:06:57
+ GET /hashrate 200 in 737ms (compile: 7ms, render: 730ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 20ms (compile: 7ms, render: 13ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 12:06:57
+ GET /hashrate 200 in 362ms (compile: 7ms, render: 354ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 21ms (compile: 6ms, render: 15ms)
+ GET /apple-touch-icon.png 404 in 44ms (compile: 9ms, render: 35ms)
+ GET /apple-touch-icon-precomposed.png 404 in 28ms (compile: 4ms, render: 24ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 12:27:57
+ GET /hashrate 200 in 842ms (compile: 8ms, render: 834ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 18ms (compile: 6ms, render: 12ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 12:27:57
+ GET /hashrate 200 in 797ms (compile: 5ms, render: 793ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 8ms (compile: 3ms, render: 6ms)
+ GET /crypto 200 in 30ms (compile: 9ms, render: 21ms)
+ GET /community 200 in 34ms (compile: 12ms, render: 22ms)
+ GET / 200 in 29ms (compile: 7ms, render: 22ms)
+ GET / 200 in 48ms (compile: 7ms, render: 40ms)
+ GET / 200 in 48ms (compile: 6ms, render: 42ms)
+ GET /exchange 200 in 37ms (compile: 13ms, render: 24ms)
+ GET /exchange 200 in 59ms (compile: 7ms, render: 52ms)
+ GET / 200 in 52ms (compile: 7ms, render: 44ms)
+ GET /exchange 200 in 60ms (compile: 9ms, render: 51ms)
+ GET /exchange 200 in 48ms (compile: 7ms, render: 41ms)
+레디스에 있음 935424
+{ value: 935424, timestamp: 1770472605 }
+[getRealTimeHashrate] API 호출 성공, 데이터 반환
+HashratePage: 2026. 02. 12. 12:34:57
+ GET /hashrate 200 in 322ms (compile: 7ms, render: 314ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 10ms (compile: 4ms, render: 6ms)
+=================================== getDataSimple<T>(_key: string): Promise<{
+ POST /hashrate 200 in 8ms (compile: 1894µs, render: 6ms)
+ GET / 200 in 52ms (compile: 10ms, render: 41ms)
+ GET /robots.txt 404 in 86ms (compile: 34ms, render: 51ms)
+Redis Client Error Error: Socket closed unexpectedly
+    at ignore-listed frames
+Redis Client Error Error: Socket closed unexpectedly
+    at ignore-listed frames

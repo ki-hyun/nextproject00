@@ -1,6 +1,5 @@
 'use client';
 
-import TabNavigation from '../../components/TabNavigation';
 
 export default function FuturesPage() {
   const futuresData = [
@@ -12,7 +11,6 @@ export default function FuturesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-gray-700/50">

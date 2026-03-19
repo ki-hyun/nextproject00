@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useActionState } from "react";
 import { addDataToRedis, getDataFromRedis, clearDataFromRedis, getRedisStats } from "./actions";
 import { RedisData, RedisStats } from "./types";
-import TabNavigation from '../../components/TabNavigation';
 
 export default function RedisTestPage() {
   const [data, setData] = useState<RedisData[]>([]);
@@ -66,7 +65,6 @@ export default function RedisTestPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

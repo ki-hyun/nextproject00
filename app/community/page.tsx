@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import TabNavigation from '../../components/TabNavigation';
 
 export default function CommunityPage() {
   const categories = [
@@ -27,7 +26,6 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <TabNavigation />
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
