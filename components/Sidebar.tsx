@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTheme } from '@/lib/ThemeContext';
 
 export interface Tab {
   href: string;
@@ -20,39 +21,39 @@ export const tabs: Tab[] = [
   { href: '/exchange', name: '거래소/차트', icon: '📊', description: '실시간 거래 및 차트 분석' },
   { href: '/graph', name: '그래프', icon: '📈', description: '데이터 시각화 및 그래프 차트' },
   { href: '/redis', name: 'Redis', icon: '🔴', description: 'Redis 데이터 저장 및 조회 테스트' },
-  { href: '/trans', name: '변환', icon: '🔄', description: '데이터변환' },  
+  { href: '/trans', name: '변환', icon: '🔄', description: '데이터변환' },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { theme } = useTheme();
 
   return (
-    <aside className="w-52 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md flex flex-col h-screen sticky top-0">
-      {/* 로고 영역 */}
-      <div className="h-14 flex items-center px-4 border-b border-gray-200 dark:border-gray-800 shrink-0">
+    <aside className="w-52 flex-shrink-0 border-r flex flex-col h-screen sticky top-0" style={{ backgroundColor: 'var(--theme-primary)', borderColor: 'color-mix(in srgb, var(--theme-text-on-primary) 10%, transparent)' }}>
+      {/* 로고 */}
+      <div className="h-14 flex items-center px-5 border-b shrink-0" style={{ borderColor: 'color-mix(in srgb, var(--theme-text-on-primary) 10%, transparent)' }}>
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-base font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+          <span className="text-sm font-extrabold tracking-tight" style={{ color: 'var(--theme-text-on-primary)' }}>
             BitCoinBoard
           </span>
         </Link>
       </div>
 
-      {/* 네비게이션 메뉴 */}
-      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-        <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3">
-          메뉴
-        </div>
+      {/* 네비게이션 */}
+      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-0.5">
+        <p className="text-xs font-semibold uppercase tracking-wider mb-2 px-2" style={{ color: 'var(--theme-text-muted-on-primary)' }}>메뉴</p>
         {tabs.map((tab) => {
           const isActive = pathname === tab.href;
           return (
             <Link
               key={tab.href}
               href={tab.href}
-              className={`flex items-center space-x-2 px-2 py-2 rounded-lg text-xs font-medium transition-colors ${
-                isActive
-                  ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                  : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+              className={`flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                isActive ? 'font-semibold' : 'hover:bg-black/5 hover:dark:bg-white/5'
               }`}
+              style={isActive
+                ? { backgroundColor: 'color-mix(in srgb, var(--theme-text-on-primary) 15%, transparent)', color: 'var(--theme-text-on-primary)' }
+                : { color: 'var(--theme-text-muted-on-primary)' }}
             >
               <span className="text-base w-4 text-center">{tab.icon}</span>
               <span>{tab.name}</span>
@@ -61,12 +62,10 @@ export default function Sidebar() {
         })}
       </div>
 
-      {/* 하단 푸터 영역 */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-800 shrink-0">
-        <div className="text-xs text-gray-500 dark:text-gray-400">
-          <p>© 2026 BitCoinBoard</p>
-          <p className="mt-1">All rights reserved.</p>
-        </div>
+      {/* 하단 푸터 */}
+      <div className="p-4 border-t shrink-0" style={{ borderColor: 'color-mix(in srgb, var(--theme-text-on-primary) 10%, transparent)' }}>
+        <p className="text-xs" style={{ color: 'var(--theme-text-muted-on-primary)' }}>© 2026 BitCoinBoard</p>
+        <p className="text-xs mt-0.5" style={{ color: 'var(--theme-text-muted-on-primary)' }}>All rights reserved.</p>
       </div>
     </aside>
   );

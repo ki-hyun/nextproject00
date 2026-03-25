@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { tabs } from './Sidebar';
+import { useLanguage } from '@/lib/LanguageContext';
+import { useTheme, THEMES } from '@/lib/ThemeContext';
 
 interface User {
   id: number;
@@ -15,20 +17,14 @@ interface User {
 
 export default function TopBar() {
   const [user, setUser] = useState<User | null>(null);
-  const [language, setLanguage] = useState('ko');
   const router = useRouter();
   const pathname = usePathname();
+  const { language, toggle: toggleLang } = useLanguage();
+  const { theme, nextTheme } = useTheme();
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-    
-    const savedLanguage = localStorage.getItem('language');
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-    }
+    if (userData) setUser(JSON.parse(userData));
   }, []);
 
   const handleLogout = () => {
@@ -37,79 +33,66 @@ export default function TopBar() {
     router.push('/');
   };
 
-  const handleLanguageChange = (lang: string) => {
-    setLanguage(lang);
-    localStorage.setItem('language', lang);
-  };
-
-  // 현재 페이지 타이틀 찾기
   const currentTab = tabs.find(t => t.href === pathname);
   const pageTitle = currentTab ? currentTab.name : '대시보드';
 
   return (
-    <header className="h-16 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-40">
-      <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        
+    <header
+      className="h-14 border-b sticky top-0 z-40"
+      style={{ backgroundColor: 'var(--theme-primary)', borderColor: 'color-mix(in srgb, var(--theme-text-on-primary) 10%, transparent)' }}
+    >
+      <div className="h-full px-5 flex items-center justify-between">
+
         {/* 왼쪽: 현재 페이지 타이틀 */}
-        <div className="flex items-center">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-            {pageTitle}
-          </h2>
-        </div>
+        <h2 className="text-base font-bold" style={{ color: 'var(--theme-text-on-primary)' }}>{pageTitle}</h2>
 
-        {/* 오른쪽: 언어 선택 및 유저 정보 */}
-        <div className="flex items-center space-x-4 sm:space-x-6">
-          <div className="relative">
-            <select
-              value={language}
-              onChange={(e) => handleLanguageChange(e.target.value)}
-              className="appearance-none bg-gray-50 border border-gray-300 dark:bg-gray-800 dark:border-gray-700 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors cursor-pointer"
+        {/* 오른쪽 컨트롤 */}
+        <div className="flex items-center gap-2">
+
+          {/* 언어 토글 버튼 */}
+          <div className="flex items-center border rounded-lg overflow-hidden text-xs font-semibold" style={{ borderColor: 'color-mix(in srgb, var(--theme-text-on-primary) 20%, transparent)' }}>
+            <button
+              onClick={() => toggleLang()}
+              className={`px-2.5 py-1.5 transition-colors font-bold ${language === 'ko' ? '' : 'hover:bg-black/5 hover:dark:bg-white/5'}`}
+              style={language === 'ko' ? { backgroundColor: theme.textOnPrimary, color: theme.primary } : { color: theme.textMutedOnPrimary }}
             >
-              <option value="ko">🇰🇷 한국어</option>
-              <option value="en">🇺🇸 English</option>
-              <option value="ja">🇯🇵 日본語</option>
-              <option value="zh">🇨🇳 中文</option>
-            </select>
+              한
+            </button>
+            <div className="w-px h-4" style={{ backgroundColor: theme.textMutedOnPrimary, opacity: 0.3 }} />
+            <button
+              onClick={() => toggleLang()}
+              className={`px-2.5 py-1.5 transition-colors font-bold ${language === 'en' ? '' : 'hover:bg-black/5 hover:dark:bg-white/5'}`}
+              style={language === 'en' ? { backgroundColor: theme.textOnPrimary, color: theme.primary } : { color: theme.textMutedOnPrimary }}
+            >
+              EN
+            </button>
           </div>
 
-          <div className="hidden sm:flex items-center space-x-4 bg-gray-50 dark:bg-gray-800/50 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700/50">
-            <span className="text-sm font-medium text-purple-600 dark:text-purple-400">Lv.4</span>
-            <div className="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
-            <span className="text-sm font-medium text-blue-600 dark:text-blue-400">250 P</span>
-          </div>
-          
-          <div className="flex items-center border-l pl-4 border-gray-200 dark:border-gray-700 shrink-0">
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-700 dark:text-gray-300 text-sm font-medium hidden sm:block">
-                  {user.username}님
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors text-sm font-medium"
-                >
-                  로그아웃
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Link
-                  href="/login"
-                  className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  로그인
-                </Link>
-                {/* <Link
-                  href="/register"
-                  className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors"
-                >
-                  회원가입
-                </Link> */}
-              </div>
-            )}
-          </div>
+          {/* 테마 순환 버튼 */}
+          <button
+            onClick={nextTheme}
+            title={`테마: ${theme.label} → 다음`}
+            className="flex items-center gap-1.5 border rounded-lg px-2.5 py-1.5 hover:bg-black/5 hover:dark:bg-white/5 transition-colors text-xs"
+            style={{ borderColor: 'color-mix(in srgb, var(--theme-text-on-primary) 20%, transparent)' }}
+          >
+            {/* 4개 테마 스와치 미리보기 */}
+            <span className="flex gap-0.5">
+              {THEMES.map(t => (
+                <span
+                  key={t.name}
+                  className="w-3 h-3 rounded-full block border border-white/50"
+                  style={{
+                    backgroundColor: t.swatch,
+                    opacity: t.name === theme.name ? 1 : 0.35,
+                    transform: t.name === theme.name ? 'scale(1.2)' : 'scale(1)',
+                    transition: 'all 0.2s',
+                  }}
+                />
+              ))}
+            </span>
+          </button>
+
         </div>
-        
       </div>
     </header>
   );

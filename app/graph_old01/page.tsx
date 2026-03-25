@@ -361,7 +361,7 @@ export default function GraphPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-transparent dark:bg-gray-900">
       <main className="container mx-auto px-6 py-16">
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}

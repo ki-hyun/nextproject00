@@ -140,6 +140,49 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
     return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
   };
 
+  // 큰 숫자를 단위에 맞게 자동 축약
+  // seriesName에 'hash'가 포함되면 해시레이트 단위(TH/PH/EH) 적용, 그 외엔 K/M/B/T
+  const formatValue = (value: number, seriesName: string): string => {
+    const name = seriesName.toLowerCase();
+    // price 시리즈는 축약 없이 전체 값 표시
+    if (name.includes('price')) {
+      return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    }
+    if (name.includes('hash')) {
+      // 해시레이트: 원시 단위가 H/s라고 가정
+      const units: [number, string][] = [
+        [1e21, 'ZH/s'],
+        [1e18, 'EH/s'],
+        [1e15, 'PH/s'],
+        [1e12, 'TH/s'],
+        [1e9, 'GH/s'],
+        [1e6, 'MH/s'],
+        [1e3, 'KH/s'],
+      ];
+      for (const [div, label] of units) {
+        if (Math.abs(value) >= div) {
+          const formatted = (value / div).toLocaleString(undefined, { maximumFractionDigits: 2 });
+          return `${formatted} ${label}`;
+        }
+      }
+      return `${value.toLocaleString(undefined, { maximumFractionDigits: 2 })} H/s`;
+    }
+    // 일반 숫자 ( K / M / B / T )
+    const units: [number, string][] = [
+      [1e12, 'T'],
+      [1e9, 'B'],
+      [1e6, 'M'],
+      [1e3, 'K'],
+    ];
+    for (const [div, label] of units) {
+      if (Math.abs(value) >= div) {
+        const formatted = (value / div).toLocaleString(undefined, { maximumFractionDigits: 2 });
+        return `${formatted}${label}`;
+      }
+    }
+    return value.toLocaleString(undefined, { maximumFractionDigits: 4 });
+  };
+
   // tzLabel 표시용
   const tzSign = timezoneOffset >= 0 ? '+' : '-';
   const tzAbs = Math.abs(timezoneOffset);
@@ -261,14 +304,10 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
         }
       }
     }, {
-      // 세 번째 Y축: Block Reward
+      // 세 번째 Y축: Block Reward / Difficulty
       opposite: false,
       labels: {
-        align: 'left',
-        x: 0,
-        style: {
-          color: '#6b7280'
-        }
+        enabled: false,
       },
       gridLineColor: 'rgba(0, 0, 0, 0.05)',
       title: {
@@ -308,7 +347,7 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
     },
 
     tooltip: {
-      shared: false,
+      shared: true,
       backgroundColor: 'rgba(255, 255, 255, 0.95)',
       borderColor: 'rgba(0, 0, 0, 0.1)',
       borderRadius: 8,
@@ -325,8 +364,16 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (this: any) {
         const timeStr = formatWithOffset(this.x as number, timezoneOffset);
-        const value = typeof this.y === 'number' ? this.y.toLocaleString(undefined, { maximumFractionDigits: 2 }) : this.y;
-        return `<b>${this.series?.name ?? ''}</b><br/>${timeStr} (${currentTzLabel})<br/>${value}`;
+        let html = `<span style="font-size:11px;color:#6b7280">${timeStr} (${currentTzLabel})</span><br/>`;
+        (this.points ?? []).forEach((point: any) => {
+          const seriesName = point.series?.name ?? '';
+          const value = typeof point.y === 'number'
+            ? formatValue(point.y, seriesName)
+            : point.y;
+          const color = point.color ?? point.series?.color ?? '#374151';
+          html += `<span style="color:${color}">●</span> <b>${seriesName}</b>: ${value}<br/>`;
+        });
+        return html;
       }
     },
 
