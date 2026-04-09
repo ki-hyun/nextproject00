@@ -15,13 +15,8 @@ export const tabs: Tab[] = [
   { href: '/', name: '홈', icon: '🏠', description: 'NextProject 메인 홈페이지' },
   { href: '/hashrate', name: '해시레이트', icon: '⚡', description: '네트워크 해시레이트 정보' },
   { href: '/mining', name: '마이닝', icon: '⛏️', description: '암호화폐 채굴 시뮬레이션' },
-  { href: '/block', name: '블록', icon: '🧱', description: '블록체인 블록 정보 및 탐색' },
-  { href: '/crypto', name: '암호화폐', icon: '₿', description: '실시간 암호화폐 시세 확인' },
-  { href: '/community', name: '커뮤니티', icon: '💬', description: '개발자들과 소통하고 지식 공유' },
-  { href: '/exchange', name: '거래소/차트', icon: '📊', description: '실시간 거래 및 차트 분석' },
   { href: '/graph', name: '그래프', icon: '📈', description: '데이터 시각화 및 그래프 차트' },
   { href: '/redis', name: 'Redis', icon: '🔴', description: 'Redis 데이터 저장 및 조회 테스트' },
-  { href: '/trans', name: '변환', icon: '🔄', description: '데이터변환' },
 ];
 
 export default function Sidebar() {
@@ -48,9 +43,8 @@ export default function Sidebar() {
             <Link
               key={tab.href}
               href={tab.href}
-              className={`flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                isActive ? 'font-semibold' : 'hover:bg-black/5 hover:dark:bg-white/5'
-              }`}
+              className={`flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${isActive ? 'font-semibold' : 'hover:bg-black/5 hover:dark:bg-white/5'
+                }`}
               style={isActive
                 ? { backgroundColor: 'color-mix(in srgb, var(--theme-text-on-primary) 15%, transparent)', color: 'var(--theme-text-on-primary)' }
                 : { color: 'var(--theme-text-muted-on-primary)' }}
