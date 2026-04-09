@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 import { useActionState } from "react";
 import { addDataToRedis, getDataFromRedis, clearDataFromRedis, getRedisStats } from "./actions";
 import { RedisData, RedisStats } from "./types";
+import DeleteIndexButton from '@/components/DeleteIndexButton';
 
 export default function RedisTestPage() {
   const [data, setData] = useState<RedisData[]>([]);
   const [stats, setStats] = useState<RedisStats | null>(null);
   const [message, setMessage] = useState("");
-  
+
   const [addState, addAction] = useActionState(addDataToRedis, null);
   const [clearState, clearAction] = useActionState(clearDataFromRedis, null);
 
@@ -17,7 +18,7 @@ export default function RedisTestPage() {
     setMessage("데이터를 가져오는 중...");
     try {
       const result = await getDataFromRedis();
-      
+
       if (result.success) {
         setData(result.data || []);
         setMessage(`${result.data?.length || 0}개의 데이터를 가져왔습니다!`);
@@ -33,7 +34,7 @@ export default function RedisTestPage() {
     setMessage("Redis 통계를 조회하는 중...");
     try {
       const result = await getRedisStats();
-      
+
       if (result.success && result.stats) {
         setStats(result.stats);
         setMessage(`Redis 통계 정보가 업데이트되었습니다!`);
@@ -87,21 +88,21 @@ export default function RedisTestPage() {
                   🔄 데이터 추가
                 </button>
               </form>
-              
+
               <button
                 onClick={handleGetData}
                 className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 📋 데이터 조회
               </button>
-              
+
               <button
                 onClick={handleGetStats}
                 className="bg-gradient-to-r from-indigo-500 to-cyan-600 text-white font-semibold py-3 px-4 rounded-lg hover:from-indigo-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 📊 Redis 통계
               </button>
-              
+
               <form action={clearAction}>
                 <button
                   type="submit"
@@ -111,6 +112,8 @@ export default function RedisTestPage() {
                 </button>
               </form>
             </div>
+
+            <DeleteIndexButton />
 
             {/* Message */}
             {message && (
@@ -126,7 +129,7 @@ export default function RedisTestPage() {
           {stats && (
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 mb-6 border border-gray-200/50 dark:border-gray-700/50">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Redis 통계</h2>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="text-center">
                   <div className="bg-blue-100 dark:bg-blue-900/30 rounded-xl p-4">
@@ -138,7 +141,7 @@ export default function RedisTestPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="bg-green-100 dark:bg-green-900/30 rounded-xl p-4">
                     <div className="text-3xl font-bold text-green-600 dark:text-green-400">
@@ -149,7 +152,7 @@ export default function RedisTestPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="bg-purple-100 dark:bg-purple-900/30 rounded-xl p-4">
                     <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
@@ -160,7 +163,7 @@ export default function RedisTestPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="bg-orange-100 dark:bg-orange-900/30 rounded-xl p-4">
                     <div className="text-sm font-bold text-orange-600 dark:text-orange-400">
@@ -179,7 +182,7 @@ export default function RedisTestPage() {
           {data.length > 0 && (
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-gray-700/50">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Redis 데이터</h2>
-              
+
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
@@ -206,7 +209,7 @@ export default function RedisTestPage() {
                   </tbody>
                 </table>
               </div>
-              
+
               <div className="mt-4 text-center">
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
                   총 {data.length}개의 데이터

@@ -1,6 +1,5 @@
 import { getRealTimeHashrate, formatHashrate } from "@/lib/getRealTimeInfo";
 import Chart from '@/components/Chart';
-import DeleteIndexButton from '@/components/DeleteIndexButton';
 import T from '@/components/T';
 
 export const dynamic = 'force-dynamic';
@@ -114,7 +113,7 @@ export default async function BlockPage() {
           <div className="bg-white rounded-2xl border border-gray-200 p-5">
             <p className="text-xs text-gray-400 mb-3">⚡ <T ns="hashrate" k="card_hashrate" /></p>
             <p className="text-xl font-bold text-violet-600">
-              {_realtimehashrate?.hash_rate ? formatHashrate(_realtimehashrate.hash_rate) : 'N/A'}
+              {_realtimehashrate?.hash_rate ? formatHashrate(_realtimehashrate.hash_rate, 4) : 'N/A'}
             </p>
             <p className="text-xs text-gray-400 mt-2"><T ns="hashrate" k="card_hashrate_sub" /></p>
           </div>
@@ -228,11 +227,9 @@ export default async function BlockPage() {
             series={chartSeries}
             title=""
             firstloding={3}
-            height={560}
+            height={500}
           />
         </div>
-
-        <DeleteIndexButton />
 
       </main>
     </div>

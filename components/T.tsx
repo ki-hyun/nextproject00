@@ -3,10 +3,13 @@
 import { useLanguage } from '@/lib/LanguageContext';
 import koHashrate from '@/app/hashrate/ko.json';
 import enHashrate from '@/app/hashrate/en.json';
+import koMining from '@/app/mining/ko.json';
+import enMining from '@/app/mining/en.json';
 
 // namespace → 번역 맵
 const translations: Record<string, Record<string, string>> = {
   hashrate: { ko: JSON.stringify(koHashrate), en: JSON.stringify(enHashrate) },
+  mining: { ko: JSON.stringify(koMining), en: JSON.stringify(enMining) },
 };
 
 // 번역 캐시

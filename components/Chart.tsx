@@ -363,16 +363,60 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (this: any) {
-        const timeStr = formatWithOffset(this.x as number, timezoneOffset);
+        const x = this.x as number;
+        const timeStr = formatWithOffset(x, timezoneOffset);
         let html = `<span style="font-size:11px;color:#6b7280">${timeStr} (${currentTzLabel})</span><br/>`;
-        (this.points ?? []).forEach((point: any) => {
-          const seriesName = point.series?.name ?? '';
-          const value = typeof point.y === 'number'
-            ? formatValue(point.y, seriesName)
-            : point.y;
-          const color = point.color ?? point.series?.color ?? '#374151';
-          html += `<span style="color:${color}">●</span> <b>${seriesName}</b>: ${value}<br/>`;
+
+        const chart = this.points ? this.points[0].series.chart : this.series?.chart;
+        if (!chart) return html;
+
+        chart.series.forEach((s: any) => {
+          // Navigator나 내부 시리즈, 숨겨진 시리즈는 제외
+          if (!s.visible || s.options.isInternal || s.name.includes('Navigator')) return;
+
+          let val: number | null | undefined = null;
+
+          // 정확히 일치하는 시간대의 point가 this.points에 있으면 그것을 사용
+          const exactPoint = (this.points ?? []).find((p: any) => p.series === s);
+          if (exactPoint && typeof exactPoint.y === 'number') {
+            val = exactPoint.y;
+          } else {
+            // 없으면 해당 시리즈의 데이터 중 x와 가장 가깝거나 직전인 값을 찾음 (이진 탐색)
+            const xData = s.processedXData || s.xData;
+            const yData = s.processedYData || s.yData;
+            if (xData && yData && xData.length > 0) {
+              let idx = -1;
+              let low = 0, high = xData.length - 1;
+              // 범위를 벗어난 경우 처리
+              if (x < xData[0]) {
+                idx = -1; // 데이터 시작 전
+              } else if (x >= xData[xData.length - 1]) {
+                idx = xData.length - 1;
+              } else {
+                while (low <= high) {
+                  const mid = Math.floor((low + high) / 2);
+                  if (xData[mid] === x) {
+                    idx = mid;
+                    break;
+                  } else if (xData[mid] < x) {
+                    idx = mid;
+                    low = mid + 1;
+                  } else {
+                    high = mid - 1;
+                  }
+                }
+              }
+              if (idx !== -1) val = yData[idx];
+            }
+          }
+
+          if (val !== null && val !== undefined) {
+            const formatted = formatValue(val, s.name);
+            const color = s.color || '#374151';
+            html += `<span style="color:${color}">●</span> <b>${s.name}</b>: ${formatted}<br/>`;
+          }
         });
+
         return html;
       }
     },
