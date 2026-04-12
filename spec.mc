@@ -14,4 +14,7 @@
 
 
 # /mining 페이지구현
-lib/redis.ts 이용해서 키 asics의 정보를 가져와서 사용자가 마이닝 장비 정보 선택해서 볼 수 있게추가 해줘
+lib/redis.ts 이용해서 키 asics의 정보를 가져와서 사용자가 마이닝 장비 정보 선택해서 볼 수 있게 구현
+채굴기 마다 전성비 효율도 같이 표시
+lib/getRealTimeInfo  파일의  getRealTimeHashrate() 함수 이용해서 현재 난이도 표시하고 그 기준으로 계산
+

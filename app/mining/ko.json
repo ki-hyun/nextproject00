@@ -32,5 +32,10 @@
   "disclaimer_title": "면책 조항",
   "disclaimer_text": "이 계산기는 참고용이며, 실제 마이닝 수익을 보장하지 않습니다. 투자 결정 전 충분한 검토가 필요합니다.",
   "select": "선택",
-  "release_date": "출시일"
+  "release_date": "출시일",
+  "efficiency": "전성비",
+  "realtime": "실시간",
+  "yearly": "연간",
+  "monthly_depreciation": "감가상각 (월)",
+  "monthly_other_cost": "기타비용 (월)"
 }

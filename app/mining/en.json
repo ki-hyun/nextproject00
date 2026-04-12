@@ -32,5 +32,10 @@
   "disclaimer_title": "Disclaimer",
   "disclaimer_text": "This calculator is for reference only and does not guarantee actual mining profits. Thorough review is required before making investment decisions.",
   "select": "Select",
-  "release_date": "Release Date"
+  "release_date": "Release Date",
+  "efficiency": "Efficiency",
+  "realtime": "Live",
+  "yearly": "Yearly",
+  "monthly_depreciation": "Depreciation (mo.)",
+  "monthly_other_cost": "Other Costs (mo.)"
 }
