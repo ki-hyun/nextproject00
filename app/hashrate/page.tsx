@@ -86,10 +86,10 @@ export default async function BlockPage() {
 
   return (
     <div className="min-h-screen bg-transparent">
-      <main className="max-w-screen-xl mx-auto px-4 py-6 md:px-6 md:py-8">
+      <main className="max-w-screen-xl mx-auto px-0 py-4 md:px-6 md:py-8">
 
         {/* ── 페이지 헤더 ── */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6 px-4 md:px-0">
           <div>
             <h1 className="text-2xl font-bold" style={{ color: 'var(--theme-text-on-primary)' }}>
               <T ns="hashrate" k="title" />

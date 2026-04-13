@@ -118,10 +118,10 @@ export default function MiningClient({ asicsData, initialDifficulty = 0, initial
 
   return (
     <div className="min-h-screen transition-colors" style={{ backgroundColor: 'var(--theme-bg-light)' }}>
-      <main className="container mx-auto px-4 py-10 max-w-7xl">
+      <main className="container mx-auto px-0 py-4 md:px-4 md:py-10 max-w-7xl">
 
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 px-4 md:px-0">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <div className="flex items-center gap-3 mb-1">

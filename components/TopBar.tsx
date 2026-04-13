@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { tabs } from './Sidebar';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useTheme, THEMES } from '@/lib/ThemeContext';
+import { useSidebar } from '@/lib/SidebarContext';
 
 interface User {
   id: number;
@@ -21,6 +22,7 @@ export default function TopBar() {
   const pathname = usePathname();
   const { language, toggle: toggleLang } = useLanguage();
   const { theme, nextTheme } = useTheme();
+  const { toggle: toggleSidebar } = useSidebar();
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -38,13 +40,30 @@ export default function TopBar() {
 
   return (
     <header
-      className="h-14 border-b sticky top-0 z-40"
-      style={{ backgroundColor: 'var(--theme-primary)', borderColor: 'color-mix(in srgb, var(--theme-text-on-primary) 10%, transparent)' }}
+      className="border-b sticky top-0 z-50"
+      style={{
+        backgroundColor: 'var(--theme-primary)',
+        borderColor: 'color-mix(in srgb, var(--theme-text-on-primary) 10%, transparent)',
+        paddingTop: 'env(safe-area-inset-top)',
+      }}
     >
-      <div className="h-full px-5 flex items-center justify-between">
+      <div className="h-14 px-5 flex items-center justify-between">
 
-        {/* 왼쪽: 현재 페이지 타이틀 */}
-        <h2 className="text-base font-bold" style={{ color: 'var(--theme-text-on-primary)' }}>{pageTitle}</h2>
+        {/* 왼쪽: 햄버거 버튼(모바일) + 현재 페이지 타이틀 */}
+        <div className="flex items-center gap-3">
+          <button
+            className="md:hidden p-1 rounded-lg hover:bg-black/10"
+            onClick={toggleSidebar}
+            aria-label="메뉴"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ color: 'var(--theme-text-on-primary)' }}>
+              <rect y="3" width="20" height="2" rx="1" fill="currentColor" />
+              <rect y="9" width="20" height="2" rx="1" fill="currentColor" />
+              <rect y="15" width="20" height="2" rx="1" fill="currentColor" />
+            </svg>
+          </button>
+          <h2 className="text-base font-bold" style={{ color: 'var(--theme-text-on-primary)' }}>{pageTitle}</h2>
+        </div>
 
         {/* 오른쪽 컨트롤 */}
         <div className="flex items-center gap-2">
