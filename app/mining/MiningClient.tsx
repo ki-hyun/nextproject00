@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import DeleteIndexButton from '@/components/DeleteIndexButton';
 import T from '@/components/T';
 
@@ -43,6 +43,7 @@ export default function MiningClient({ asicsData, initialDifficulty = 0, initial
   const [monthlyDepreciation, setMonthlyDepreciation] = useState(0); // 감가상각 (월)
   const [monthlyOtherCost, setMonthlyOtherCost] = useState(0);       // 기타비용 (월)
   const [btcPrice, setBtcPrice] = useState(initialBtcPrice > 0 ? initialBtcPrice : 67000);
+  const [appliedBtcPrice, setAppliedBtcPrice] = useState(btcPrice);
   const [difficulty, setDifficulty] = useState(initialDifficulty > 0 ? initialDifficulty : 72676943932377);
   const [blockReward, setBlockReward] = useState(3.125);
   const [selectedAsicName, setSelectedAsicName] = useState(s21Default?.name ?? '');
@@ -74,7 +75,7 @@ export default function MiningClient({ asicsData, initialDifficulty = 0, initial
     };
   }).sort((a, b) => b.releaseRaw - a.releaseRaw);
 
-  const calculateProfitability = useCallback(() => {
+  const calculateProfitability = () => {
     const hashRateHs = hashRate * Math.pow(10, 12);
     const btcPerSecond = (hashRateHs * blockReward) / (difficulty * Math.pow(2, 32));
     const powerCostPerHour = (powerConsumption / 1000) * electricityRate;
@@ -102,11 +103,14 @@ export default function MiningClient({ asicsData, initialDifficulty = 0, initial
       newResults[period] = { btc, usd: netUsd, cost, profit: netUsd - cost };
     });
     setResults(newResults);
-  }, [hashRate, powerConsumption, electricityRate, poolFee, btcPrice, difficulty, blockReward, monthlyDepreciation, monthlyOtherCost]);
+    setAppliedBtcPrice(btcPrice);
+  };
 
+  // 초기 로드 + ASIC 장비 선택 시 자동 계산
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     calculateProfitability();
-  }, [calculateProfitability]);
+  }, [selectedAsicName]);
 
   const periodRows = [
     { key: 'hourly',  label: <T ns="mining" k="hourly"  fallback="시간당" />, data: results.hourly },
@@ -137,19 +141,23 @@ export default function MiningClient({ asicsData, initialDifficulty = 0, initial
                 <T ns="mining" k="subtitle" fallback="마이닝 장비 사양과 전기료를 입력하여 예상 수익을 계산해보세요" />
               </p>
             </div>
-            {selectedAsicName && (
-              <div className="flex flex-col items-end">
-                <p className="text-xs text-gray-400 mb-1">선택된 채굴기</p>
-                <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-sm border"
-                  style={{ backgroundColor: 'var(--theme-primary)', borderColor: 'var(--theme-primary)', color: 'var(--theme-text-on-primary)' }}>
-                  <span className="text-lg">⛏️</span>
-                  <span className="text-lg font-bold">{selectedAsicName}</span>
+            {selectedAsicName && (() => {
+              const selectedAsic = cleanedAsics.find(a => a.name === selectedAsicName);
+              return (
+                <div className="flex flex-col items-end">
+                  <p className="text-xs text-gray-400 mb-1">선택된 채굴기</p>
+                  <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-sm border"
+                    style={{ backgroundColor: 'var(--theme-primary)', borderColor: 'var(--theme-primary)', color: 'var(--theme-text-on-primary)' }}>
+                    <span className="text-lg">⛏️</span>
+                    <span className="text-lg font-bold">{selectedAsicName}</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    {hashRate.toFixed(0)} TH/s · {powerConsumption}W
+                    {selectedAsic?.releaseFormatted && ` (${selectedAsic.releaseFormatted})`}
+                  </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-1.5">
-                  {hashRate.toFixed(0)} TH/s · {powerConsumption}W
-                </p>
-              </div>
-            )}
+              );
+            })()}
           </div>
         </div>
 
@@ -295,6 +303,18 @@ export default function MiningClient({ asicsData, initialDifficulty = 0, initial
           {/* 왼쪽: 입력 설정 (2/5) */}
           <div className="lg:col-span-2 flex flex-col gap-4">
 
+            {/* 계산하기 버튼 */}
+            <button
+              onClick={calculateProfitability}
+              className="w-full py-3 rounded-xl font-bold text-base shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
+              style={{
+                backgroundColor: 'var(--theme-primary)',
+                color: 'var(--theme-text-on-primary)',
+              }}
+            >
+              🔄 계산하기
+            </button>
+
             {/* 하드웨어 설정 */}
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-5 border border-gray-200/50 shadow-sm text-gray-900">
               <h2 className="font-bold text-base mb-4">
@@ -364,34 +384,29 @@ export default function MiningClient({ asicsData, initialDifficulty = 0, initial
                 <T ns="mining" k="network_info" fallback="네트워크 정보" />
               </h2>
               <div className="space-y-3">
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-xs font-medium text-gray-600">
-                      <T ns="mining" k="difficulty" fallback="난이도" />
-                    </label>
-                  </div>
-                  <input
-                    type="number"
-                    value={difficulty}
-                    onChange={(e) => setDifficulty(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg border text-sm text-black focus:outline-none focus:ring-2 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                    style={{ borderColor: 'var(--theme-border)' }}
-                  />
-                </div>
+                <InputRow
+                  label={<T ns="mining" k="difficulty" fallback="난이도" />}
+                  unit=""
+                  value={difficulty}
+                  onChange={setDifficulty}
+                />
                 <InputRow
                   label={<T ns="mining" k="block_reward" fallback="블록 보상" />}
-                  unit="BTC"
+                  unit=""
                   value={blockReward}
                   onChange={setBlockReward}
                   step={0.001}
                 />
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-xs font-medium text-gray-600 whitespace-nowrap shrink-0">
+                <div className="grid items-center gap-2" style={{ gridTemplateColumns: '7rem 1fr 3rem' }}>
+                  <label className="text-xs font-medium text-gray-600 whitespace-nowrap">
                     <T ns="mining" k="network_hashrate" fallback="네트워크 해시레이트" />
-                  </span>
-                  <span className="text-sm font-semibold text-gray-800">
-                    {initialNetworkHashRateFormatted || 'N/A'}
-                  </span>
+                  </label>
+                  <div className="flex items-center gap-1">
+                    <div className="w-full px-3 py-2 text-sm font-semibold text-gray-800 text-right">
+                      {initialNetworkHashRateFormatted || 'N/A'}
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-500"></span>
                 </div>
               </div>
             </div>
@@ -401,49 +416,83 @@ export default function MiningClient({ asicsData, initialDifficulty = 0, initial
           {/* 오른쪽: 결과 (3/5) */}
           <div className="lg:col-span-3 flex flex-col gap-4">
 
-            {/* 일일 수익 요약 카드 */}
-            <div className="rounded-2xl p-6 border border-gray-200/50 shadow-sm flex flex-col gap-5"
-              style={{ backgroundColor: 'var(--theme-primary)', color: 'var(--theme-text-on-primary)' }}>
+            {/* 일일 수익 요약 + 손익분기 BTC 가격 */}
+            {(() => {
+              // 손익분기 BTC 가격 계산: 순이익 = 0 → btcPrice = dailyCost / (dailyBtc × (1 - poolFee/100))
+              const dailyBtc = results.daily.btc;
+              const dailyCost = results.daily.cost;
+              const feeMultiplier = 1 - poolFee / 100;
+              const breakEvenPrice = dailyBtc > 0 && feeMultiplier > 0
+                ? dailyCost / (dailyBtc * feeMultiplier)
+                : 0;
 
-              {/* 타이틀 */}
-              <p className="text-sm font-semibold tracking-wide uppercase" style={{ color: 'var(--theme-text-muted-on-primary)' }}>
-                <T ns="mining" k="daily" fallback="일일" /> <T ns="mining" k="expected_profit" fallback="예상 수익" />
-              </p>
+              return (
+                <div className="flex flex-col gap-4">
+                  {/* 상단: 일일 예상 수익 */}
+                  <div className="rounded-2xl p-6 border border-gray-200/50 shadow-sm flex flex-col gap-5"
+                    style={{ backgroundColor: 'var(--theme-primary)', color: 'var(--theme-text-on-primary)' }}>
 
-              {/* 순이익 강조 */}
-              <div>
-                <p className="text-xs mb-1" style={{ color: 'var(--theme-text-muted-on-primary)' }}>
-                  <T ns="mining" k="net_profit" fallback="순이익" />
-                </p>
-                <p className="text-4xl font-bold tracking-tight"
-                  style={{ color: results.daily.profit < 0 ? '#ef4444' : 'var(--theme-text-on-primary)' }}>
-                  ${results.daily.profit.toFixed(2)}
-                </p>
-              </div>
+                    {/* 타이틀 */}
+                    <p className="text-sm font-semibold tracking-wide uppercase" style={{ color: 'var(--theme-text-muted-on-primary)' }}>
+                      <T ns="mining" k="daily" fallback="일일" /> <T ns="mining" k="expected_profit" fallback="예상 수익" />
+                    </p>
 
-              {/* 구분선 */}
-              <div className="border-t" style={{ borderColor: 'var(--theme-text-muted-on-primary)', opacity: 0.3 }} />
+                    {/* 순이익 강조 */}
+                    <div>
+                      <p className="text-xs mb-1" style={{ color: 'var(--theme-text-muted-on-primary)' }}>
+                        <T ns="mining" k="net_profit" fallback="순이익" />
+                      </p>
+                      <p className="text-4xl font-bold tracking-tight"
+                        style={{ color: results.daily.profit < 0 ? '#ef4444' : 'var(--theme-text-on-primary)' }}>
+                        ${results.daily.profit.toFixed(2)}
+                      </p>
+                    </div>
 
-              {/* BTC / 수익 / 전기료 */}
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <p className="text-xs mb-1" style={{ color: 'var(--theme-text-muted-on-primary)' }}>BTC</p>
-                  <p className="text-base font-bold">{results.daily.btc.toFixed(6)}</p>
+                    {/* 구분선 */}
+                    <div className="border-t" style={{ borderColor: 'var(--theme-text-muted-on-primary)', opacity: 0.3 }} />
+
+                    {/* BTC / 수익 / 전기료 */}
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-xs mb-1" style={{ color: 'var(--theme-text-muted-on-primary)' }}>BTC</p>
+                        <p className="text-base font-bold">{results.daily.btc.toFixed(6)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs mb-1" style={{ color: 'var(--theme-text-muted-on-primary)' }}>
+                          <T ns="mining" k="profit" fallback="수익" />
+                        </p>
+                        <p className="text-base font-bold">${results.daily.usd.toFixed(2)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs mb-1" style={{ color: 'var(--theme-text-muted-on-primary)' }}>
+                          <T ns="mining" k="electricity_cost" fallback="전기료" />
+                        </p>
+                        <p className="text-base font-bold">${results.daily.cost.toFixed(2)}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 하단: 손익분기 BTC 가격 */}
+                  <div className="rounded-2xl p-6 border border-gray-200/50 shadow-sm flex flex-col justify-between"
+                    style={{ backgroundColor: breakEvenPrice > appliedBtcPrice ? '#fef2f2' : '#f0fdf4' }}>
+
+                    {/* 타이틀 */}
+                    <div>
+                      <p className="text-sm font-semibold tracking-wide uppercase text-gray-500 mb-4">
+                        손익분기 BTC 가격
+                      </p>
+                    </div>
+
+                    {/* 손익분기 가격 */}
+                    <div className="mb-4">
+                      <p className="text-3xl font-bold tracking-tight text-gray-900">
+                        ${breakEvenPrice > 0 ? breakEvenPrice.toLocaleString('en-US', { maximumFractionDigits: 0 }) : '—'}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs mb-1" style={{ color: 'var(--theme-text-muted-on-primary)' }}>
-                    <T ns="mining" k="profit" fallback="수익" />
-                  </p>
-                  <p className="text-base font-bold">${results.daily.usd.toFixed(2)}</p>
-                </div>
-                <div>
-                  <p className="text-xs mb-1" style={{ color: 'var(--theme-text-muted-on-primary)' }}>
-                    <T ns="mining" k="electricity_cost" fallback="전기료" />
-                  </p>
-                  <p className="text-base font-bold">${results.daily.cost.toFixed(2)}</p>
-                </div>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* 기간별 수익 표 */}
             <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200/50 shadow-sm text-gray-900 overflow-auto">

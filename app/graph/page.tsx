@@ -16,6 +16,8 @@ export default function GraphPage() {
       turboThreshold: 0,  // 모든 데이터 포인트 표시
       yAxis: 0,
       visible: true,  // Price만 처음에 표시
+      showInNavigator: true,
+      navigatorOptions: { visible: true },
       tooltip: {
         valueDecimals: 2,
         valuePrefix: '$',
@@ -24,18 +26,6 @@ export default function GraphPage() {
       customData: {
         dataSource: 'coinprice',
       }
-      // 커스텀 데이터 저장
-      // customData: {
-      //   dataSource: 'coinprice',
-      //   lastUpdate: new Date().toISOString(),
-      //   category: 'crypto',
-      //   priority: 1,
-      //   metadata: {
-      //     exchange: 'binance',
-      //     currency: 'USD',
-      //     interval: '1d'
-      //   }
-      // }
     },
     {
       name: 'HashRate',
@@ -46,6 +36,7 @@ export default function GraphPage() {
       turboThreshold: 0,  // 모든 데이터 포인트 표시
       yAxis: 1,
       visible: true,  // 처음에 표시
+      showInNavigator: false,
       tooltip: {
         valueDecimals: 2,
         valueSuffix: ' TH/s'
@@ -63,6 +54,7 @@ export default function GraphPage() {
       turboThreshold: 0,  // 모든 데이터 포인트 표시
       yAxis: 2,
       visible: false,  // 처음에는 숨김
+      showInNavigator: false,
       tooltip: {
         valueDecimals: 8,
         valueSuffix: ' BTC'
@@ -80,6 +72,7 @@ export default function GraphPage() {
       turboThreshold: 0,  // 모든 데이터 포인트 표시
       yAxis: 3,
       visible: false,  // 처음에는 숨김
+      showInNavigator: false,
       tooltip: {
         valueDecimals: 8,
         valueSuffix: ' BTC'

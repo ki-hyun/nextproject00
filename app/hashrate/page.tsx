@@ -18,7 +18,8 @@ export default async function BlockPage() {
       lineWidth: 2,
       turboThreshold: 0,
       yAxis: 0,
-      visible: true,
+      visible: false,
+      showInNavigator: true,
       tooltip: { valueDecimals: 2, valuePrefix: '$', valueSuffix: ' USD' },
       customData: { dataSource: 'price' }
     },
@@ -31,6 +32,7 @@ export default async function BlockPage() {
       turboThreshold: 0,
       yAxis: 1,
       visible: true,
+      showInNavigator: true,
       tooltip: { valueDecimals: 2, valueSuffix: 'TH/s' },
       customData: { dataSource: 'hashrate' }
     },
@@ -43,6 +45,7 @@ export default async function BlockPage() {
       turboThreshold: 0,
       yAxis: 2,
       visible: false,
+      showInNavigator: false,
       tooltip: { valueDecimals: 2, valueSuffix: '' },
       customData: { dataSource: 'difficulty', displayUnit: 'trillion' }
     },
@@ -228,6 +231,7 @@ export default async function BlockPage() {
             title=""
             firstloding={3}
             height={500}
+            defaultSelectedRange={1}
           />
         </div>
 

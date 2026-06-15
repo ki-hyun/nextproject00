@@ -125,13 +125,68 @@ interface ChartProps {
   title?: string;
   firstloding?: number;
   height?: number;
+  defaultSelectedRange?: number;
 }
 
-export default function Chart({ series = [], title = 'chart', firstloding = 2, height = 800 }: ChartProps) {
+export default function Chart({ series = [], title = 'chart', firstloding = 2, height = 800, defaultSelectedRange = 0 }: ChartProps) {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
   // 브라우저 로컬 시간대 오프셋(분)
   const timezoneOffset = -new Date().getTimezoneOffset();
+
+  // 네비게이터 시리즈 활성화 여부 동적 조절 (Price 우선순위)
+  const syncNavigator = (chart: Highcharts.Chart) => {
+    if (!(chart as any).navigator || !(chart as any).navigator.series) return;
+
+    const priceSeries = chart.series.find(s => (s.options as any).customData?.dataSource === 'price');
+    const hashrateSeries = chart.series.find(s => (s.options as any).customData?.dataSource === 'hashrate');
+
+    if (!priceSeries || !hashrateSeries) return;
+
+    const priceNavSeries = (chart as any).navigator.series.find((s: any) => s.name === priceSeries.name);
+    const hashrateNavSeries = (chart as any).navigator.series.find((s: any) => s.name === hashrateSeries.name);
+
+    if (priceNavSeries && hashrateNavSeries) {
+      // 원본 참조 복사본 보관
+      if (!priceNavSeries.originalBaseSeries) priceNavSeries.originalBaseSeries = priceNavSeries.baseSeries || priceSeries;
+      if (!hashrateNavSeries.originalBaseSeries) hashrateNavSeries.originalBaseSeries = hashrateNavSeries.baseSeries || hashrateSeries;
+      if (!(priceSeries as any).originalNavigatorSeries) (priceSeries as any).originalNavigatorSeries = (priceSeries as any).navigatorSeries || priceNavSeries;
+      if (!(hashrateSeries as any).originalNavigatorSeries) (hashrateSeries as any).originalNavigatorSeries = (hashrateSeries as any).navigatorSeries || hashrateNavSeries;
+
+      const origPriceNav = (priceSeries as any).originalNavigatorSeries;
+      const origHashrateNav = (hashrateSeries as any).originalNavigatorSeries;
+
+      if (priceSeries.visible) {
+        // Price 활성화 -> Price 네비게이터 우선 노출 및 HashRate 네비게이터 링크 차단/숨김
+        (priceSeries as any).navigatorSeries = origPriceNav;
+        origPriceNav.baseSeries = priceSeries;
+        origPriceNav.setVisible(true, false);
+
+        (hashrateSeries as any).navigatorSeries = undefined;
+        origHashrateNav.baseSeries = undefined;
+        origHashrateNav.setVisible(false, false);
+      } else if (hashrateSeries.visible) {
+        // Price 비활성화 & HashRate 활성화 -> HashRate 네비게이터 노출 및 Price 네비게이터 링크 차단/숨김
+        (priceSeries as any).navigatorSeries = undefined;
+        origPriceNav.baseSeries = undefined;
+        origPriceNav.setVisible(false, false);
+
+        (hashrateSeries as any).navigatorSeries = origHashrateNav;
+        origHashrateNav.baseSeries = hashrateSeries;
+        origHashrateNav.setVisible(true, false);
+      } else {
+        // 둘 다 꺼져 있는 경우 네비게이터 유지용 기본 설정 (HashRate 우선)
+        (priceSeries as any).navigatorSeries = undefined;
+        origPriceNav.baseSeries = undefined;
+        origPriceNav.setVisible(false, false);
+
+        (hashrateSeries as any).navigatorSeries = origHashrateNav;
+        origHashrateNav.baseSeries = hashrateSeries;
+        origHashrateNav.setVisible(true, false);
+      }
+      chart.redraw();
+    }
+  };
 
   // timestamp + offset(분) → 'YYYY-MM-DD HH:mm' 문자열
   const formatWithOffset = (timestamp: number, offsetMin: number) => {
@@ -199,7 +254,7 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
     },
 
     rangeSelector: {
-      selected: 0,
+      selected: defaultSelectedRange,
       buttons: [{
         type: 'week',
         count: 1,
@@ -429,21 +484,19 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
         events: {
           legendItemClick: async function (this: Highcharts.Series) {
             // console.log(`Legend item clicked: ${this.name}`);
-            // console.log(`Current visibility: ${this.visible ? 'visible' : 'hidden'}`);
-
-            // 차트 객체는 this.chart로 가져옴
             const chart = this.chart;
-
-            // 시리즈 인덱스 찾기
             const seriesIndex = chart.series.indexOf(this);
 
             // 현재 숨겨진 상태에서 활성화하려는 경우이고, 데이터가 없는 경우에만 로드
-            if (this.visible && (!this.data || this.data.length === 0)) {
+            if (!this.visible && (!this.data || this.data.length === 0)) {
               // console.log(`Loading data for ${this.name}...`);
               await loadchart(chart, seriesIndex, true);
             }
 
-            // return false; // 기본 show/hide 동작 막기
+            // 범례 상태 변경 완료 후 네비게이터 동기화
+            setTimeout(() => {
+              syncNavigator(chart);
+            }, 0);
           }
         }
       }
@@ -506,35 +559,50 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
   };
 
   useEffect(() => {
+    console.log('[Chart.tsx] useEffect 실행됨', { seriesCount: series.length });
     let isMounted = true;
 
     const loadData = async () => {
+      console.log('[Chart.tsx] loadData 호출됨');
       try {
         // 차트가 준비되지 않았거나 시리즈가 없으면 리턴
         if (!chartComponentRef.current?.chart || !series.length) {
-          console.log('아직 준비 안됨  Chart or series not ready yet...');
+          console.log('[Chart.tsx] 아직 준비 안됨 Chart or series not ready yet...', { 
+            hasChart: !!chartComponentRef.current?.chart, 
+            seriesLength: series.length 
+          });
           return;
         }
 
         const chart = chartComponentRef.current.chart;
+        console.log('[Chart.tsx] chart 준비 완료, 데이터 로드 시작', { firstloding });
 
         for (let i = 0; i < firstloding; i++) {
+          console.log(`[Chart.tsx] ${i}번째 시리즈 확인 중...`);
           // 언마운트 됐거나 차트가 이미 파괴된 경우 중단
-          if (!isMounted || !chart.series) break;
+          if (!isMounted || !chart.series) {
+            console.log(`[Chart.tsx] 중단됨. isMounted: ${isMounted}, hasChartSeries: ${!!chart.series}`);
+            break;
+          }
 
           if (i < chart.series.length && chart.series[i]) {
+            console.log(`[Chart.tsx] ${i}번째 시리즈(${chart.series[i].name}) 데이터 로드 호출`);
             await loadchart(chart, i, false);
+            console.log(`[Chart.tsx] ${i}번째 시리즈 데이터 로드 완료`);
           }
         }
 
+        console.log('[Chart.tsx] 모든 초기 데이터 로드 완료, syncNavigator 호출 준비');
         // 아직 마운트 상태이고 차트가 유효할 때만 redraw
         if (isMounted && chart.series) {
+          syncNavigator(chart); // 초기 상태에 따른 네비게이터 동기화
+          console.log('[Chart.tsx] syncNavigator 완료, chart.redraw() 호출');
           chart.redraw();
         }
 
       } catch (error) {
         if (isMounted) {
-          console.error('Error loading data:', error);
+          console.error('[Chart.tsx] Error loading data:', error);
         }
       }
     };
@@ -543,6 +611,7 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
 
     // 언마운트 시 플래그 해제
     return () => {
+      console.log('[Chart.tsx] 컴포넌트 언마운트됨');
       isMounted = false;
     };
   }, [series]);
