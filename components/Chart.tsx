@@ -285,22 +285,29 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
       buttonTheme: {
         fill: 'rgba(59, 130, 246, 0.1)',
         stroke: 'rgba(59, 130, 246, 0.5)',
+        'stroke-width': 1,
+        r: 6,
+        padding: 4,
         style: {
-          color: '#3b82f6'
+          color: '#3b82f6',
+          fontWeight: '600'
         },
         states: {
           hover: {
             fill: 'rgba(59, 130, 246, 0.2)',
             stroke: '#3b82f6',
             style: {
-              color: '#2563eb'
+              color: '#2563eb',
+              fontWeight: '600'
             }
           },
           select: {
             fill: '#3b82f6',
-            stroke: '#3b82f6',
+            stroke: '#2563eb',
+            'stroke-width': 2,
             style: {
-              color: 'white'
+              color: '#ffffff',
+              fontWeight: '700'
             }
           }
         }
@@ -598,6 +605,9 @@ export default function Chart({ series = [], title = 'chart', firstloding = 2, h
           syncNavigator(chart); // 초기 상태에 따른 네비게이터 동기화
           console.log('[Chart.tsx] syncNavigator 완료, chart.redraw() 호출');
           chart.redraw();
+          if ((chart as any).rangeSelector && typeof defaultSelectedRange === 'number') {
+            (chart as any).rangeSelector.clickButton(defaultSelectedRange, true);
+          }
         }
 
       } catch (error) {

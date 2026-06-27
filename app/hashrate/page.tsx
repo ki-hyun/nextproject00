@@ -231,7 +231,7 @@ export default async function BlockPage() {
             title=""
             firstloding={3}
             height={500}
-            defaultSelectedRange={1}
+            defaultSelectedRange={0} // 1일, 1주일, 1달, 3달, 6달, 1년, 전체
           />
         </div>
 
